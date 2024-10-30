@@ -22,6 +22,7 @@ export default function SidebarNavItem(props: Props) {
   const {
     showSidebarState: [, setIsShowSidebar],
   } = useSidebar()
+  
 
   return (
     <NavItem>

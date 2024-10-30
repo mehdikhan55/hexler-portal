@@ -11,25 +11,38 @@ import {
 
 
 export const expenseColumns: ColumnDef<Expense>[] = [
+
     {
         accessorKey: "id",
         header: "ID", // This is a string; no issue here.
         cell: ({ row }) => <div>{row.getValue("id")}</div>,
     },
+
     {
         accessorKey: "date",
-        // header: "Date", // This is a string; no issue here.
         header: ({ column }) => (
             <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
                 Date
                 <ArrowUpDown className="ml-2 h-4 w-4" />
             </Button>
         ),
+        // filterFn: (row, columnId, value) => {
+        //     const dateValue = new Date(row.getValue(columnId)); 
+        //     return dateValue.toDateString() === value?.toDateString();
+        // },
+        filterFn: (row, columnId, value) => {
+            const dateValue = new Date(row.getValue(columnId));
+            const isSingleDateMatch = value?.singleDate ? dateValue.toDateString() === value.singleDate.toDateString() : true;
+            const isAfterStart = !value?.startDate || dateValue >= new Date(value.startDate);
+            const isBeforeEnd = !value?.endDate || dateValue <= new Date(value.endDate);
+            return isSingleDateMatch && isAfterStart && isBeforeEnd;
+        },
+
         cell: ({ row }) => <div>{new Date(row.getValue("date")).toLocaleDateString()}</div>,
     },
+
     {
         accessorKey: "description",
-        // header: "Description",
         header: ({ column }) => (
             <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
                 Description
@@ -38,12 +51,13 @@ export const expenseColumns: ColumnDef<Expense>[] = [
         ),
         cell: ({ row }) => <div>{row.getValue("description")}</div>,
     },
+
     {
         accessorKey: "amount",
         // header: "Amount", // This is a string; no issue here.
         header: ({ column }) => (
-            <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-                Amount
+            <Button className="w-full flex justify-end " variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                <span className="text-right">Amount</span>
                 <ArrowUpDown className="ml-2 h-4 w-4" />
             </Button>
         ),
