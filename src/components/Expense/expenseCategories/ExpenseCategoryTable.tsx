@@ -90,7 +90,7 @@ export default function ExpenseCategoryTable({
                     </div>
                     <div className="rounded-md border">
                         <Table>
-                            <TableHeader className="bg-gray-700">
+                            <TableHeader className="bg-dark-200">
                                 {table.getHeaderGroups().map((headerGroup) => (
                                     <TableRow key={headerGroup.id}>
                                         {headerGroup.headers.map((header) => (

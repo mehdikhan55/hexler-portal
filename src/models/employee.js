@@ -1,45 +1,53 @@
 import mongoose from 'mongoose';
 
 const employeeSchema = new mongoose.Schema({
-    name: {
+    firstName: {
         type: String,
         required: true
     },
-    role: {
+    lastName: {
+        type: String,
+        required: true
+    },
+    email: {
         type: String,
         required: true,
-        enum: ['Employee', 'Admin', 'Finance']
+        unique: true
     },
-    dateOfJoining:{
+    phoneNumber: {
+        type: String,
+        required: true,
+    },
+    dateOfBirth: {
         type: Date,
-        required: true,
     },
-    contactNo: {
+    hireDate: {
+        type: Date,
+        required: true
+    },
+    position: {
         type: String,
         required: true
     },
-    contactEmail:{
+    status: {
         type: String,
-        required: true
+        enum: ['active', 'inactive', 'terminated'],
+        default: 'active'
     },
     address: {
-        type: String,
-        required: true
+        street: String,
+        city: String,
+        state: String,
+        zip: String
     },
-    salaryStructure: {
-        baseSalary: {
-            type: Number,
-            required: true
-        },
-        bonuses: {
-            type: [Number],
-            default: [],
-        },
-        deductions: {
-            type: [Number],
-            default: []
-        }
+    department: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Department'
+    },
+    salary: {
+        type: Number,
+        required: true
     }
-});
+}, { timestamps: true });
 
 export default mongoose.models.Employee || mongoose.model('Employee', employeeSchema);

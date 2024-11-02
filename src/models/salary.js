@@ -5,7 +5,7 @@ const salarySchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Employee',
         required: true,
-        index: true // Indexing the employeeId field for faster query performance
+        index: true
     },
     baseSalary: {
         type: Number,

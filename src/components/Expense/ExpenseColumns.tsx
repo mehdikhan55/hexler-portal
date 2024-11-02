@@ -10,15 +10,12 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 
-export const expenseColumns: ColumnDef<Expense>[] = [
-
-    {
-        accessorKey: "id",
-        header: "ID", // This is a string; no issue here.
-        cell: ({ row }) => <div>{row.getValue("id")}</div>,
-    },
-
-    {
+export const expenseColumns = ({
+    handleStatusChange
+}: {
+    handleStatusChange:(id: string) => void 
+}): ColumnDef<Expense>[] => [
+       {
         accessorKey: "date",
         header: ({ column }) => (
             <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
@@ -40,7 +37,17 @@ export const expenseColumns: ColumnDef<Expense>[] = [
 
         cell: ({ row }) => <div>{new Date(row.getValue("date")).toLocaleDateString()}</div>,
     },
-
+    {
+        accessorKey: "category",
+        header: ({ column }) => (
+            <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                Category
+                <ArrowUpDown className="ml-2 h-4 w-4" />
+            </Button>
+        ),
+        accessorFn: (row) => row.category?.name || "No Category",
+        cell: ({ row }) => <div>{row.getValue("category")}</div>,
+    },
     {
         accessorKey: "description",
         header: ({ column }) => (
@@ -67,9 +74,24 @@ export const expenseColumns: ColumnDef<Expense>[] = [
         },
     },
     {
+        accessorKey: "budgetedAmount",
+        // header: "Amount", // This is a string; no issue here.
+        header: "Budgeted Amount",
+        cell: ({ row }) => {
+            const budgetedAmount = parseFloat(row.getValue("budgetedAmount"));
+            return <div className="text-right font-medium">PKR {budgetedAmount.toFixed(2)}</div>;
+        },
+    },
+    {
         accessorKey: "paymentMethod",
         header: "Payment Method", // This is a string; no issue here.
         cell: ({ row }) => <div>{row.getValue("paymentMethod")}</div>,
+    },
+    {
+        accessorKey: "approvalStatus",
+        header: "Approval Status", 
+        accessorFn: (row) => row.approvalStatus || "No Category",
+        cell: ({ row }) => <div>{row.getValue("approvalStatus")}</div>,
     },
     {
         accessorKey: "actions",
@@ -84,8 +106,11 @@ export const expenseColumns: ColumnDef<Expense>[] = [
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => navigator.clipboard.writeText(expense.id)}>
+                        <DropdownMenuItem onClick={() => navigator.clipboard.writeText(expense._id)}>
                             Copy Expense ID
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={()=> handleStatusChange(expense._id)}>
+                            Change Status
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>

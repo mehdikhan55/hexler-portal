@@ -117,3 +117,22 @@ $enable-negative-margins: true;
     @apply overflow-hidden border-transparent w-full placeholder:text-dark-600  h-11  rounded-md px-3 outline-none !important;
   }
 }
+
+
+/* Custom Scrollbar Styles */
+::-webkit-scrollbar {
+  width: 8px; /* Width of the scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background: transparent; /* Background of the scrollbar track */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888; /* Color of the scrollbar thumb */
+  border-radius: 10px; /* Rounded edges for the thumb */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Color when hovering over the thumb */
+}

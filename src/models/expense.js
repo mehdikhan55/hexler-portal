@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const expenseSchema = new mongoose.Schema({
-    categoryId: {
+    category: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Category',
         required: true
@@ -23,9 +23,10 @@ const expenseSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    approvedByAdmin: {
-        type: Boolean,
-        default: false
+    approvalStatus: {
+        type: String,
+        default: 'pending',
+        enum: ['approved', 'disapproved', 'pending']
     },
     budgetedAmount: {
         type: Number,

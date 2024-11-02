@@ -56,7 +56,7 @@ export default function Sidebar({ children }: { children: React.ReactNode }) {
         {children}
       </div>
 
-      <Button
+      {/* <Button
         variant="link"
         className="sidebar-toggler d-none d-md-inline-block rounded-0 text-end pe-4 fw-bold shadow-none border-top"
         onClick={toggleIsNarrow}
@@ -64,7 +64,7 @@ export default function Sidebar({ children }: { children: React.ReactNode }) {
         aria-label="sidebar toggler"
       >
         <FontAwesomeIcon className="sidebar-toggler-chevron" icon={faAngleLeft} fontSize={24} />
-      </Button>
+      </Button> */}
     </div>
   )
 }

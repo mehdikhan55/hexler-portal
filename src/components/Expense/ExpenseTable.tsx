@@ -13,14 +13,15 @@ import {
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { expenseColumns } from "./ExpenseColumns";
+
 import { Expense } from "@/types/Expense";
 import { fetchExpenses } from "@/lib/utils/fetchExpenses";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import DatePicker from "./date-picker-demo";
 import { Label } from "../ui/label";
+import { expenseColumns } from "./ExpenseColumns";
 
-export default function ExpenseTable({ data, isLoading }: { data: Expense[], isLoading: boolean }) {
+export default function ExpenseTable({ data, isLoading, handleStatusChange }: { data: Expense[], isLoading: boolean, handleStatusChange:(id: string) => void }) {
 
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
     const [singleDate, setSingleDate] = React.useState<Date | null>(null);
@@ -31,7 +32,7 @@ export default function ExpenseTable({ data, isLoading }: { data: Expense[], isL
 
     const table = useReactTable({
         data,
-        columns: expenseColumns,
+        columns: expenseColumns({ handleStatusChange }),
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
         getSortedRowModel: getSortedRowModel(),

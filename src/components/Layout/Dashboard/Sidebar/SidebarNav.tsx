@@ -1,25 +1,34 @@
 import {
-  faAddressCard, faBell, faFileLines, faStar,
+  faAddressCard, faBarChart, faBell, faEnvelope, faFileLines, faIdCard, faStar,
 } from '@fortawesome/free-regular-svg-icons'
 import {
   faBank,
   faBug,
+  faBuildingUser,
   faCalculator,
   faChartPie,
   faCode,
   faDollar,
   faDroplet,
   faGauge,
+  faIdCardClip,
   faLayerGroup,
   faLocationArrow,
+  faMailBulk,
   faMoneyBill,
   faPencil,
   faPeopleArrows,
+  faPeopleCarry,
   faPeopleLine,
+  faPeopleRoof,
+  faPersonShelter,
+  faPlusCircle,
   faProjectDiagram,
   faPuzzlePiece,
   faRightToBracket,
   faScaleUnbalancedFlip,
+  faStarAndCrescent,
+  faStarOfLife,
   faWeightScale,
 } from '@fortawesome/free-solid-svg-icons'
 import React, { PropsWithChildren } from 'react'
@@ -81,7 +90,7 @@ export default async function SidebarNav() {
 
       <SidebarNavTitle>Finance Management</SidebarNavTitle>
 
-      <SidebarNavGroup toggleIcon={faDollar} toggleText={"Salary Management"}>
+      <SidebarNavGroup toggleIcon={faDollar} toggleText={"Payroll"}>
         <SidebarNavItem icon={faCalculator} href="/salary-calculator">Salary Calculator</SidebarNavItem>
         <SidebarNavItem icon={faMoneyBill} href="/">Payslips</SidebarNavItem>
         <SidebarNavItem icon={faPeopleLine} href="/">Attendance</SidebarNavItem>
@@ -92,11 +101,27 @@ export default async function SidebarNav() {
         <SidebarNavItem icon={faPuzzlePiece} href="/expense-categories">Expense Categories</SidebarNavItem>
       </SidebarNavGroup>
 
-      <SidebarNavItem icon={faBank} href="#">Cheques Management</SidebarNavItem>
-      <SidebarNavTitle>Project Management</SidebarNavTitle>
+      {/* <SidebarNavItem icon={faBank} href="#">Cheques Management</SidebarNavItem> */}
 
+
+
+      <SidebarNavTitle>Employees Management</SidebarNavTitle>
+      <SidebarNavGroup toggleIcon={faPersonShelter} toggleText={"Employee"}>
+        <SidebarNavItem icon={faPeopleRoof} href="/employee-profiles">Employee Profiles</SidebarNavItem>
+        <SidebarNavItem icon={faPlusCircle} href="/add-employee">Add Employee</SidebarNavItem>
+        <SidebarNavItem icon={faPeopleLine} href="/employees">Manage Employees</SidebarNavItem>
+      </SidebarNavGroup>
+      <SidebarNavItem icon={faStarAndCrescent} href="/employee-benefits">Employee Benefits</SidebarNavItem>
+
+
+      <SidebarNavTitle>Project Management</SidebarNavTitle>
       <SidebarNavItem icon={faProjectDiagram} href="#">Projects</SidebarNavItem>
 
+      <SidebarNavTitle>Administration</SidebarNavTitle>
+      <SidebarNavItem icon={faBuildingUser} href="#">Departments</SidebarNavItem>
+      <SidebarNavItem icon={faBarChart} href="#">HR</SidebarNavItem>
+      <SidebarNavItem icon={faEnvelope} href="#">Email Logs</SidebarNavItem>
+      <SidebarNavItem icon={faIdCard} href="#">Etag and Card</SidebarNavItem>
 
       {/* <SidebarNavItem icon={faCode} href="/pokemons">
         {siteData.sidebar.items.sample}
