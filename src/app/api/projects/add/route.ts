@@ -22,6 +22,9 @@ export async function POST(req: NextRequest) {
         //     return NextResponse.json({ message: 'No image uploaded' }, { status: 400 });
         // }
 
+        let imageUrl;
+        //@ts-ignore
+        if(projectImage !== 'null') {
         const fileBuffer = await projectImage.arrayBuffer();
         const mimeType = projectImage.type;
         const encoding = "base64";
@@ -35,8 +38,10 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ message: 'Error uploading image to Cloudinary' }, { status: 500 });
         }
 
-        const imageUrl = uploadResponse.result.secure_url;
-
+        imageUrl = uploadResponse.result.secure_url;
+    }else{
+        imageUrl = null;
+    }
         // Step 4: Save the project to the database
         const newProject = new Project({
             projectName,
