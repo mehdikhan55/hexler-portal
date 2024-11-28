@@ -1,5 +1,3 @@
-export const fetchCache = 'force-no-store'
-
 import { NextRequest, NextResponse } from "next/server";
 import Project from "@/models/project";
 import dbConnect from "@/lib/dbConnect";
@@ -186,3 +184,5 @@ export async function DELETE(req: NextRequest) {
     );
   }
 }
+
+export const revalidate = 0;

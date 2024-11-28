@@ -1,5 +1,3 @@
-export const fetchCache = 'force-no-store'
-
 import { uploadToCloudinary } from "@/lib/storage";
 import { NextRequest, NextResponse } from "next/server";
 import Project from "@/models/project";
@@ -69,3 +67,5 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ message: 'Error creating project' }, { status: 500 });
     }
 }
+
+export const revalidate = 0;
