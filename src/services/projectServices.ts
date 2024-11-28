@@ -1,9 +1,17 @@
 import axios from 'axios';
+import { headers } from 'next/headers';
 
 export const projectServices = {
   async getProjects() {
     try {
-      const response = await axios.get('/api/projects');
+      const response = await axios.get('/api/projects', {
+        headers: {
+          'Cache-Control': 'no-store',
+          'Pragma': 'no-cache',
+          'Expires': '0'
+
+        }
+      });
       if (response.data?.projects) {
         return { success: true, data: response.data.projects };
       }
@@ -20,6 +28,10 @@ export const projectServices = {
       const response = await axios.post('/api/projects/add', projectData, {
         headers: {
           'Content-Type': 'multipart/form-data',
+          'Cache-Control': 'no-store',
+          'Pragma': 'no-cache',
+          'Expires': '0'
+
         },
       });
 
@@ -37,7 +49,14 @@ export const projectServices = {
   // Fetch a single project by its ID
   async getSingleProject(projectId: string) {
     try {
-      const response = await axios.get(`/api/projects/${projectId}`);
+      const response = await axios.get(`/api/projects/${projectId}`, {
+        headers: {
+          'Cache-Control': 'no-store',
+          'Pragma': 'no-cache',
+          'Expires': '0'
+
+        }
+      });
 
       if (response.data?.project) {
         return { success: true, data: response.data.project };
@@ -52,7 +71,14 @@ export const projectServices = {
   // Edit a project (update its data)
   async updateProject(projectId: string, updatedData: any) {
     try {
-      const response = await axios.put(`/api/projects/${projectId}`,
+      const response = await axios.put(`/api/projects/${projectId}`, {
+        headers: {
+          'Cache-Control': 'no-store',
+          'Pragma': 'no-cache',
+          'Expires': '0'
+
+        }
+      },
         updatedData);
 
       if (response.data?.project) {
@@ -66,7 +92,14 @@ export const projectServices = {
   },
   async deleteProject(projectId: string) {
     try {
-      const response = await axios.delete(`/api/projects/${projectId}`);
+      const response = await axios.delete(`/api/projects/${projectId}`, {
+        headers: {
+          'Cache-Control': 'no-store',
+          'Pragma': 'no-cache',
+          'Expires': '0'
+
+        }
+      });
 
       if (response.data?.project) {
         return { success: true, data: response.data };

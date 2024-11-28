@@ -1,7 +1,7 @@
 "use client"
 import { projectServices } from '@/services/projectServices';
 import React, { useEffect, useState } from 'react'
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import Loader from '@/components/Common/Loader';
 import { useForm } from 'react-hook-form';
 import { ProjectAddSchema } from '@/lib/validations';
@@ -10,7 +10,7 @@ import { z } from 'zod';
 import AddProjectForm from '@/components/Forms/AddProjectForm/AddProjectForm';
 import EditProject from '@/components/Projects/EditProject';
 import toast from 'react-hot-toast';
-import Router from 'next/navigation';
+
 
 
 
