@@ -10,7 +10,6 @@ const Page = () => {
   const [error, setError] = useState(null);
 
   const fetchProjects = async () => {
-    setLoading(true);
     const result = await projectServices.getProjects();
     if (result.success) {
       setProjects(result.data);
