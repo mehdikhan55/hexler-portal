@@ -1,3 +1,4 @@
+'use client'
 import { Link as LinkIcon, Edit, Trash } from 'lucide-react';
 import React, { useState } from 'react';
 import {
@@ -30,9 +31,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project,fetchProjects }) => {
   const [projectToDelete, setProjectToDelete] = useState<null | string>(null); 
   const [loading,setLoading]=useState(false);
 
-  const handleEdit = () => {
-    console.log(`Edit project: ${project.projectName}`);
-  };
 
   // Open delete confirmation modal
   const handleDeleteClick = () => {
@@ -82,7 +80,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project,fetchProjects }) => {
           </DropdownMenuTrigger>
           <DropdownMenuContent className="absolute right-0 top-0 bg-gray-800 dark:bg-gray-800 rounded-lg shadow-md">
             <Link href={`/projects/${project._id}/edit`} >
-              <DropdownMenuItem onClick={handleEdit} className="hover:bg-gray-700 text-white cursor-pointer">
+              <DropdownMenuItem className="hover:bg-gray-700 text-white cursor-pointer">
                 <Edit className="mr-2 w-4 h-4 text-gray-300" />
                 Edit Project
               </DropdownMenuItem>
