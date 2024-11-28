@@ -40,6 +40,7 @@ const AddExpense: React.FC<AddExpenseProps> = ({ onAddExpense, categories }) => 
             amount: parseFloat(amount),
             description,
             paymentMethod,
+            //@ts-ignore
             category: selectedCategory,
             isRecurring,
             approvalStatus: "pending",
