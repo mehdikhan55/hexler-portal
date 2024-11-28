@@ -73,6 +73,7 @@ export const projectServices = {
     try {
       const response = await axios.put(`/api/projects/${projectId}`, {
         headers: {
+          'Content-Type': 'multipart/form-data',
           'Cache-Control': 'no-store',
           'Pragma': 'no-cache',
           'Expires': '0'
