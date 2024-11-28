@@ -71,7 +71,7 @@ export const projectServices = {
   // Edit a project (update its data)
   async updateProject(projectId: string, updatedData: any) {
     try {
-      const response = await axios.put(`/api/projects/${projectId}`, {
+      const response = await axios.put(`/api/projects/${projectId}`,updatedData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Cache-Control': 'no-store',
@@ -79,8 +79,7 @@ export const projectServices = {
           'Expires': '0'
 
         }
-      },
-        updatedData);
+      });
 
       if (response.data?.project) {
         return { success: true, data: response.data.project };
