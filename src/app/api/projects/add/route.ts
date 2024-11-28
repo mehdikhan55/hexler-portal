@@ -22,9 +22,10 @@ export async function POST(req: NextRequest) {
         //     return NextResponse.json({ message: 'No image uploaded' }, { status: 400 });
         // }
 
+        console.log('Project image:', projectImage);
+        console.log("type of projectImage", typeof projectImage);
         let imageUrl;
-        //@ts-ignore
-        if(projectImage !== 'null') {
+        if(projectImage && projectImage instanceof File){
         const fileBuffer = await projectImage.arrayBuffer();
         const mimeType = projectImage.type;
         const encoding = "base64";

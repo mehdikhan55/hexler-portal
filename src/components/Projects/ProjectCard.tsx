@@ -22,9 +22,10 @@ interface ProjectCardProps {
     projectLink: string;
     projectOrder: number;
   };
+  fetchProjects:()=>void; 
 }
 
-const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
+const ProjectCard: React.FC<ProjectCardProps> = ({ project,fetchProjects }) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [projectToDelete, setProjectToDelete] = useState<null | string>(null); 
   const [loading,setLoading]=useState(false);
@@ -47,6 +48,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
     if(result.success){
       console.log(result.data);
       toast.success("Project Deleted Successfully");
+      await fetchProjects();
       setLoading(false);
     }else{
       toast.error(result.message);
@@ -63,7 +65,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
   return (
     <div className="bg-gray-800 dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden transform transition duration-300 ease-in-out hover:shadow-xl">
       <img
-        src={project.projectImage}
+        src={project.projectImage || "https://plus.unsplash.com/premium_photo-1675793715030-0584c8ec4a13?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"}
         alt={project.projectName}
         className="w-full h-48 object-cover rounded-t-lg"
       />

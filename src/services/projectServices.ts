@@ -68,7 +68,7 @@ export const projectServices = {
     try {
       const response = await axios.delete(`/api/projects/${projectId}`);
 
-      if (response.data?.message === 'Project deleted successfully') {
+      if (response.data?.project) {
         return { success: true, data: response.data };
       } else {
         throw new Error(response.data?.message || 'Unexpected response from server');
