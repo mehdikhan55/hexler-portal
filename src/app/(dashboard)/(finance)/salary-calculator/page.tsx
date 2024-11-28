@@ -1,5 +1,5 @@
 import { Card, CardBody, CardHeader } from 'react-bootstrap'
-import SalaryCalculationForm from '@/components/Page/Pokemon/Form/SalaryCalculationForm'
+import SalaryCalculationForm from '@/components/Forms/salary calculation form/SalaryCalculationForm'
 
 
 export default async function Page() {

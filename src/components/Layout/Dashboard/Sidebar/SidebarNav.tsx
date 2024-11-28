@@ -8,6 +8,7 @@ import {
   faCalculator,
   faChartPie,
   faCode,
+  faDiagramProject,
   faDollar,
   faDroplet,
   faGauge,
@@ -115,7 +116,10 @@ export default async function SidebarNav() {
 
 
       <SidebarNavTitle>Project Management</SidebarNavTitle>
-      <SidebarNavItem icon={faProjectDiagram} href="#">Projects</SidebarNavItem>
+      <SidebarNavGroup toggleIcon={faProjectDiagram} toggleText={"Projects"}>
+      <SidebarNavItem icon={faFileLines} href="/projects">See Projects</SidebarNavItem>
+      <SidebarNavItem icon={faPlusCircle} href="/projects/new">Add New Project</SidebarNavItem>
+      </SidebarNavGroup>
 
       <SidebarNavTitle>Administration</SidebarNavTitle>
       <SidebarNavItem icon={faBuildingUser} href="#">Departments</SidebarNavItem>

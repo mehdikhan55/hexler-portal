@@ -1,0 +1,21 @@
+.loader {
+    width: 40px; /* Size of the dot */
+    height: 40px; /* Size of the dot */
+    border-radius: 50%; /* Make it round */
+    background-color: rgba(255, 255, 255, 0.8); /* White with some transparency */
+    animation: pulse 1.5s infinite; /* Animation effect */
+    box-shadow: 0 0 50px rgba(255, 255, 255, 0.5); /* Blur effect */
+  }
+  
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.3); /* Expanding effect */
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  
