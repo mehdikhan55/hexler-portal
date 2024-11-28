@@ -18,9 +18,9 @@ export async function POST(req: NextRequest) {
         const projectOrder = parseInt(formData.get('projectOrder') as string, 10);
 
         // Step 3: Upload the image to Cloudinary
-        if (!projectImage) {
-            return NextResponse.json({ message: 'No image uploaded' }, { status: 400 });
-        }
+        // if (!projectImage) {
+        //     return NextResponse.json({ message: 'No image uploaded' }, { status: 400 });
+        // }
 
         const fileBuffer = await projectImage.arrayBuffer();
         const mimeType = projectImage.type;

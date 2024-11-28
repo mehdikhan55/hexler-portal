@@ -9,6 +9,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import AddProjectForm from '@/components/Forms/AddProjectForm/AddProjectForm';
 import EditProject from '@/components/Projects/EditProject';
+import toast from 'react-hot-toast';
+import Router from 'next/navigation';
 
 
 
@@ -28,6 +30,7 @@ const page = ({ params: { projectId } }: any) => {
     const [error, setError] = useState(null);
     const [project, setProject] = useState<ProjectItem | null>(null);
     const [imageRemoved, setImageRemoved] = useState(false);
+    const router = useRouter();
 
 
     const fetchProject = async () => {
@@ -88,7 +91,8 @@ const page = ({ params: { projectId } }: any) => {
         const { success, data, message } = await projectServices.updateProject(project?._id, formData);
         if (success) {
             console.log('Update successful:', data);
-            await fetchProject();
+            toast.success('Project updated successfully');
+            router.push('/projects');
         } else {
             setError(message);
         }
