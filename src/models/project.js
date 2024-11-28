@@ -12,7 +12,6 @@ const projectSchema = new Schema({
   },
   projectDescription: {
     type: String,
-    required: [true, 'Project description is required'],
   },
   projectCategory: {
     type: String,
@@ -20,7 +19,6 @@ const projectSchema = new Schema({
   },
   projectImage: {
     type: String,
-    required: [true, 'Project image is required'],
   },
   projectLink: {
     type: String,
