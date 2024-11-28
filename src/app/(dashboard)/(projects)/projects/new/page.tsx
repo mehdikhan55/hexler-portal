@@ -8,10 +8,13 @@ import { z } from 'zod';
 
 import AddProjectForm from '@/components/Forms/AddProjectForm/AddProjectForm';
 import { projectServices } from '@/services/projectServices';
+import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
 
 const Page = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const Router = useRouter();
 
   const form = useForm<z.infer<typeof ProjectAddSchema>>({
     resolver: zodResolver(ProjectAddSchema),
@@ -47,6 +50,9 @@ const Page = () => {
 
     if (success) {
       console.log('Upload successful:', data);
+      toast.success('Project added successfully');
+      form.reset();
+      Router.push('/projects');
     } else {
       setError(message);
     }
