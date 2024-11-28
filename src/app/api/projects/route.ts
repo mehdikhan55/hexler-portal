@@ -8,7 +8,7 @@ export async function GET(req: NextRequest) {
     await dbConnect();
 
     // Step 2: Get all projects from the database, sorted by projectOrder
-    const projects = await Project.find({}).sort({ projectOrder: 1 });
+    const projects = await Project.find().sort({ projectOrder: 1 });
 
     // Step 3: Return the projects as JSON response
     return NextResponse.json(
