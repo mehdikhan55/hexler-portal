@@ -1,3 +1,5 @@
+export const fetchCache = 'force-no-store'
+
 import axios from 'axios';
 import { headers } from 'next/headers';
 
