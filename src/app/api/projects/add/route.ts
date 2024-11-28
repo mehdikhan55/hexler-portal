@@ -1,3 +1,5 @@
+export const fetchCache = 'force-no-store'
+
 import { uploadToCloudinary } from "@/lib/storage";
 import { NextRequest, NextResponse } from "next/server";
 import Project from "@/models/project";
