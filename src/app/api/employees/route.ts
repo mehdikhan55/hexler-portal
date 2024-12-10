@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import Project from "@/models/project";
+import Employee from "@/models//employee"
 import dbConnect from "@/lib/dbConnect";
 
 export async function GET(req: NextRequest) {
@@ -8,21 +8,19 @@ export async function GET(req: NextRequest) {
     await dbConnect();
 
     // Step 2: Get all projects from the database, sorted by projectOrder
-    const projects = await Project.find()
-    .sort({ projectOrder: 1 })
-    .populate({ path: 'projectCategory', select: 'name description' });
+    const employees = await Employee.find().populate("department");
  
     // Step 3: Return the projects as JSON response
     return NextResponse.json(
-      { projects }, // Data to return in the response
+      { employees }, // Data to return in the response
       { status: 200 } // Optional status code (200 is default for success)
     );
   } catch (error) {
-    console.error('Error getting projects:', error);
+    console.error('Error getting employees:', error);
 
     // Return error response with appropriate message
     return NextResponse.json(
-      { message: 'Error getting projects' },
+      { message: 'Error getting employees' },
       { status: 500 } // Internal server error
     );
   }

@@ -124,7 +124,8 @@ export async function GET(req: NextRequest) {
     const projectId = req.nextUrl.pathname.split('/')[3];
 
     // Step 3: Find the project by projectId
-    const project = await Project.findById(projectId);
+    const project = await Project.findById(projectId).populate({ path: 'projectCategory', select: 'name description' });
+    console.log("project", project);
 
     // Step 4: Check if the project was found
     if (!project) {

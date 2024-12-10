@@ -14,12 +14,16 @@ import toast from 'react-hot-toast';
 
 
 
+
 interface ProjectItem {
     _id: string;
     projectName: string;
     projectTagline: string;
     projectDescription: string;
-    projectCategory: string;
+    projectCategory: {
+        _id: string;
+        name: string
+    };
     projectImage: string;
     projectLink: string;
     projectOrder: number;
@@ -30,7 +34,24 @@ const page = ({ params: { projectId } }: any) => {
     const [error, setError] = useState(null);
     const [project, setProject] = useState<ProjectItem | null>(null);
     const [imageRemoved, setImageRemoved] = useState(false);
+    const [categoriesData, setCategoriesData] = useState<any>(null);
     const router = useRouter();
+
+    
+  const fetchCategories = async () => {
+    setLoading(true);
+    const result = await projectServices.getCategories();
+    if (result.success) {
+      console.log(result);
+      setCategoriesData(result.data);
+      console.log(result.data);
+    } else {
+      setError(result.message);
+    }
+    setLoading(false);
+  };
+
+  
 
 
     const fetchProject = async () => {
@@ -38,6 +59,7 @@ const page = ({ params: { projectId } }: any) => {
         const result = await projectServices.getSingleProject(projectId);
         if (result.success) {
             setProject(result.data);
+            await fetchCategories();
             setLoading(false);
         } else {
             setError(result.message);
@@ -107,7 +129,7 @@ const page = ({ params: { projectId } }: any) => {
             ) : error ? (
                 <div>Project not found</div>
             ) : (
-                <EditProject error={error} project={project} onSubmit={onSubmit} loading={loading} setImageRemoved={setImageRemoved} />
+                <EditProject categoriesData={categoriesData} error={error} project={project} onSubmit={onSubmit} loading={loading} setImageRemoved={setImageRemoved} />
             )
             }
         </>

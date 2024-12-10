@@ -7,7 +7,7 @@ import { categoriesData } from '@/constants/categoriesData'
 import React, { useEffect } from 'react'
 
 
-const ProjectEditForm = ({ form, onSubmit, loading, buttonText = "Submit", projectImage, setProjectImage,setImageRemoved }: any) => {
+const ProjectEditForm = ({categoriesData ,form, onSubmit, loading, buttonText = "Submit", projectImage, setProjectImage,setImageRemoved }: any) => {
 
     useEffect(() => {
         if (form.watch('projectImage') && form.watch('projectImage').length > 0) {
@@ -54,8 +54,9 @@ const ProjectEditForm = ({ form, onSubmit, loading, buttonText = "Submit", proje
                             label='Project Category'
                             placeholder="Select Category"
                         >
+                            {/* @ts-ignore */}
                             {categoriesData.map((category, i) => (
-                                <SelectItem key={category.id} value={category.name}>
+                                <SelectItem key={category._id} value={category._id}>
                                     <div className="flex cursor-pointer items-center gap-2">
                                         <p>{category.name}</p>
                                     </div>

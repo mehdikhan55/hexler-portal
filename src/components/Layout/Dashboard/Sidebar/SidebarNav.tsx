@@ -2,43 +2,25 @@ import {
   faAddressCard, faBarChart, faBell, faEnvelope, faFileLines, faIdCard, faStar,
 } from '@fortawesome/free-regular-svg-icons'
 import {
-  faBank,
-  faBug,
   faBuildingUser,
   faCalculator,
-  faChartPie,
-  faCode,
-  faDiagramProject,
   faDollar,
-  faDroplet,
   faGauge,
-  faIdCardClip,
-  faLayerGroup,
-  faLocationArrow,
-  faMailBulk,
   faMoneyBill,
-  faPencil,
-  faPeopleArrows,
-  faPeopleCarry,
   faPeopleLine,
   faPeopleRoof,
   faPersonShelter,
   faPlusCircle,
   faProjectDiagram,
   faPuzzlePiece,
-  faRightToBracket,
   faScaleUnbalancedFlip,
   faStarAndCrescent,
-  faStarOfLife,
-  faWeightScale,
 } from '@fortawesome/free-solid-svg-icons'
 import React, { PropsWithChildren } from 'react'
 import { Badge } from 'react-bootstrap'
 import SidebarNavGroup from '@/components/Layout/Dashboard/Sidebar/SidebarNavGroup'
 import SidebarNavItem from '@/components/Layout/Dashboard/Sidebar/SidebarNavItem'
-import { getDictionary } from '@/locales/dictionary'
 import { siteData } from '@/constants/siteData'
-import { faPaypal } from '@fortawesome/free-brands-svg-icons'
 
 const SidebarNavTitle = (props: PropsWithChildren) => {
   const { children } = props
@@ -51,36 +33,6 @@ const SidebarNavTitle = (props: PropsWithChildren) => {
 export default async function SidebarNav() {
 
   return (
-    // <ul className="list-unstyled">
-
-    //   <SidebarNavItem icon={faGauge} href="/">
-    //     {siteData.sidebar.items.dashboard}
-    //   </SidebarNavItem>
-
-    //   {/* <SidebarNavItem icon={faCode} href="/pokemons">
-    //     {siteData.sidebar.items.sample}
-    //     <small className="ms-auto"><Badge bg="danger" className="ms-auto">DEMO</Badge></small>
-    //   </SidebarNavItem> */}
-
-    //   <div className=" text-gray-300">
-    //     <SidebarNavTitle>Finance Management</SidebarNavTitle>
-    //   </div>
-    //   <div className='-mt-5 ml-2 '>
-    //     <SidebarNavTitle>Salary Management</SidebarNavTitle>
-    //   </div>
-    //   <div className="ml-1">
-    //   <SidebarNavItem icon={faGauge} href="/expense-tracker">Office Expense Tracker</SidebarNavItem>
-    //   <SidebarNavItem icon={faCalculator} href="/salary-calculator">Salary Calculator</SidebarNavItem>
-    //   <SidebarNavItem icon={faBank} href="#">Cheques Management</SidebarNavItem>
-    //   </div>
-
-    //   <div className=" text-gray-300">
-    //   <SidebarNavTitle>Project Management</SidebarNavTitle>
-    //   </div>
-    //   <SidebarNavItem icon={faProjectDiagram} href="#">Projects</SidebarNavItem>
-
-
-    // </ul>
     <ul className="list-unstyled">
 
       <SidebarNavItem icon={faGauge} href="/">
@@ -115,10 +67,11 @@ export default async function SidebarNav() {
       <SidebarNavItem icon={faStarAndCrescent} href="/employee-benefits">Employee Benefits</SidebarNavItem>
 
 
-      <SidebarNavTitle>Project Management</SidebarNavTitle>
+      <SidebarNavTitle>Website CMS</SidebarNavTitle>
       <SidebarNavGroup toggleIcon={faProjectDiagram} toggleText={"Projects"}>
-      <SidebarNavItem icon={faFileLines} href="/projects">See Projects</SidebarNavItem>
-      <SidebarNavItem icon={faPlusCircle} href="/projects/new">Add New Project</SidebarNavItem>
+        <SidebarNavItem icon={faFileLines} href="/projects">See Projects</SidebarNavItem>
+        <SidebarNavItem icon={faPlusCircle} href="/projects/new">Add New Project</SidebarNavItem>
+        <SidebarNavItem icon={faPuzzlePiece} href="/project-categories">Project Categories</SidebarNavItem>
       </SidebarNavGroup>
 
       <SidebarNavTitle>Administration</SidebarNavTitle>

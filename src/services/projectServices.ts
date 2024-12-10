@@ -111,4 +111,92 @@ export const projectServices = {
       return { success: false, message: errorMessage };
     }
   },
+
+
+  // project categories related services
+  async getCategories() {
+    try {
+      const response = await axios.get('/api/projects/categories', {
+        headers: {
+          'Cache-Control': 'no-store',
+          'Pragma': 'no-cache',
+          'Expires': '0'
+
+        }
+      });
+
+      if (response.data?.categories) {
+        return { success: true, data: response.data.categories };
+      }
+      throw new Error(response.data?.message || 'Unexpected response from server');
+    } catch (error: any) {
+      const errorMessage = error?.response?.data?.message || error.message || 'An error occurred during the request';
+      return { success: false, message: errorMessage };
+    }
+  },
+  async addCategory(categoryData: any) {
+    try {
+      const response = await axios.post('/api/projects/categories', categoryData, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Cache-Control': 'no-store',
+          'Pragma': 'no-cache',
+          'Expires': '0'
+
+        }
+      });
+
+      if (response.data?.message === 'Category created successfully') {
+        return { success: true, data: response.data };
+      } else {
+        throw new Error(response.data?.message || 'Unexpected response from server');
+      }
+    } catch (error: any) {
+      // Handle specific errors
+      const errorMessage = error?.response?.data?.message || error.message || 'An error occurred during the request';
+      return { success: false, message: errorMessage };
+    }
+  },
+  async deleteCategory(categoryId: string) {
+    try {
+      const response = await axios.delete(`/api/projects/categories/${categoryId}`, {
+        headers: {
+          'Cache-Control': 'no-store',
+          'Pragma': 'no-cache',
+          'Expires': '0'
+
+        }
+      });
+
+      if (response.data?.category) {
+        return { success: true, data: response.data };
+      } else {
+        throw new Error(response.data?.message || 'Unexpected response from server');
+      }
+    } catch (error: any) {
+      const errorMessage = error?.response?.data?.message || error.message || 'An error occurred during the request';
+      return { success: false, message: errorMessage };
+    }
+  },
+  async updateCategory(categoryId: string, updatedData: any) {
+    try {
+      const response = await axios.put(`/api/projects/categories/${categoryId}`, updatedData, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Cache-Control': 'no-store',
+          'Pragma': 'no-cache',
+          'Expires': '0'
+
+        }
+      });
+
+      if (response.data?.category) {
+        return { success: true, data: response.data.category };
+      }
+      throw new Error(response.data?.message || 'Unexpected response from server');
+    } catch (error: any) {
+      const errorMessage = error?.response?.data?.message || error.message || 'An error occurred during the request';
+      return { success: false, message: errorMessage };
+    }
+  },
 };

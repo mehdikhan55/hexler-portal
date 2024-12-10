@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import Department from "@/models/department";
 
 const employeeSchema = new mongoose.Schema({
     firstName: {
@@ -13,6 +14,10 @@ const employeeSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true
+    },
+    profilePhoto:{
+        type: String,
+        default: '/images/default-profile.jpg'
     },
     phoneNumber: {
         type: String,
@@ -42,7 +47,7 @@ const employeeSchema = new mongoose.Schema({
     },
     department: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Department'
+        ref: "Department",
     },
     salary: {
         type: Number,

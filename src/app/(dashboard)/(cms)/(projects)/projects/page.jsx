@@ -13,7 +13,7 @@ const Page = () => {
     const result = await projectServices.getProjects();
     if (result.success) {
       setProjects(result.data);
-      console.log(result.data);
+      console.log("Fetched projects", result.data);
     } else {
       setError(result.message);
     }

@@ -18,7 +18,10 @@ interface ProjectCardProps {
     projectName: string;
     projectTagline: string;
     projectDescription: string;
-    projectCategory: string;
+    projectCategory: {
+      _id: string;
+      name: string;
+    };
     projectImage: string;
     projectLink: string;
     projectOrder: number;
@@ -100,7 +103,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project,fetchProjects }) => {
         <p className="text-sm text-gray-400 dark:text-gray-300 mb-4 text-center">{project.projectTagline}</p>
         <p className="text-sm text-gray-200 dark:text-gray-300 mb-4 italic">Description: {project?.projectDescription}</p>
         <span className="block text-sm text-blue-500 dark:text-blue-400 font-medium mb-4">
-          {project.projectCategory}
+          {project.projectCategory.name}
         </span>
 
         <div className="flex items-center justify-between">

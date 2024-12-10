@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import ProjectEditForm from './ProjectEditForm';
 
-const EditProject = ({ onSubmit, loading, project, error, setImageRemoved }: any) => {
+const EditProject = ({categoriesData , onSubmit, loading, project, error, setImageRemoved }: any) => {
     const [projectImage, setProjectImage] = useState<string | null>(null);
 
     useEffect(() => {
@@ -19,7 +19,7 @@ const EditProject = ({ onSubmit, loading, project, error, setImageRemoved }: any
             projectName: project?.projectName,
             projectTagline: project?.projectTagline,
             projectDescription: project?.projectDescription,
-            projectCategory: project?.projectCategory,
+            projectCategory: project?.projectCategory._id,
             projectImage: null,
             updatedImage: null,
             projectLink: project?.projectLink,
@@ -39,6 +39,7 @@ const EditProject = ({ onSubmit, loading, project, error, setImageRemoved }: any
                     loading={loading}
                     buttonText="Update"
                     projectImage={projectImage}
+                    categoriesData={categoriesData}
                     setProjectImage={setProjectImage}
                     setImageRemoved={setImageRemoved} />
 

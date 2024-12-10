@@ -80,10 +80,13 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
                         placeholder={props.placeholder}
                         {...field}
                         type="number"
-                        // className="shad-input border-0"
+                        value={field.value || ''}
+                        onChange={(e) => field.onChange(Number(e.target.value))}
+                    // className="shad-input border-0"
                     />
                 </FormControl>
             );
+
         case FormFieldType.PASSWORD:
             return (
                 // <div className="flex rounded-md border border-dark-500 bg-dark-400">
@@ -102,7 +105,7 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
                             placeholder={props.placeholder}
                             {...field}
                             type="password"
-                            // className="shad-input border-0"
+                        // className="shad-input border-0"
                         />
                     </FormControl>
                 </div>
@@ -193,10 +196,11 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
 }
 
 const CustomFormField = (props: CustomProps) => {
-    const { control, name, label } = props;
+    const { control, name, label, disabled } = props;
 
     return (
         <FormField
+            disabled={disabled && true}
             control={control}
             name={name}
             render={({ field }) => (

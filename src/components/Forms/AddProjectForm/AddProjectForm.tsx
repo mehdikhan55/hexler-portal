@@ -3,11 +3,10 @@ import { FileUploader } from '@/components/Form Reusables/FileUploader'
 import { Button } from '@/components/ui/button'
 import { Form, FormControl } from '@/components/ui/form'
 import { SelectItem } from '@/components/ui/select'
-import { categoriesData } from '@/constants/categoriesData'
 import React from 'react'
 
 
-const AddProjectForm = ({ form, onSubmit, loading, buttonText="Submit" }: any) => {
+const AddProjectForm = ({ form, onSubmit, loading, buttonText="Submit", categoriesData }: any) => {
     return (
         <div>
             <Form {...form}>
@@ -47,8 +46,9 @@ const AddProjectForm = ({ form, onSubmit, loading, buttonText="Submit" }: any) =
                             label='Project Category'
                             placeholder="Select Category"
                         >
+                            {/* @ts-ignore */}
                             {categoriesData.map((category, i) => (
-                                <SelectItem key={category.id} value={category.name}>
+                                <SelectItem key={category._id} value={category._id}>
                                     <div className="flex cursor-pointer items-center gap-2">
                                         <p>{category.name}</p>
                                     </div>
