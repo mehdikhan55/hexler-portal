@@ -26,6 +26,7 @@ const AddProjectCategory: React.FC<AddExpenseCategoryProps> = ({ onAddCategory }
     }
 
     const newCategory: Category = {
+      _id: Math.random().toString(),
       name,
       description,
     };
