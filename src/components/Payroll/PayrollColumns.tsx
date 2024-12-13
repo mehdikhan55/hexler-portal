@@ -151,7 +151,7 @@ export const payrollColumns = ({
                             </DropdownMenuItem>
                             {/* @ts-ignore */}
                             <DropdownMenuItem onClick={() => handleDeletePayroll(payroll._id)}>
-                                Edit Record
+                                Delete Record
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>

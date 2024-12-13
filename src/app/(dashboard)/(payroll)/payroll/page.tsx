@@ -9,6 +9,7 @@ import { Payroll } from "@/types/Payroll";
 import { payrollServices } from "@/services/payrollServices";
 import { useRouter } from "next/navigation";
 import PayrollDetails from "@/components/Payroll/PayrollDetails";
+import toast from "react-hot-toast";
 
 // /payroll
 
@@ -18,6 +19,9 @@ const Page = () => {
   const [error, setError] = useState(null);
   const [showPayrollData, setShowPayrollData] = useState(false);
   const [selectedPayroll, setSelectedPayroll] = useState(null);
+  const [payrollToDelete, setPayrollToDelete] = useState<null | string>(null);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
 
@@ -54,7 +58,33 @@ const Page = () => {
   }
 
   const handleDeletePayroll = async (payrollId: string) => {
+    setPayrollToDelete(payrollId); // Set the project name for confirmation
+    setIsDeleteModalOpen(true);
   }
+
+  // Confirm delete
+  const handleConfirmDelete = async () => {
+    console.log(`Payroll "${payrollToDelete}" has been deleted.`);
+    setLoading(true);
+    // @ts-ignore
+    const result = await payrollServices.deletePayroll(payrollToDelete);
+    if (result.success) {
+      console.log(result.data);
+      toast.success("Payroll Deleted Successfully");
+      await loadData();
+      setLoading(false);
+    } else {
+      toast.error(result.message);
+      setLoading(false);
+    }
+    setIsDeleteModalOpen(false); // Close modal
+  };
+
+
+  // Cancel delete
+  const handleCancelDelete = () => {
+    setIsDeleteModalOpen(false); // Close modal without deleting
+  };
 
   return (
     <div>
@@ -86,6 +116,32 @@ const Page = () => {
           )}
         </DialogContent>
       </Dialog>
+
+      {isDeleteModalOpen && (
+        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
+          <div className="light:bg-white dark:bg-gray-900 p-6 rounded-lg shadow-lg max-w-sm w-full">
+            <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-4">Confirm Deletion</h3>
+            <p className="text-sm text-gray-700 dark:text-gray-300 mb-6">
+              Are you sure you want to delete the payroll: <strong>{payrollToDelete}</strong>?
+            </p>
+            <div className="flex justify-between">
+              <button
+                onClick={handleCancelDelete}
+                className="px-4 py-2 bg-gray-300 dark:bg-gray-700 text-gray-800 dark:text-white rounded-lg hover:bg-gray-400 dark:hover:bg-gray-600"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleConfirmDelete}
+                disabled={loading}
+                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+              >
+                {loading ? "Deleting..." : "Confirm"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
