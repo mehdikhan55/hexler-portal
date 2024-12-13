@@ -15,7 +15,6 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Button } from "@/components/ui/button";
 
 import { Expense } from "@/types/Expense";
-import { fetchExpenses } from "@/lib/utils/fetchExpenses";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import DatePicker from "./date-picker-demo";
 import { Label } from "../ui/label";

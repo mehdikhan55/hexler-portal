@@ -44,8 +44,8 @@ export default async function SidebarNav() {
       <SidebarNavTitle>Finance Management</SidebarNavTitle>
 
       <SidebarNavGroup toggleIcon={faDollar} toggleText={"Payroll"}>
+        <SidebarNavItem icon={faMoneyBill} href="/payroll">Payroll</SidebarNavItem>
         <SidebarNavItem icon={faCalculator} href="/salary-calculator">Salary Calculator</SidebarNavItem>
-        <SidebarNavItem icon={faMoneyBill} href="/">Payslips</SidebarNavItem>
         <SidebarNavItem icon={faPeopleLine} href="/">Attendance</SidebarNavItem>
       </SidebarNavGroup>
 

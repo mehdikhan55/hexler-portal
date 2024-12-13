@@ -53,3 +53,54 @@ export const EmployeeAddSchema = z.object({
         .min(0, 'Salary cannot be negative')
         .max(1000000, 'Salary seems unusually high')
 });
+
+export const PayrollAddSchema = z.object({
+    employeeId: z.string(),
+    baseSalary: z.number()
+        .min(0, 'Base salary must be at least 0'),
+    bonus: z.number()
+        .min(0, 'Bonus must not be negative')
+        .default(0),
+    deductions: z.number()
+        .min(0, 'Deductions must not be negative')
+        .default(0),
+    totalSalary: z.number()
+        .min(0, 'Total salary must be at least 0'),
+    payDate: z.date().nullable().optional(),
+    payMonth: z.number()
+        .min(1, 'Pay month must be between 1 and 12')
+        .max(12, 'Pay month must be between 1 and 12'),
+    payYear: z.string(),
+    attendanceData: z.object({
+        hoursWorked: z.number()
+            .min(0, 'Hours worked must not be negative').nullable().optional()
+    }).optional(),
+    isPaid: z.boolean().default(false),
+    paymentMethod: z.enum(['Bank transfer', 'Cash', 'Cheque', 'Direct deposit'])
+        .default('Bank transfer')
+});
+export const PayrollAddSchema2 = z.object({
+    employeeId: z.string(),
+    baseSalary: z.number()
+        .min(0, 'Base salary must be at least 0'),
+    bonus: z.number()
+        .min(0, 'Bonus must not be negative')
+        .default(0),
+    deductions: z.number()
+        .min(0, 'Deductions must not be negative')
+        .default(0),
+    totalSalary: z.number()
+        .min(0, 'Total salary must be at least 0'),
+    payDate: z.string().nullable().optional(),
+    payMonth: z.number()
+        .min(1, 'Pay month must be between 1 and 12')
+        .max(12, 'Pay month must be between 1 and 12'),
+    payYear: z.string(),
+    attendanceData: z.object({
+        hoursWorked: z.number()
+            .min(0, 'Hours worked must not be negative').nullable().optional()
+    }).optional(),
+    isPaid: z.boolean().default(false),
+    paymentMethod: z.enum(['Bank transfer', 'Cash', 'Cheque', 'Direct deposit'])
+        .default('Bank transfer')
+});
