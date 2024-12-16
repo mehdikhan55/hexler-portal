@@ -9,6 +9,7 @@ import {
   faMoneyBill,
   faPeopleLine,
   faPeopleRoof,
+  faPersonDress,
   faPersonShelter,
   faPlusCircle,
   faProjectDiagram,
@@ -72,6 +73,10 @@ export default async function SidebarNav() {
         <SidebarNavItem icon={faFileLines} href="/projects">See Projects</SidebarNavItem>
         <SidebarNavItem icon={faPlusCircle} href="/projects/new">Add New Project</SidebarNavItem>
         <SidebarNavItem icon={faPuzzlePiece} href="/project-categories">Project Categories</SidebarNavItem>
+      </SidebarNavGroup>
+      <SidebarNavGroup toggleIcon={faPersonDress} toggleText={"Careers"}>
+        <SidebarNavItem icon={faFileLines} href="/careers">Manage Careers</SidebarNavItem>
+        <SidebarNavItem icon={faPlusCircle} href="/careers/applications">View Applications</SidebarNavItem>
       </SidebarNavGroup>
 
       <SidebarNavTitle>Administration</SidebarNavTitle>

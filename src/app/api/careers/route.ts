@@ -7,7 +7,7 @@ import dbConnect from "@/lib/dbConnect";
 export async function GET(req: NextRequest) {
   try {
     await dbConnect();
-    const careers = await Career.find({});
+    const careers = await Career.find({}).sort({ updatedAt: -1 });
     return NextResponse.json({ careers }, { status: 200 });
   } catch (error) {
     console.error("Error getting careers:", error);
@@ -48,5 +48,6 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+
 
 export const revalidate = 0;

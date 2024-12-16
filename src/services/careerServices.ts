@@ -1,33 +1,6 @@
+import { AddCareer, Career, CareerApplication } from '@/types/Career';
 import axios from 'axios';
 
-// Types for Career and CareerApplication
-interface Career {
-  _id?: string;
-  name: string;
-  description?: string;
-  createdAt?: Date;
-  updatedAt?: Date;
-}
-
-interface CareerApplication {
-  _id?: string;
-  firstName: string;
-  lastName: string;
-  gender: 'male' | 'female' | 'other';
-  DOB: string;
-  phoneNumber: string;
-  email: string;
-  address: string;
-  city: string;
-  projectLinks?: string;
-  linkedinProfile?: string;
-  githubProfile?: string;
-  career: string | Career;
-  resume?: string;
-  status: 'pending' | 'reviewing' | 'shortlisted' | 'rejected' | 'hired';
-  createdAt?: Date;
-  updatedAt?: Date;
-}
 
 export const careerServices = {
   // Career position management
@@ -51,7 +24,7 @@ export const careerServices = {
     }
   },
 
-  async addCareer(careerData: Career) {
+  async addCareer(careerData: AddCareer) {
     try {
       const response = await axios.post('/api/careers', careerData, {
         headers: {
@@ -62,7 +35,7 @@ export const careerServices = {
         }
       });
 
-      if (response.data?.message === 'Career position created successfully') {
+      if (response.data?.message === 'Career created successfully') {
         return { success: true, data: response.data.career };
       }
       throw new Error(response.data?.message || 'Unexpected response from server');
@@ -103,7 +76,7 @@ export const careerServices = {
         }
       });
 
-      if (response.data?.message === 'Career deleted successfully') {
+      if (response.data?.message === 'Career and associated applications deleted successfully') {
         return { success: true, data: response.data.career };
       }
       throw new Error(response.data?.message || 'Unexpected response from server');
@@ -119,7 +92,7 @@ export const careerServices = {
     career?: string;
   }) {
     try {
-      let url = '/api/career-applications';
+      let url = '/api/careers/applications';
       if (filters) {
         const params = new URLSearchParams();
         if (filters.status) params.append('status', filters.status);
@@ -145,11 +118,11 @@ export const careerServices = {
     }
   },
 
-  async submitApplication(applicationData: FormData) {
+  async submitApplication(applicationData: CareerApplication) {
     try {
-      const response = await axios.post('/api/career-applications', applicationData, {
+      const response = await axios.post('/api/careers/applications', applicationData, {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          'Content-Type': 'application/json',
           'Cache-Control': 'no-store',
           'Pragma': 'no-cache',
           'Expires': '0'
@@ -168,7 +141,7 @@ export const careerServices = {
 
   async updateApplicationStatus(applicationId: string, status: CareerApplication['status']) {
     try {
-      const response = await axios.patch(`/api/career-applications/${applicationId}/status`, 
+      const response = await axios.patch(`/api/careers/applications/${applicationId}/status`, 
         { status },
         {
           headers: {
@@ -192,7 +165,7 @@ export const careerServices = {
 
   async getApplicationDetails(applicationId: string) {
     try {
-      const response = await axios.get(`/api/career-applications/${applicationId}`, {
+      const response = await axios.get(`/api/careers/applications/${applicationId}`, {
         headers: {
           'Cache-Control': 'no-store',
           'Pragma': 'no-cache',
@@ -212,7 +185,7 @@ export const careerServices = {
 
   async deleteApplication(applicationId: string) {
     try {
-      const response = await axios.delete(`/api/career-applications/${applicationId}`, {
+      const response = await axios.delete(`/api/careers/applications/${applicationId}`, {
         headers: {
           'Cache-Control': 'no-store',
           'Pragma': 'no-cache',

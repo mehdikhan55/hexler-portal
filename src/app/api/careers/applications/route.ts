@@ -1,4 +1,3 @@
-
 // /api/careers/applications/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import CareerApplication from "@/models/careerApplication";
@@ -9,8 +8,26 @@ export async function GET(req: NextRequest) {
   try {
     await dbConnect();
     
-    // Fetch all applications and populate career info
-    const applications = await CareerApplication.find({})
+    // Get filters from query parameters
+    const { searchParams } = new URL(req.url);
+    const status = searchParams.get('status');
+    const career = searchParams.get('career');
+
+    // Build query object based on filters
+    const query: any = {};
+    
+    // Add status filter if provided
+    if (status) {
+      query.status = status;
+    }
+
+    // Add career filter if provided
+    if (career) {
+      query.career = career;
+    }
+
+    // Fetch applications with filters and populate career info
+    const applications = await CareerApplication.find(query)
       .populate("career")
       .sort({ createdAt: -1 });
 
