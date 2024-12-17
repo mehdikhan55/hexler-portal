@@ -11,7 +11,7 @@ import { Expense, Category } from "@/types/Expense";
 import { format } from "date-fns";
 
 interface AddExpenseProps {
-    onAddExpense: (newExpense: Expense) => void;
+    onAddExpense: (newExpense: Omit<Expense, '_id'>) => void;
     categories: Category[];
 }
 
@@ -34,8 +34,7 @@ const AddExpense: React.FC<AddExpenseProps> = ({ onAddExpense, categories }) => 
             return;
         }
 
-        const newExpense: Expense = {
-            _id: Math.floor(1000 + Math.random() * 9000).toString(),
+        const newExpense: Omit<Expense, '_id'> = {
             date: format(date, "yyyy-MM-dd"),
             amount: parseFloat(amount),
             description,

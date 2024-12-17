@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Category } from "@/types/Category";
 
 interface AddExpenseCategoryProps {
-  onAddCategory: (newCategory: Category) => void;
+  onAddCategory: (newCategory:  Omit<Category, '_id'>) => void;
 }
 
 const AddExpenseCategory: React.FC<AddExpenseCategoryProps> = ({ onAddCategory }) => {
@@ -25,8 +25,7 @@ const AddExpenseCategory: React.FC<AddExpenseCategoryProps> = ({ onAddCategory }
       return;
     }
 
-    const newCategory: Category = {
-      _id: Math.floor(1000 + Math.random() * 9000).toString(),
+    const newCategory:  Omit<Category, '_id'> = {
       name,
       description,
     };
