@@ -26,8 +26,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import Link from 'next/link'
 import HeaderLogout from '@/components/Layout/Dashboard/Header/HeaderLogout'
-import { authOptions } from '@/app/api/auth/option'
-import { getServerSession } from 'next-auth'
 import { getDictionary } from '@/locales/dictionary'
 
 type ItemWithIconProps = {
@@ -46,7 +44,7 @@ const ItemWithIcon = (props: ItemWithIconProps) => {
 }
 
 export default async function HeaderProfileNav() {
-  const session = await getServerSession(authOptions)
+  // const session = await getServerSession(authOptions)
   const dict = await getDictionary()
 
   return (
@@ -54,7 +52,7 @@ export default async function HeaderProfileNav() {
       <Dropdown as={NavItem}>
         <DropdownToggle variant="link" bsPrefix="hide-caret" className="py-0 px-2 rounded-0" id="dropdown-profile">
           <div className="avatar position-relative">
-            {session && (
+            {/* {session && (
               <Image
                 fill
                 sizes="32px"
@@ -62,7 +60,7 @@ export default async function HeaderProfileNav() {
                 src={session.user.avatar}
                 alt={session.user.email}
               />
-            )}
+            )} */}
           </div>
         </DropdownToggle>
         <DropdownMenu className="pt-0">

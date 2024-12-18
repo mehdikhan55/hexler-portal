@@ -9,7 +9,6 @@ import { faLock } from '@fortawesome/free-solid-svg-icons'
 import { useState } from 'react'
 import Link from 'next/link'
 import InputGroupText from 'react-bootstrap/InputGroupText'
-import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import useDictionary from '@/locales/dictionary-hook'
 
@@ -19,45 +18,45 @@ export default function Login({ callbackUrl }: { callbackUrl: string }) {
   const router = useRouter()
   const dict = useDictionary()
 
-  const login = async (formData: FormData) => {
-    setSubmitting(true)
+  // const login = async (formData: FormData) => {
+  //   setSubmitting(true)
 
-    try {
-      const res = await signIn('credentials', {
-        username: formData.get('username'),
-        password: formData.get('password'),
-        redirect: false,
-        callbackUrl,
-      })
+  //   try {
+  //     const res = await signIn('credentials', {
+  //       username: formData.get('username'),
+  //       password: formData.get('password'),
+  //       redirect: false,
+  //       callbackUrl,
+  //     })
 
-      if (!res) {
-        setError('Login failed')
-        return
-      }
+  //     if (!res) {
+  //       setError('Login failed')
+  //       return
+  //     }
 
-      const { ok, url, error: err } = res
+  //     const { ok, url, error: err } = res
 
-      if (!ok) {
-        if (err) {
-          setError(err)
-          return
-        }
+  //     if (!ok) {
+  //       if (err) {
+  //         setError(err)
+  //         return
+  //       }
 
-        setError('Login failed')
-        return
-      }
+  //       setError('Login failed')
+  //       return
+  //     }
 
-      if (url) {
-        router.push(url)
-      }
-    } catch (err) {
-      if (err instanceof Error) {
-        setError(err.message)
-      }
-    } finally {
-      setSubmitting(false)
-    }
-  }
+  //     if (url) {
+  //       router.push(url)
+  //     }
+  //   } catch (err) {
+  //     if (err instanceof Error) {
+  //       setError(err.message)
+  //     }
+  //   } finally {
+  //     setSubmitting(false)
+  //   }
+  // }
 
   return (
     <>
@@ -69,7 +68,7 @@ export default function Login({ callbackUrl }: { callbackUrl: string }) {
       >
         {error}
       </Alert>
-      <Form action={login}>
+      <Form action={()=>{}}>
         <InputGroup className="mb-3">
           <InputGroupText>
             <FontAwesomeIcon

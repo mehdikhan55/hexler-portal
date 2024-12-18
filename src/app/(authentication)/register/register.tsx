@@ -9,7 +9,6 @@ import { faLock } from '@fortawesome/free-solid-svg-icons'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import InputGroupText from 'react-bootstrap/InputGroupText'
-import { signIn } from 'next-auth/react'
 import useDictionary from '@/locales/dictionary-hook'
 
 export default function Register() {
@@ -18,50 +17,50 @@ export default function Register() {
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
 
-  const register = async () => {
-    setSubmitting(true)
+  // const register = async () => {
+  //   setSubmitting(true)
 
-    try {
-      const res = await signIn('credentials', {
-        username: 'Username',
-        password: 'Password',
-        redirect: false,
-        callbackUrl: '/',
-      })
+  //   try {
+  //     const res = await signIn('credentials', {
+  //       username: 'Username',
+  //       password: 'Password',
+  //       redirect: false,
+  //       callbackUrl: '/',
+  //     })
 
-      if (!res) {
-        setError('Register failed')
-        return
-      }
+  //     if (!res) {
+  //       setError('Register failed')
+  //       return
+  //     }
 
-      const { ok, url, error: err } = res
+  //     const { ok, url, error: err } = res
 
-      if (!ok) {
-        if (err) {
-          setError(err)
-          return
-        }
+  //     if (!ok) {
+  //       if (err) {
+  //         setError(err)
+  //         return
+  //       }
 
-        setError('Register failed')
-        return
-      }
+  //       setError('Register failed')
+  //       return
+  //     }
 
-      if (url) {
-        router.push(url)
-      }
-    } catch (err) {
-      if (err instanceof Error) {
-        setError(err.message)
-      }
-    } finally {
-      setSubmitting(false)
-    }
-  }
+  //     if (url) {
+  //       router.push(url)
+  //     }
+  //   } catch (err) {
+  //     if (err instanceof Error) {
+  //       setError(err.message)
+  //     }
+  //   } finally {
+  //     setSubmitting(false)
+  //   }
+  // }
 
   return (
     <>
       <Alert variant="danger" show={error !== ''} onClose={() => setError('')} dismissible>{error}</Alert>
-      <Form onSubmit={register}>
+      <Form onSubmit={()=>{}}>
         <InputGroup className="mb-3">
           <InputGroupText><FontAwesomeIcon icon={faUser} fixedWidth /></InputGroupText>
           <FormControl
