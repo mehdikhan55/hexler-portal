@@ -73,7 +73,7 @@ export default function SidebarNav() {
 
 
       {
-        isFinanceAdmin() || isHRAdmin() && <>
+        (isFinanceAdmin() || isHRAdmin() )&& <>
           <SidebarNavTitle>Employees Management</SidebarNavTitle>
           <SidebarNavGroup toggleIcon={faPersonShelter} toggleText={"Employee"}>
             <SidebarNavItem icon={faPeopleRoof} href="/employee-profiles">Employee Profiles</SidebarNavItem>
@@ -84,48 +84,31 @@ export default function SidebarNav() {
         </>
       }
 
-      {
-        canManageCMS() && <>
-          <SidebarNavTitle>Website CMS</SidebarNavTitle>
-          <SidebarNavGroup toggleIcon={faProjectDiagram} toggleText={"Projects"}>
-            <SidebarNavItem icon={faFileLines} href="/projects">See Projects</SidebarNavItem>
-            <SidebarNavItem icon={faPlusCircle} href="/projects/new">Add New Project</SidebarNavItem>
-            <SidebarNavItem icon={faPuzzlePiece} href="/project-categories">Project Categories</SidebarNavItem>
-          </SidebarNavGroup>
-          <SidebarNavGroup toggleIcon={faPersonDress} toggleText={"Careers"}>
-            <SidebarNavItem icon={faFileLines} href="/careers">Manage Careers</SidebarNavItem>
-            <SidebarNavItem icon={faPlusCircle} href="/careers/applications">View Applications</SidebarNavItem>
-          </SidebarNavGroup>
-        </>
-      }
 
-     { (canViewProjects() && canManageProjects()) && <>
+      <SidebarNavTitle>Website CMS</SidebarNavTitle>
+      <SidebarNavGroup toggleIcon={faProjectDiagram} toggleText={"Projects"}>
+        <SidebarNavItem icon={faFileLines} href="/projects">See Projects</SidebarNavItem>
+        <SidebarNavItem icon={faPlusCircle} href="/projects/new">Add New Project</SidebarNavItem>
+        <SidebarNavItem icon={faPuzzlePiece} href="/project-categories">Project Categories</SidebarNavItem>
+      </SidebarNavGroup>
+      <SidebarNavGroup toggleIcon={faPersonDress} toggleText={"Careers"}>
+        <SidebarNavItem icon={faFileLines} href="/careers">Manage Careers</SidebarNavItem>
+        <SidebarNavItem icon={faPlusCircle} href="/careers/applications">View Applications</SidebarNavItem>
+      </SidebarNavGroup>
+
       <SidebarNavTitle>Project Management</SidebarNavTitle>
       <SidebarNavGroup toggleIcon={faProjectDiagram} toggleText={"Manage Projects"}>
-        <SidebarNavItem icon={faFileLines} href="/all-projects">See All Projects</SidebarNavItem>
-        {canManageProjects() && <SidebarNavItem icon={faPlusCircle} href="/manage-projects/new">Add New Project</SidebarNavItem>}
+      <SidebarNavItem icon={faFileLines} href="/all-projects">See All Projects</SidebarNavItem>
+        {/* <SidebarNavItem icon={faFileLines} href="/manage-projects">Manage Projects</SidebarNavItem> */}
+        <SidebarNavItem icon={faPlusCircle} href="/manage-projects/new">Add New Project</SidebarNavItem>
       </SidebarNavGroup>
-      </>
-      }
 
-    
-      {isAdmin() && (
-        <>
-          <SidebarNavTitle>Account Management</SidebarNavTitle>
-          <SidebarNavItem icon={faPeopleRoof} href="/manage-accounts">Manage Accounts</SidebarNavItem>
-          {/* <SidebarNavItem icon={faPlusCircle} href="/manage-accounts/new">Add New Account</SidebarNavItem> */}
-        </>
-      )}
+      <SidebarNavTitle>Administration</SidebarNavTitle>
+      <SidebarNavItem icon={faBuildingUser} href="#">Departments</SidebarNavItem>
+      <SidebarNavItem icon={faBarChart} href="#">HR</SidebarNavItem>
+      <SidebarNavItem icon={faEnvelope} href="#">Email Logs</SidebarNavItem>
+      <SidebarNavItem icon={faIdCard} href="#">Etag and Card</SidebarNavItem>
 
-      {
-        isFinanceAdmin() && <>
-          <SidebarNavTitle>Administration</SidebarNavTitle>
-          <SidebarNavItem icon={faBuildingUser} href="#">Departments</SidebarNavItem>
-          <SidebarNavItem icon={faBarChart} href="#">HR</SidebarNavItem>
-          <SidebarNavItem icon={faEnvelope} href="#">Email Logs</SidebarNavItem>
-          <SidebarNavItem icon={faIdCard} href="#">Etag and Card</SidebarNavItem>
-        </>
-      }
       {/* <SidebarNavItem icon={faCode} href="/pokemons">
         {siteData.sidebar.items.sample}
         <small className="ms-auto"><Badge bg="danger" className="ms-auto">DEMO</Badge></small>

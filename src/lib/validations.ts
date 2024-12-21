@@ -1,5 +1,25 @@
 import { z } from 'zod';
 
+export const NewProjectSchema = z.object({
+    projectName: z.string().min(1, "Project name is required"),
+    projectDescription: z.string().min(1, "Project description is required"),
+    budget: z.object({
+        amount: z.number().nullable(),
+        currency: z.string().default('USD')
+    }),
+    sendForApproval: z.boolean().default(false),
+    isActive: z.boolean().default(true),
+    modules: z.array(z.object({
+        moduleName: z.string().min(1, "Module name is required"),
+        description: z.string().min(1, "Module description is required"),
+        budget: z.object({
+            amount: z.number().nullable(),
+            currency: z.string().default('USD')
+        }),
+        deadline: z.date()
+    })).default([])
+});
+
 export const ProjectAddSchema = z.object({
     projectName: z.string().min(3, 'Project name must be at least 3 characters long'),
     projectTagline: z.string().min(3, 'Project tagline must be at least 3 characters long'),
