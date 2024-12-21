@@ -8,7 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-   "init-auth": "node -r dotenv/config \"src/scripts/initAuth.js\"",
+    "init-auth": "node -r dotenv/config \"src/scripts/initAuth.js\"",
     "clear-auth": "node -r dotenv/config \"src/scripts/clearAuth.js\""
   },
   "dependencies": {

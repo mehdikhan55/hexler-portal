@@ -15,10 +15,6 @@ const NewProjectForm = ({ form, onSubmit, loading, buttonText = "Submit" }: any)
         moduleName: '',
         description: '',
         deadline: null as Date | null,
-        budget: {
-            amount: 0,
-            currency: 'USD'
-        }
     });
     const [modules, setModules] = useState<any[]>([]);
     const [editingModuleId, setEditingModuleId] = useState<number | null>(null);
@@ -44,11 +40,7 @@ const NewProjectForm = ({ form, onSubmit, loading, buttonText = "Submit" }: any)
         setCurrentModule({
             moduleName: '',
             description: '',
-            deadline: null,
-            budget: {
-                amount: 0,
-                currency: 'USD'
-            }
+            deadline: null
         });
     };
 
@@ -151,43 +143,6 @@ const NewProjectForm = ({ form, onSubmit, loading, buttonText = "Submit" }: any)
                                         })}
                                     />
                                     
-                                    {/* Module Budget */}
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <Input
-                                            type="number"
-                                            placeholder="Module Budget Amount"
-                                            value={currentModule.budget.amount}
-                                            onChange={(e) => setCurrentModule({
-                                                ...currentModule,
-                                                budget: {
-                                                    ...currentModule.budget,
-                                                    amount: parseFloat(e.target.value) || 0
-                                                }
-                                            })}
-                                        />
-                                        <Select 
-                                            value={currentModule.budget.currency}
-                                            onValueChange={(value) => setCurrentModule({
-                                                ...currentModule,
-                                                budget: {
-                                                    ...currentModule.budget,
-                                                    currency: value
-                                                }
-                                            })}
-                                        >
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Select currency" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                {currencies.map((currency) => (
-                                                    <SelectItem key={currency} value={currency}>
-                                                        {currency}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-                                    </div>
-
                                     {/* Date Picker */}
                                     <div className="space-y-2">
                                         <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
@@ -226,7 +181,6 @@ const NewProjectForm = ({ form, onSubmit, loading, buttonText = "Submit" }: any)
                                             <div className="space-y-1">
                                                 <p className="font-medium">{module.moduleName}</p>
                                                 <p className="text-sm text-muted-foreground">{module.description}</p>
-                                                <p className="text-sm">Budget: {module.budget.amount} {module.budget.currency}</p>
                                                 <p className="text-sm">Deadline: {module.deadline?.toLocaleDateString()}</p>
                                             </div>
                                             <div className="flex gap-2">

@@ -190,17 +190,18 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
             );
         case FormFieldType.SKELETON:
             return props.renderSkeleton ? props.renderSkeleton(field) : null;
-            case FormFieldType.DATE:
-    return (
-        <FormControl>
-            <Input
-                type="date"
-                {...field}
-                value={field.value ? new Date(field.value).toISOString().split('T')[0] : ''}
-                onChange={e => field.onChange(new Date(e.target.value))}
-            />
-        </FormControl>
-    );
+        case FormFieldType.DATE:
+            return (
+                <FormControl>
+                    <Input
+                        type="date"
+                        {...field}
+                        value={field.value ? new Date(field.value).toISOString().split('T')[0] : ''}
+                        onChange={e => field.onChange(new Date(e.target.value))}
+                        className="w-fit"
+                    />
+                </FormControl>
+            );
         default:
             return null;
         // }

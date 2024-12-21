@@ -9,16 +9,14 @@ import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 import Loader from "@/components/Common/Loader";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { projectManagementServices } from '@/services/projectManagementServices';
+import toast from 'react-hot-toast';
 
 interface ModuleData {
   moduleName: string;
   description: string;
-  isActive: boolean;
   deadline: Date;
-  budget: {
-    amount: number;
-    currency: string;
-  };
+  status: 'todo' | 'inprogress' | 'completed';
 }
 
 interface ProjectData {
@@ -29,12 +27,13 @@ interface ProjectData {
     amount: number;
     currency: string;
   };
-  isActive: boolean;
-  approvalStatus: string;
+  projectStatus: 'PENDING' | 'CANCELLED' | 'ACTIVE' | 'COMPLETED' | 'INACTIVE';
   approvedByFinance: boolean;
+  sendForApproval: boolean;
   modules: ModuleData[];
 }
 
+const projectStatuses = ['PENDING', 'CANCELLED', 'ACTIVE', 'COMPLETED', 'INACTIVE'];
 export default function EditProjectPage() {
   const params = useParams();
   const router = useRouter();
@@ -52,44 +51,45 @@ export default function EditProjectPage() {
         amount: 0,
         currency: 'USD'
       },
-      isActive: false,
-      modules: []
+      modules: [],
+      projectStatus: 'PENDING',
+      approvedByFinance: false,
+      sendForApproval: false
     }
   });
 
   useEffect(() => {
     const fetchProject = async () => {
-      const projectId = params.id;
-      
+      const projectId = params.id as string;
+
       if (projectId) {
         try {
-          const project = projectsDummyData.find(p => p._id === projectId);
+          const result = await projectManagementServices.getProject(projectId);
 
-          if (project) {
-            // Transform the budget structure
+          if (result.success && result.data) {
+            const project = result.data;
+
+            // Transform dates into Date objects for the form
             const transformedProject = {
               ...project,
-              budget: {
-                amount: project.budget,
-                currency: 'USD' // Default currency for existing data
-              },
+              //@ts-ignore
               modules: project.modules.map(module => ({
                 ...module,
-                deadline: new Date(module.deadline),
-                budget: {
-                  amount: 0, // Default amount for existing modules
-                  currency: 'USD' // Default currency for existing modules
-                }
+                deadline: new Date(module.deadline)
               }))
             };
-            
-            setProjectData(transformedProject);
 
+            setProjectData(transformedProject);
             // Set form default values
             form.reset(transformedProject);
+          } else {
+            toast.error('Project not found');
+            router.push('/manage-projects');
           }
         } catch (error) {
           console.error('Error fetching project:', error);
+          toast.error('Failed to load project details');
+          router.push('/manage-projects');
         } finally {
           setIsPageLoading(false);
         }
@@ -97,28 +97,50 @@ export default function EditProjectPage() {
     };
 
     fetchProject();
-  }, [params.id, form]);
+  }, [params.id, form, router]);
 
   const onSubmit = async (data: ProjectData) => {
     try {
       setLoading(true);
-      console.log('Updated Project Data:', {
-        ...data,
+
+      // Transform and validate the data
+      const updatedProject = {
+        projectName: data.projectName,
+        projectDescription: data.projectDescription,
+        budget: {
+          amount: data.budget.amount,
+          currency: data.budget.currency
+        },
+        projectStatus: data.projectStatus as 'PENDING' | 'CANCELLED' | 'ACTIVE' | 'COMPLETED' | 'INACTIVE',
+        sendForApproval: data.sendForApproval,
+        approvedByFinance: (data.sendForApproval && data.approvedByFinance) && false,
         modules: data.modules.map(module => ({
-          ...module,
+          moduleName: module.moduleName,
+          description: module.description,
           deadline: new Date(module.deadline),
+          status: module.status as 'todo' | 'inprogress' | 'completed'
         }))
-      });
-      
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      router.push('/all-projects');
+      };
+
+      const result = await projectManagementServices.updateProject(
+        params.id as string,
+        updatedProject
+      );
+
+      if (result.success) {
+        toast.success('Project updated successfully');
+        router.push('/manage-projects');
+      } else {
+        throw new Error(result.message || 'Failed to update project');
+      }
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to update project';
       console.error('Error updating project:', error);
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
   };
-
   return (
     <div className="p-6">
       {isPageLoading ? (
@@ -165,7 +187,7 @@ export default function EditProjectPage() {
                       <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                         Currency
                       </label>
-                      <Select 
+                      <Select
                         value={form.watch('budget.currency')}
                         onValueChange={(value) => form.setValue('budget.currency', value)}
                       >
@@ -181,7 +203,40 @@ export default function EditProjectPage() {
                         </SelectContent>
                       </Select>
                     </div>
+
+                    <div>
+                      <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                        Project Status
+                      </label>
+                      <Select
+                        value={form.watch('projectStatus')}
+                        onValueChange={(value) => form.setValue('projectStatus', value as any)}
+                      >
+                        <SelectTrigger className="mt-2">
+                          <SelectValue placeholder="Select Status" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {projectStatuses.map((status) => (
+                            <SelectItem key={status} value={status}>
+                              {status}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2">
+                        <CustomFormField
+                          fieldType={FormFieldType.CHECKBOX}
+                          control={form.control}
+                          name="sendForApproval"
+                          label="Send(Resend) To Finance For Price Approval"
+                        />
+                      </div>
+                    </div>
+
                   </div>
+
 
                   <div className="space-y-4">
                     <h2 className="font-semibold">Modules</h2>
@@ -203,36 +258,7 @@ export default function EditProjectPage() {
                           placeholder="Enter module description"
                         />
 
-                        {/* Module Budget Section */}
-                        <div className="grid grid-cols-2 gap-4">
-                          <CustomFormField
-                            fieldType={FormFieldType.NUMBER}
-                            control={form.control}
-                            name={`modules.${index}.budget.amount`}
-                            label="Module Budget Amount"
-                            placeholder="Enter module budget"
-                          />
-                          <div>
-                            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                              Module Currency
-                            </label>
-                            <Select 
-                              value={form.watch(`modules.${index}.budget.currency`)}
-                              onValueChange={(value) => form.setValue(`modules.${index}.budget.currency`, value)}
-                            >
-                              <SelectTrigger className="mt-2">
-                                <SelectValue placeholder="Select currency" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {currencies.map((currency) => (
-                                  <SelectItem key={currency} value={currency}>
-                                    {currency}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                          </div>
-                        </div>
+
 
                         <CustomFormField
                           fieldType={FormFieldType.DATE}

@@ -9,6 +9,7 @@ import NewProjectForm from '@/components/Forms/projectManagementForm/NewProjectF
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import Loader from "@/components/Common/Loader";
+import { projectManagementServices } from '@/services/projectManagementServices';
 
 const Page = () => {
     const [loading, setLoading] = useState(false);
@@ -42,17 +43,37 @@ const Page = () => {
         try {
             setLoading(true);
             setError(null);
-
+    
             console.log('Form Values:', values);
-
-            // Here you would make your API call
-            // const response = await projectServices.createProject(values);
-
-            toast.success('Project created successfully');
-            router.push('/all-projects');
+    
+            // Call the project management service to create the project
+            const result = await projectManagementServices.addProject({
+                projectName: values.projectName,
+                projectDescription: values.projectDescription,
+                sendForApproval: values.sendForApproval,
+                projectStatus: 'ACTIVE',
+                budget: {
+                    amount: values.budget.amount,
+                    currency: values.budget.currency
+                },
+                approvedByFinance: false,
+                modules: values.modules.map(module => ({
+                    moduleName: module.moduleName,
+                    description: module.description,
+                    deadline: new Date(module.deadline)
+                }))
+            });
+    
+            if (result.success) {
+                toast.success('Project created successfully');
+                router.push('/manage-projects');
+            } else {
+                throw new Error(result.message);
+            }
         } catch (err) {
-            setError(err instanceof Error ? err.message : 'Something went wrong');
-            toast.error('Failed to create project');
+            const errorMessage = err instanceof Error ? err.message : 'Failed to create project';
+            setError(errorMessage);
+            toast.error(errorMessage);
         } finally {
             setLoading(false);
         }
@@ -76,7 +97,6 @@ const Page = () => {
                 loading={loading} 
                 buttonText={loading ? (
                     <div className="flex items-center justify-center gap-2">
-                        <Loader />
                         <span>Creating...</span>
                     </div>
                 ) : "Create Project"}

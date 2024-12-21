@@ -12,24 +12,15 @@ const moduleSchema = new Schema({
     type: String,
     required: [true, "Module description is required"],
   },
-  budget: {
-    amount: {
-      type: Number,
-      default: null,
-    },
-    currency: {
-      type: String,
-      default: "USD",
-    },
-  },
-  isActive: {
-    type: Boolean,
-    default: true,
-  },
   deadline: {
     type: Date,
     required: [true, "Module deadline is required"],
   },
+  status: {
+    type: String,
+    enum: ['todo', 'inprogress', 'completed'],
+    default: 'todo'
+  }
 });
 
 // Project Schema with embedded modules
@@ -44,20 +35,26 @@ const projectSchema = new Schema(
       type: String,
       required: [true, "Project description is required"],
     },
-    isActive: {
-      type: Boolean,
-      default: true,
+    budget: {
+      amount: {
+        type: Number,
+        default: null,
+      },
+      currency: {
+        type: String,
+        default: "USD",
+      },
     },
-    approvalStatus: {
-      type: String,
-      enum: ["PENDING", "APPROVED", "REJECTED"],
-      default: "PENDING",
+    projectStatus: { // STATUS OF THE PROJECT
+      type: String,  
+      enum: ["PENDING", "ACTIVE", "INACTIVE", "CANCELLED","COMPLETED"],
+      default: "ACTIVE",
     },
-    sendForApproval: {
+    sendForApproval: { // APPROVAL SENT TO FINANCE FOR BUDGET FINALIZATION OR NOT
       type: Boolean,
       default: false,
     },
-    approvedByFinance: {
+    approvedByFinance: { // APPROVAL STATUS BY FINANCE FOR THE BUDGET
       type: Boolean,
       default: false,
     },
@@ -67,7 +64,6 @@ const projectSchema = new Schema(
 );
 
 // Create and export the Project model
-const Project =
-  mongoose.models.Project || mongoose.model("Project", projectSchema);
+const Project =   mongoose.models.ProjectManagement || mongoose.model("ProjectManagement", projectSchema);
 
 export default Project;
