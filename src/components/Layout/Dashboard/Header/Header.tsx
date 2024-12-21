@@ -12,10 +12,9 @@ export default function Header() {
       <Container fluid className="header-navbar d-flex align-items-center px-0">
         <HeaderSidebarToggler />
         <Link href="/" className="header-brand d-md-none">
-          <svg width="80" height="46">
-            <title>CoreUI Logo</title>
-            <use xlinkHref="/assets/brand/coreui.svg#full" />
-          </svg>
+          <div className="sidebar-brand  d-md-flex align-items-center justify-content-center">
+            <img src={"/assets/brand/logo.svg"} alt="hexler tech logo" className='w-[40%]' />
+          </div>
         </Link>
         <div className="header-nav d-none d-md-flex">
           <HeaderFeaturedNav />

@@ -2,11 +2,14 @@
   "name": "hexler-portal2",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+   "init-auth": "node -r dotenv/config \"src/scripts/initAuth.js\"",
+    "clear-auth": "node -r dotenv/config \"src/scripts/clearAuth.js\""
   },
   "dependencies": {
     "@formatjs/intl-localematcher": "^0.5.5",
@@ -28,12 +31,14 @@
     "@tanstack/react-table": "^8.20.5",
     "@types/negotiator": "^0.6.3",
     "axios": "^1.7.8",
+    "bcryptjs": "^2.4.3",
     "bootstrap": "^5.3.3",
     "chart.js": "^4.4.4",
     "class-variance-authority": "^0.7.0",
     "cloudinary": "^2.5.1",
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
+    "dotenv": "^16.4.7",
     "font-awesome": "^4.7.0",
     "jose": "^5.9.6",
     "js-cookie": "^3.0.5",

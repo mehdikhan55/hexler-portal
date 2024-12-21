@@ -1,5 +1,5 @@
 import mongoose, { Schema} from 'mongoose';
-const ProjectCategory = require('./projectCategory');
+const ProjectCategory = require('@/models/projectCategory');
 
 // Define the Mongoose schema
 const projectSchema = new Schema({

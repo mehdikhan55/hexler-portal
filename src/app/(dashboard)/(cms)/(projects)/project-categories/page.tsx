@@ -70,7 +70,7 @@ const Page = () => {
 
 
 
-  const handleAddCategory = async (newExpenseCategory: ProjectCategory) => {
+  const handleAddCategory = async (newExpenseCategory: Partial<ProjectCategory>) => {
     const { success, data, message } = await projectServices.addCategory(newExpenseCategory);
 
     if (success) {

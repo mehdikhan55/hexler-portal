@@ -1,4 +1,4 @@
-// models/auth/user.js
+// models/user.js
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 
@@ -53,24 +53,22 @@ userSchema.methods.comparePassword = async function(candidatePassword) {
     return bcrypt.compare(candidatePassword, this.password);
 };
 
-// Role Schema
+// Role Schemanpm
 const roleSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
         unique: true,
-        enum: ['CEO', 'CFO', 'CTO', 'HR']
+        // enum: ['CEO', 'CFO', 'CTO', 'HR','Emp']
+    },
+    description:{
+        type: String,
+        required: false
     },
     permissions: [{
-        type: String,
-        required: true,
-        enum: [
-            'VIEW_PAYROLL', 'MANAGE_PAYROLL',
-            'VIEW_EXPENSES', 'MANAGE_EXPENSES',
-            'VIEW_EMPLOYEES', 'MANAGE_EMPLOYEES',
-            'MANAGE_BENEFITS', 'MANAGE_WEBSITE',
-            'MANAGE_PROJECTS'
-        ]
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Permission', // Reference to Permission model
+        required: true
     }],
     subordinateRoles: [{
         type: mongoose.Schema.Types.ObjectId,
@@ -78,8 +76,34 @@ const roleSchema = new mongoose.Schema({
     }]
 });
 
+const permissionSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true,
+        unique: true,
+        enum: [
+            // Admin Permissions
+            'ADMIN',
+            
+            // Finance Permissions
+            'VIEW_PAYROLL', 'MANAGE_PAYROLL',
+            'VIEW_EXPENSES', 'MANAGE_EXPENSES',
+            
+            // HR Permissions
+            'VIEW_EMPLOYEES', 'MANAGE_EMPLOYEES',
+            'MANAGE_BENEFITS',
+            
+            // CMS & Project Permissions
+            'MANAGE_CMS',  // Single permission for CMS management
+            'VIEW_PROJECTS', 'MANAGE_PROJECTS'
+        ]
+    },
+    description: String,
+}, { timestamps: true });
+
 
 const User = mongoose.models.User || mongoose.model('User', userSchema);
 const Role = mongoose.models.Role || mongoose.model('Role', roleSchema);
+const Permission = mongoose.models.Permission || mongoose.model('Permission', permissionSchema);
 
-export { User, Role };
+export { User, Role, Permission };

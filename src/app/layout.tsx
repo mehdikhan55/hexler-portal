@@ -9,6 +9,7 @@ import { getDictionary } from '@/locales/dictionary'
 import getTheme from '@/themes/theme'
 import { ThemeProvider } from '@/components/ui/theme-provider'
 import { Toaster } from 'react-hot-toast'
+import { AuthProvider } from '@/contexts/AuthContext'
 
 // You change this configuration value to false so that the Font Awesome core SVG library
 // will not try and insert <style> elements into the <head> of the page.
@@ -26,16 +27,18 @@ export default async function RootLayout({
   return (
     <html lang="en" data-bs-theme={getTheme()}>
       <body>
-      <ThemeProvider
+        <AuthProvider>
+          <ThemeProvider
             attribute="class"
             defaultTheme="dark"
           >
-        <ProgressBar />
-        <DictionaryProvider dictionary={dictionary}>
-          <Toaster/>
-          {children}
-        </DictionaryProvider>
-        </ThemeProvider>
+            <ProgressBar />
+            <DictionaryProvider dictionary={dictionary}>
+              <Toaster />
+              {children}
+            </DictionaryProvider>
+          </ThemeProvider>
+        </AuthProvider>
       </body>
     </html>
   )

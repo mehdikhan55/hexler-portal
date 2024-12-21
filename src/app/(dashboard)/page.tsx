@@ -1,3 +1,4 @@
+'use client'
 import Image from 'next/image'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
@@ -33,17 +34,21 @@ import {
   faLinkedinIn,
   faTwitter,
 } from '@fortawesome/free-brands-svg-icons'
-import React from 'react'
+import React, { useEffect } from 'react'
 import UserChart from '@/components/Page/Dashboard/UserChart'
 import IncomeChart from '@/components/Page/Dashboard/IncomeChart'
 import ConversionChart from '@/components/Page/Dashboard/ConversionChart'
 import SessionChart from '@/components/Page/Dashboard/SessionChart'
 import TrafficChart from '@/components/Page/Dashboard/TrafficChart'
-import { getDictionary } from '@/locales/dictionary'
 import {siteData} from "@/constants/siteData.js";
+import { useAuth } from '@/contexts/AuthContext'
 
-export default async function Page() {
-  const dict = await getDictionary()
+export default  function Page() {
+  // const {initAuth}=useAuth();
+
+  // useEffect(() => {
+  //   initAuth()
+  // },[])
 
   return (
     <div>

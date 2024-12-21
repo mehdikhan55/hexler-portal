@@ -14,13 +14,19 @@ export async function POST(req: NextRequest) {
             .populate({
                 path: 'role',
                 populate: [
-                    { path: 'subordinateRoles' }
+                    { path: 'permissions' }
                 ]
             });
 
-        if (!user || !user.isActive) {
+        if (!user) {
             return NextResponse.json(
                 { message: "Invalid credentials" },
+                { status: 401 }
+            );
+        }
+        if (!user.isActive) {
+            return NextResponse.json(
+                { message: "Account Not Active" },
                 { status: 401 }
             );
         }
@@ -40,7 +46,6 @@ export async function POST(req: NextRequest) {
                 userId: user._id,
                 role: user.role.name,
                 permissions: user.role.permissions.map((p: any) => p.name),
-                subordinateRoles: user.role.subordinateRoles.map((r: any) => r.name)
             },
             process.env.JWT_SECRET!,
             { expiresIn: '24h' } // Token expires in 24 hours
@@ -87,3 +92,5 @@ export async function POST(req: NextRequest) {
 }
 
 
+
+export const revalidate = 0;

@@ -1,3 +1,4 @@
+'use client'
 import {
   faAddressCard, faBarChart, faBell, faEnvelope, faFileLines, faIdCard, faStar,
 } from '@fortawesome/free-regular-svg-icons'
@@ -17,11 +18,13 @@ import {
   faScaleUnbalancedFlip,
   faStarAndCrescent,
 } from '@fortawesome/free-solid-svg-icons'
-import React, { PropsWithChildren } from 'react'
+import React, { PropsWithChildren, useEffect } from 'react'
 import { Badge } from 'react-bootstrap'
 import SidebarNavGroup from '@/components/Layout/Dashboard/Sidebar/SidebarNavGroup'
 import SidebarNavItem from '@/components/Layout/Dashboard/Sidebar/SidebarNavItem'
 import { siteData } from '@/constants/siteData'
+import { useAuth } from '@/contexts/AuthContext'
+import { usePermissions } from '@/hooks/usePermissions'
 
 const SidebarNavTitle = (props: PropsWithChildren) => {
   const { children } = props
@@ -31,7 +34,15 @@ const SidebarNavTitle = (props: PropsWithChildren) => {
   )
 }
 
-export default async function SidebarNav() {
+export default function SidebarNav() {
+  const { user } = useAuth();
+  const { isAdmin, isFinanceAdmin, canManageCMS, canManageProjects, canViewProjects, isHRAdmin } = usePermissions(user?.permissions || [], user?.role || '');
+
+  useEffect(() => {
+    console.log('current user is : ', user)
+    console.log('isAdmin:', isAdmin())
+    console.log("infianceadmin:", isFinanceAdmin())
+  }, [user])
 
   return (
     <ul className="list-unstyled">
@@ -41,50 +52,80 @@ export default async function SidebarNav() {
       </SidebarNavItem>
 
 
+      {
+        isFinanceAdmin() && <>
+          <SidebarNavTitle>Finance Management</SidebarNavTitle>
 
-      <SidebarNavTitle>Finance Management</SidebarNavTitle>
+          <SidebarNavGroup toggleIcon={faDollar} toggleText={"Payroll"}>
+            <SidebarNavItem icon={faMoneyBill} href="/payroll">Payroll</SidebarNavItem>
+            <SidebarNavItem icon={faCalculator} href="/salary-calculator">Salary Calculator</SidebarNavItem>
+            <SidebarNavItem icon={faPeopleLine} href="/">Attendance</SidebarNavItem>
+          </SidebarNavGroup>
 
-      <SidebarNavGroup toggleIcon={faDollar} toggleText={"Payroll"}>
-        <SidebarNavItem icon={faMoneyBill} href="/payroll">Payroll</SidebarNavItem>
-        <SidebarNavItem icon={faCalculator} href="/salary-calculator">Salary Calculator</SidebarNavItem>
-        <SidebarNavItem icon={faPeopleLine} href="/">Attendance</SidebarNavItem>
-      </SidebarNavGroup>
-
-      <SidebarNavGroup toggleIcon={faScaleUnbalancedFlip} toggleText={"Expense Tracker"}>
-        <SidebarNavItem icon={faGauge} href="/expense-tracker">Office Expense Tracker</SidebarNavItem>
-        <SidebarNavItem icon={faPuzzlePiece} href="/expense-categories">Expense Categories</SidebarNavItem>
-      </SidebarNavGroup>
+          <SidebarNavGroup toggleIcon={faScaleUnbalancedFlip} toggleText={"Expense Tracker"}>
+            <SidebarNavItem icon={faGauge} href="/expense-tracker">Office Expense Tracker</SidebarNavItem>
+            <SidebarNavItem icon={faPuzzlePiece} href="/expense-categories">Expense Categories</SidebarNavItem>
+          </SidebarNavGroup>
+        </>
+      }
 
       {/* <SidebarNavItem icon={faBank} href="#">Cheques Management</SidebarNavItem> */}
 
 
+      {
+        isFinanceAdmin() || isHRAdmin() && <>
+          <SidebarNavTitle>Employees Management</SidebarNavTitle>
+          <SidebarNavGroup toggleIcon={faPersonShelter} toggleText={"Employee"}>
+            <SidebarNavItem icon={faPeopleRoof} href="/employee-profiles">Employee Profiles</SidebarNavItem>
+            <SidebarNavItem icon={faPlusCircle} href="/add-employee">Add Employee</SidebarNavItem>
+            <SidebarNavItem icon={faPeopleLine} href="/employees">Manage Employees</SidebarNavItem>
+          </SidebarNavGroup>
+          <SidebarNavItem icon={faStarAndCrescent} href="/employee-benefits">Employee Benefits</SidebarNavItem>
+        </>
+      }
 
-      <SidebarNavTitle>Employees Management</SidebarNavTitle>
-      <SidebarNavGroup toggleIcon={faPersonShelter} toggleText={"Employee"}>
-        <SidebarNavItem icon={faPeopleRoof} href="/employee-profiles">Employee Profiles</SidebarNavItem>
-        <SidebarNavItem icon={faPlusCircle} href="/add-employee">Add Employee</SidebarNavItem>
-        <SidebarNavItem icon={faPeopleLine} href="/employees">Manage Employees</SidebarNavItem>
+      {
+        canManageCMS() && <>
+          <SidebarNavTitle>Website CMS</SidebarNavTitle>
+          <SidebarNavGroup toggleIcon={faProjectDiagram} toggleText={"Projects"}>
+            <SidebarNavItem icon={faFileLines} href="/projects">See Projects</SidebarNavItem>
+            <SidebarNavItem icon={faPlusCircle} href="/projects/new">Add New Project</SidebarNavItem>
+            <SidebarNavItem icon={faPuzzlePiece} href="/project-categories">Project Categories</SidebarNavItem>
+          </SidebarNavGroup>
+          <SidebarNavGroup toggleIcon={faPersonDress} toggleText={"Careers"}>
+            <SidebarNavItem icon={faFileLines} href="/careers">Manage Careers</SidebarNavItem>
+            <SidebarNavItem icon={faPlusCircle} href="/careers/applications">View Applications</SidebarNavItem>
+          </SidebarNavGroup>
+        </>
+      }
+
+     { (canViewProjects() && canManageProjects()) && <>
+      <SidebarNavTitle>Project Management</SidebarNavTitle>
+      <SidebarNavGroup toggleIcon={faProjectDiagram} toggleText={"Manage Projects"}>
+        <SidebarNavItem icon={faFileLines} href="/all-projects">See All Projects</SidebarNavItem>
+        {canManageProjects() && <SidebarNavItem icon={faPlusCircle} href="/manage-projects/new">Add New Project</SidebarNavItem>}
       </SidebarNavGroup>
-      <SidebarNavItem icon={faStarAndCrescent} href="/employee-benefits">Employee Benefits</SidebarNavItem>
+      </>
+      }
 
+    
+      {isAdmin() && (
+        <>
+          <SidebarNavTitle>Account Management</SidebarNavTitle>
+          <SidebarNavItem icon={faPeopleRoof} href="/manage-accounts">Manage Accounts</SidebarNavItem>
+          {/* <SidebarNavItem icon={faPlusCircle} href="/manage-accounts/new">Add New Account</SidebarNavItem> */}
+        </>
+      )}
 
-      <SidebarNavTitle>Website CMS</SidebarNavTitle>
-      <SidebarNavGroup toggleIcon={faProjectDiagram} toggleText={"Projects"}>
-        <SidebarNavItem icon={faFileLines} href="/projects">See Projects</SidebarNavItem>
-        <SidebarNavItem icon={faPlusCircle} href="/projects/new">Add New Project</SidebarNavItem>
-        <SidebarNavItem icon={faPuzzlePiece} href="/project-categories">Project Categories</SidebarNavItem>
-      </SidebarNavGroup>
-      <SidebarNavGroup toggleIcon={faPersonDress} toggleText={"Careers"}>
-        <SidebarNavItem icon={faFileLines} href="/careers">Manage Careers</SidebarNavItem>
-        <SidebarNavItem icon={faPlusCircle} href="/careers/applications">View Applications</SidebarNavItem>
-      </SidebarNavGroup>
-
-      <SidebarNavTitle>Administration</SidebarNavTitle>
-      <SidebarNavItem icon={faBuildingUser} href="#">Departments</SidebarNavItem>
-      <SidebarNavItem icon={faBarChart} href="#">HR</SidebarNavItem>
-      <SidebarNavItem icon={faEnvelope} href="#">Email Logs</SidebarNavItem>
-      <SidebarNavItem icon={faIdCard} href="#">Etag and Card</SidebarNavItem>
-
+      {
+        isFinanceAdmin() && <>
+          <SidebarNavTitle>Administration</SidebarNavTitle>
+          <SidebarNavItem icon={faBuildingUser} href="#">Departments</SidebarNavItem>
+          <SidebarNavItem icon={faBarChart} href="#">HR</SidebarNavItem>
+          <SidebarNavItem icon={faEnvelope} href="#">Email Logs</SidebarNavItem>
+          <SidebarNavItem icon={faIdCard} href="#">Etag and Card</SidebarNavItem>
+        </>
+      }
       {/* <SidebarNavItem icon={faCode} href="/pokemons">
         {siteData.sidebar.items.sample}
         <small className="ms-auto"><Badge bg="danger" className="ms-auto">DEMO</Badge></small>

@@ -52,15 +52,11 @@ export default async function HeaderProfileNav() {
       <Dropdown as={NavItem}>
         <DropdownToggle variant="link" bsPrefix="hide-caret" className="py-0 px-2 rounded-0" id="dropdown-profile">
           <div className="avatar position-relative">
-            {/* {session && (
-              <Image
-                fill
-                sizes="32px"
-                className="rounded-circle"
-                src={session.user.avatar}
-                alt={session.user.email}
-              />
-            )} */}
+            <img
+              src={"/assets/default-profile.jpg"}
+              alt={`profile photo`}
+              className="w-full h-full object-cover rounded-full"
+            />
           </div>
         </DropdownToggle>
         <DropdownMenu className="pt-0">
