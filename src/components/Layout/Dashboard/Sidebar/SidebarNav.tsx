@@ -79,6 +79,13 @@ export default async function SidebarNav() {
         <SidebarNavItem icon={faPlusCircle} href="/careers/applications">View Applications</SidebarNavItem>
       </SidebarNavGroup>
 
+      <SidebarNavTitle>Project Management</SidebarNavTitle>
+      <SidebarNavGroup toggleIcon={faProjectDiagram} toggleText={"Manage Projects"}>
+      <SidebarNavItem icon={faFileLines} href="/all-projects">See All Projects</SidebarNavItem>
+        {/* <SidebarNavItem icon={faFileLines} href="/manage-projects">Manage Projects</SidebarNavItem> */}
+        <SidebarNavItem icon={faPlusCircle} href="/manage-projects/new">Add New Project</SidebarNavItem>
+      </SidebarNavGroup>
+
       <SidebarNavTitle>Administration</SidebarNavTitle>
       <SidebarNavItem icon={faBuildingUser} href="#">Departments</SidebarNavItem>
       <SidebarNavItem icon={faBarChart} href="#">HR</SidebarNavItem>
