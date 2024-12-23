@@ -344,12 +344,12 @@ export default  function Page() {
             style={{ '--bs-card-cap-bg': '#3b5998' } as React.CSSProperties}
           >
             <CardHeader className="d-flex justify-content-center align-items-center">
-              <FontAwesomeIcon
+              {/* <FontAwesomeIcon
                 icon={faFacebookF}
                 fixedWidth
                 size="3x"
                 className="my-4 text-white"
-              />
+              /> */}
             </CardHeader>
             <CardBody>
               <div className="row text-center">
