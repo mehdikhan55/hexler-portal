@@ -61,7 +61,7 @@ export default  function Page() {
                   26K
                   <span className="fs-6 ms-2 fw-normal">
                     (-12.4%
-                    <FontAwesomeIcon icon={faArrowDown} fixedWidth />
+                    {/* <FontAwesomeIcon icon={faArrowDown} fixedWidth /> */}
                     )
                   </span>
                 </div>
@@ -74,7 +74,7 @@ export default  function Page() {
                   className="btn-link rounded-0 text-white shadow-none p-0"
                   id="dropdown-chart1"
                 >
-                  <FontAwesomeIcon fixedWidth icon={faEllipsisVertical} />
+                  {/* <FontAwesomeIcon fixedWidth icon={faEllipsisVertical} /> */}
                 </DropdownToggle>
 
                 <DropdownMenu>
@@ -98,7 +98,7 @@ export default  function Page() {
                   $6.200
                   <span className="fs-6 ms-2 fw-normal">
                     (40.9%
-                    <FontAwesomeIcon icon={faArrowUp} fixedWidth />
+                    {/* <FontAwesomeIcon icon={faArrowUp} fixedWidth /> */}
                     )
                   </span>
                 </div>
@@ -111,7 +111,7 @@ export default  function Page() {
                   className="btn-link rounded-0 text-white shadow-none p-0"
                   id="dropdown-chart2"
                 >
-                  <FontAwesomeIcon fixedWidth icon={faEllipsisVertical} />
+                  {/* <FontAwesomeIcon fixedWidth icon={faEllipsisVertical} /> */}
                 </DropdownToggle>
 
                 <DropdownMenu>
@@ -135,7 +135,7 @@ export default  function Page() {
                   2.49%
                   <span className="fs-6 ms-2 fw-normal">
                     (84.7%
-                    <FontAwesomeIcon icon={faArrowUp} fixedWidth />
+                    {/* <FontAwesomeIcon icon={faArrowUp} fixedWidth /> */}
                     )
                   </span>
                 </div>
@@ -148,7 +148,7 @@ export default  function Page() {
                   className="btn-link rounded-0 text-white shadow-none p-0"
                   id="dropdown-chart3"
                 >
-                  <FontAwesomeIcon fixedWidth icon={faEllipsisVertical} />
+                  {/* <FontAwesomeIcon fixedWidth icon={faEllipsisVertical} /> */}
                 </DropdownToggle>
 
                 <DropdownMenu>
@@ -172,7 +172,7 @@ export default  function Page() {
                   44K
                   <span className="fs-6 ms-2 fw-normal">
                     (-23.6%
-                    <FontAwesomeIcon icon={faArrowDown} fixedWidth />
+                    {/* <FontAwesomeIcon icon={faArrowDown} fixedWidth /> */}
                     )
                   </span>
                 </div>
@@ -185,7 +185,7 @@ export default  function Page() {
                   className="btn-link rounded-0 text-white shadow-none p-0"
                   id="dropdown-chart4"
                 >
-                  <FontAwesomeIcon fixedWidth icon={faEllipsisVertical} />
+                  {/* <FontAwesomeIcon fixedWidth icon={faEllipsisVertical} /> */}
                 </DropdownToggle>
 
                 <DropdownMenu>
@@ -253,7 +253,7 @@ export default  function Page() {
                 </label>
               </ButtonGroup>
               <Button variant="primary">
-                <FontAwesomeIcon icon={faDownload} fixedWidth />
+                {/* <FontAwesomeIcon icon={faDownload} fixedWidth /> */}
               </Button>
             </div>
           </div>
@@ -377,12 +377,12 @@ export default  function Page() {
             style={{ '--bs-card-cap-bg': '#00aced' } as React.CSSProperties}
           >
             <CardHeader className="d-flex justify-content-center align-items-center">
-              <FontAwesomeIcon
+              {/* <FontAwesomeIcon
                 icon={faTwitter}
                 fixedWidth
                 size="3x"
                 className="my-4 text-white"
-              />
+              /> */}
             </CardHeader>
             <CardBody>
               <div className="row text-center">
@@ -410,12 +410,12 @@ export default  function Page() {
             style={{ '--bs-card-cap-bg': '#4875b4' } as React.CSSProperties}
           >
             <CardHeader className="d-flex justify-content-center align-items-center">
-              <FontAwesomeIcon
+              {/* <FontAwesomeIcon
                 icon={faLinkedinIn}
                 fixedWidth
                 size="3x"
                 className="my-4 text-white"
-              />
+              /> */}
             </CardHeader>
             <CardBody>
               <div className="row text-center">
@@ -640,7 +640,7 @@ export default  function Page() {
                     <div className="mb-3">
                       <div className="d-flex mb-1">
                         <div>
-                          <FontAwesomeIcon className="me-2" icon={faMars} fixedWidth />
+                          {/* <FontAwesomeIcon className="me-2" icon={faMars} fixedWidth /> */}
                           {siteData.dashboard.sales.male}
                         </div>
                         <div className="ms-auto fw-semibold">43%</div>
@@ -655,7 +655,7 @@ export default  function Page() {
                     <div className="mb-3">
                       <div className="d-flex mb-1">
                         <div>
-                          <FontAwesomeIcon className="me-2" icon={faVenus} fixedWidth />
+                          {/* <FontAwesomeIcon className="me-2" icon={faVenus} fixedWidth /> */}
                           {siteData.dashboard.sales.female}
                         </div>
                         <div className="ms-auto fw-semibold">37%</div>
@@ -671,7 +671,7 @@ export default  function Page() {
                   <div className="mb-3">
                     <div className="d-flex mb-1">
                       <div>
-                        <FontAwesomeIcon className="me-2" icon={faSearch} fixedWidth />
+                        {/* <FontAwesomeIcon className="me-2" icon={faSearch} fixedWidth /> */}
                         {siteData.dashboard.sales.organic}
                       </div>
                       <div className="ms-auto fw-semibold me-2">191.235</div>
@@ -687,7 +687,7 @@ export default  function Page() {
                   <div className="mb-3">
                     <div className="d-flex mb-1">
                       <div>
-                        <FontAwesomeIcon className="me-2" icon={faFacebookF} fixedWidth />
+                        {/* <FontAwesomeIcon className="me-2" icon={faFacebookF} fixedWidth /> */}
                         {siteData.dashboard.sales.facebook}
                       </div>
                       <div className="ms-auto fw-semibold me-2">51.223</div>
@@ -703,7 +703,7 @@ export default  function Page() {
                   <div className="mb-3">
                     <div className="d-flex mb-1">
                       <div>
-                        <FontAwesomeIcon className="me-2" icon={faTwitter} fixedWidth />
+                        {/* <FontAwesomeIcon className="me-2" icon={faTwitter} fixedWidth /> */}
                         {siteData.dashboard.sales.twitter}
                       </div>
                       <div className="ms-auto fw-semibold me-2">37.564</div>
@@ -719,7 +719,7 @@ export default  function Page() {
                   <div className="mb-3">
                     <div className="d-flex mb-1">
                       <div>
-                        <FontAwesomeIcon className="me-2" icon={faLinkedinIn} fixedWidth />
+                        {/* <FontAwesomeIcon className="me-2" icon={faLinkedinIn} fixedWidth /> */}
                         {siteData.dashboard.sales.linkedin}
                       </div>
                       <div className="ms-auto fw-semibold me-2">27.319</div>
@@ -741,7 +741,7 @@ export default  function Page() {
                   <thead className="fw-semibold">
                     <tr className="align-middle table-light dark:table-dark">
                       <th className="text-center" aria-label="icon">
-                        <FontAwesomeIcon icon={faUsers} fixedWidth />
+                        {/* <FontAwesomeIcon icon={faUsers} fixedWidth /> */}
                       </th>
                       <th>{siteData.dashboard.listing.headers.header1}</th>
                       <th>{siteData.dashboard.listing.headers.header2}</th>
@@ -793,7 +793,7 @@ export default  function Page() {
                         <ProgressBar className="progress-thin" variant="success" now={50} />
                       </td>
                       <td className="text-center" aria-label="icon">
-                        <FontAwesomeIcon icon={faCcAmex} size="lg" fixedWidth />
+                        {/* <FontAwesomeIcon icon={faCcAmex} size="lg" fixedWidth /> */}
                       </td>
                       <td>
                         <div className="small text-black-50 dark:text-gray-500">{siteData.dashboard.listing.last_login}</div>
@@ -807,7 +807,7 @@ export default  function Page() {
                             className="btn-link rounded-0 text-black-50 dark:text-gray-500 shadow-none p-0"
                             id="action-user1"
                           >
-                            <FontAwesomeIcon fixedWidth icon={faEllipsisVertical} />
+                            {/* <FontAwesomeIcon fixedWidth icon={faEllipsisVertical} /> */}
                           </DropdownToggle>
 
                           <DropdownMenu>
@@ -865,7 +865,7 @@ export default  function Page() {
                         <ProgressBar className="progress-thin" variant="info" now={10} />
                       </td>
                       <td className="text-center" aria-label="icon">
-                        <FontAwesomeIcon icon={faCcVisa} size="lg" fixedWidth />
+                        {/* <FontAwesomeIcon icon={faCcVisa} size="lg" fixedWidth /> */}
                       </td>
                       <td>
                         <div className="small text-black-50 dark:text-gray-500">{siteData.dashboard.listing.last_login}</div>
@@ -879,7 +879,7 @@ export default  function Page() {
                             className="btn-link rounded-0 text-black-50 dark:text-gray-500 shadow-none p-0"
                             id="action-user2"
                           >
-                            <FontAwesomeIcon fixedWidth icon={faEllipsisVertical} />
+                            {/* <FontAwesomeIcon fixedWidth icon={faEllipsisVertical} /> */}
                           </DropdownToggle>
 
                           <DropdownMenu>
@@ -937,7 +937,7 @@ export default  function Page() {
                         <ProgressBar className="progress-thin" variant="warning" now={74} />
                       </td>
                       <td className="text-center" aria-label="icon">
-                        <FontAwesomeIcon icon={faCcStripe} size="lg" fixedWidth />
+                        {/* <FontAwesomeIcon icon={faCcStripe} size="lg" fixedWidth /> */}
                       </td>
                       <td>
                         <div className="small text-black-50 dark:text-gray-500">{siteData.dashboard.listing.last_login}</div>
@@ -951,7 +951,7 @@ export default  function Page() {
                             className="btn-link rounded-0 text-black-50 dark:text-gray-500 shadow-none p-0"
                             id="action-user3"
                           >
-                            <FontAwesomeIcon fixedWidth icon={faEllipsisVertical} />
+                            {/* <FontAwesomeIcon fixedWidth icon={faEllipsisVertical} /> */}
                           </DropdownToggle>
 
                           <DropdownMenu>
@@ -1009,7 +1009,7 @@ export default  function Page() {
                         <ProgressBar className="progress-thin" variant="danger" now={98} />
                       </td>
                       <td className="text-center" aria-label="icon">
-                        <FontAwesomeIcon icon={faCcPaypal} size="lg" fixedWidth />
+                        {/* <FontAwesomeIcon icon={faCcPaypal} size="lg" fixedWidth /> */}
                       </td>
                       <td>
                         <div className="small text-black-50 dark:text-gray-500">{siteData.dashboard.listing.last_login}</div>
@@ -1023,7 +1023,7 @@ export default  function Page() {
                             className="btn-link rounded-0 text-black-50 dark:text-gray-500 shadow-none p-0"
                             id="action-user4"
                           >
-                            <FontAwesomeIcon fixedWidth icon={faEllipsisVertical} />
+                            {/* <FontAwesomeIcon fixedWidth icon={faEllipsisVertical} /> */}
                           </DropdownToggle>
 
                           <DropdownMenu>
@@ -1081,7 +1081,7 @@ export default  function Page() {
                         <ProgressBar className="progress-thin" variant="info" now={22} />
                       </td>
                       <td className="text-center" aria-label="icon">
-                        <FontAwesomeIcon icon={faCcApplePay} size="lg" fixedWidth />
+                        {/* <FontAwesomeIcon icon={faCcApplePay} size="lg" fixedWidth /> */}
                       </td>
                       <td>
                         <div className="small text-black-50 dark:text-gray-500">{siteData.dashboard.listing.last_login}</div>
@@ -1095,7 +1095,7 @@ export default  function Page() {
                             className="btn-link rounded-0 text-black-50 dark:text-gray-500 shadow-none p-0"
                             id="action-user5"
                           >
-                            <FontAwesomeIcon fixedWidth icon={faEllipsisVertical} />
+                            {/* <FontAwesomeIcon fixedWidth icon={faEllipsisVertical} /> */}
                           </DropdownToggle>
 
                           <DropdownMenu>
@@ -1153,7 +1153,7 @@ export default  function Page() {
                         <ProgressBar className="progress-thin" variant="success" now={43} />
                       </td>
                       <td className="text-center" aria-label="icon">
-                        <FontAwesomeIcon icon={faCcAmex} size="lg" fixedWidth />
+                        {/* <FontAwesomeIcon icon={faCcAmex} size="lg" fixedWidth /> */}
                       </td>
                       <td>
                         <div className="small text-black-50 dark:text-gray-500">{siteData.dashboard.listing.last_login}</div>
@@ -1167,7 +1167,7 @@ export default  function Page() {
                             className="btn-link rounded-0 text-black-50 dark:text-gray-500 shadow-none p-0"
                             id="action-user6"
                           >
-                            <FontAwesomeIcon fixedWidth icon={faEllipsisVertical} />
+                            {/* <FontAwesomeIcon fixedWidth icon={faEllipsisVertical} /> */}
                           </DropdownToggle>
 
                           <DropdownMenu>
