@@ -37,7 +37,13 @@ const SidebarNavTitle = (props: PropsWithChildren) => {
 
 export default function SidebarNav() {
   const { user } = useAuth();
-  const { isAdmin, isFinanceAdmin, canManageCMS, canManageProjects, canViewProjects, isHRAdmin } = usePermissions(user?.permissions || [], user?.role || '');
+  const { isAdmin, 
+    isFinanceAdmin, 
+    canManageCMS, 
+    canManageProjects, 
+    canViewProjects, 
+    canApproveProjectBudget,
+    isHRAdmin } = usePermissions(user?.permissions || [], user?.role || '');
 
   useEffect(() => {
     console.log('current user is : ', user)
@@ -68,7 +74,7 @@ export default function SidebarNav() {
             <SidebarNavItem icon={faPuzzlePiece} href="/expense-categories">Expense Categories</SidebarNavItem>
           </SidebarNavGroup>
 
-          <SidebarNavItem icon={faSackDollar} href="/project-budget-approval">Project Budget</SidebarNavItem>
+          {canApproveProjectBudget() && <SidebarNavItem icon={faSackDollar} href="/project-budget-approval">Project Budget</SidebarNavItem>}
         </>
       }
 
