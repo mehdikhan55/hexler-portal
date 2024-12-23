@@ -166,7 +166,7 @@ const AddProjectForm = ({ form, onSubmit, loading, buttonText = "Submit", catego
                         </CardContent>
                     </Card>
 
-                    <div className="flex flex-row gap-6">
+                    <div className="flex flex-row gap-6 w-fit">
                         {/* Start Date */}
                         <CustomFormField
                             fieldType={FormFieldType.SKELETON}

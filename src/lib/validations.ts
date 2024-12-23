@@ -4,7 +4,7 @@ export const NewProjectSchema = z.object({
     projectName: z.string().min(1, "Project name is required"),
     projectDescription: z.string().min(1, "Project description is required"),
     budget: z.object({
-        amount: z.number().nullable(),
+        amount: z.number().min(0, "Budget amount must be greater than 0").nullable(),
         currency: z.string().default('USD')
     }),
     sendForApproval: z.boolean().default(false),

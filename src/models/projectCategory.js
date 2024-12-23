@@ -12,4 +12,6 @@ const projectCategorySchema = new mongoose.Schema({
 },{timestamps: true});
 
 
-export default mongoose.models.ProjectCategory || mongoose.model('ProjectCategory', projectCategorySchema);
+const ProjectCategory= mongoose.models.ProjectCategory || mongoose.model('ProjectCategory', projectCategorySchema);
+
+export default ProjectCategory;

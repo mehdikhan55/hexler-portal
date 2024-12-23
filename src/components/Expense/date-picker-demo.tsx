@@ -27,7 +27,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
       showTimeSelect={showTimeSelect}
       dateFormat={dateFormat}
       wrapperClassName="date-picker"
-      className="bg-[#212529] border border-dark-500 py-[3.2px] mt-1 rounded-md text-white "
+      className="dark:bg-[#212529] border border-dark-500 py-[3.2px] mt-1 rounded-md dark:text-white w-full bg-transparent "
     />
   );
 };

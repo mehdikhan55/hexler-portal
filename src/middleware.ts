@@ -132,10 +132,11 @@ const routePermissions = {
     '/careers/applications/[id]': ['MANAGE_CMS'],
 
     // Project management routes
-    '/all-projects': ['VIEW_PROJECTS'],
+    '/manage-projects': ['VIEW_PROJECTS'],
     '/manage-projects/new': ['MANAGE_PROJECTS'],
     '/manage-projects/[id]': ['VIEW_PROJECTS'],
     '/manage-projects/[id]/edit': ['MANAGE_PROJECTS'],
+    '/project-budget-approval': ['APPROVE-PROJECT_BUDGET'],
 
     // Account management routes
     '/users': ['ADMIN'],

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import Project from "@/models/project";
 import dbConnect from "@/lib/dbConnect";
-const ProjectCategory = require('@/models/projectCategory');
+import ProjectCategory from "@/models/projectCategory";
 
 export async function GET(req: NextRequest) {
   try {

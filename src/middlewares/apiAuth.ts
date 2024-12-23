@@ -46,7 +46,7 @@ export async function apiAuthMiddleware(req: NextRequest) {
 
         // Create permission key from method and path
         const permissionKey = `${req.method}:${path}`;
-
+        console.log('Permission Key:', permissionKey);
         // Check permissions for the route
         const hasPermission = checkRoutePermissions(permissionKey, decoded.permissions);
 
@@ -178,6 +178,19 @@ const apiPermissions = {
     'PUT:/api/projects/categories/[id]': ['MANAGE_CMS'],
     'DELETE:/api/projects/categories/[id]': ['MANAGE_CMS'],
     // ===> CMS APIs End<===
+
+    // ===> Project Management APIs Start
+    // Manage Projects APIs
+    'GET:/api/manage-projects': ['MANAGE_PROJECTS'],
+    'POST:/api/manage-projects': ['MANAGE_PROJECTS'],
+    'GET:/api/manage-projects/pending-approval': ['APPROVE-PROJECT_BUDGET'],
+    'GET:/api/manage-projects/[id]': ['MANAGE_PROJECTS'],
+    'PUT:/api/manage-projects/[id]': ['MANAGE_PROJECTS'],
+    'DELETE:/api/manage-projects/[id]': ['MANAGE_PROJECTS'],
+    'PATCH:/api/manage-projects/[id]/approve-budget': ['APPROVE-PROJECT_BUDGET'],
+    // ===> Project Management APIs End
+
+
 
     // Authentication APIs
     'POST:/api/auth/register': ['ADMIN'],

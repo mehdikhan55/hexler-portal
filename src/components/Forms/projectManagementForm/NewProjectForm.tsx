@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Edit, Plus, X } from 'lucide-react';
 import React, { useState } from 'react';
 import DatePicker from '@/components/Expense/date-picker-demo';
+import MyDatePicker from '@/components/Common/MyDatePicker';
 
 const NewProjectForm = ({ form, onSubmit, loading, buttonText = "Submit" }: any) => {
     // State for managing modules
@@ -100,7 +101,7 @@ const NewProjectForm = ({ form, onSubmit, loading, buttonText = "Submit" }: any)
                             <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                                 Currency
                             </label>
-                            <Select 
+                            <Select
                                 onValueChange={(value) => form.setValue('budget.currency', value)}
                                 defaultValue={form.getValues('budget.currency')}
                             >
@@ -142,14 +143,14 @@ const NewProjectForm = ({ form, onSubmit, loading, buttonText = "Submit" }: any)
                                             description: e.target.value
                                         })}
                                     />
-                                    
+
                                     {/* Date Picker */}
                                     <div className="space-y-2">
                                         <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                                             Module Deadline
                                         </label>
-                                        <div className="-ml-4">
-                                            <DatePicker
+                                        <div className="">
+                                            {/* <DatePicker
                                                 id="module-deadline"
                                                 selectedDate={currentModule.deadline}
                                                 onDateChange={(date) => setCurrentModule({
@@ -157,6 +158,15 @@ const NewProjectForm = ({ form, onSubmit, loading, buttonText = "Submit" }: any)
                                                     deadline: date
                                                 })}
                                                 dateFormat="dd/MM/yyyy"
+                                            /> */}
+                                            <MyDatePicker
+                                                selectedDate={currentModule.deadline}
+                                                onDateChange={(date) => setCurrentModule({
+                                                    ...currentModule,
+                                                    deadline: date
+                                                })}
+                                                dateFormat="dd/MM/yyyy"
+                                                className='w-fit'
                                             />
                                         </div>
                                     </div>

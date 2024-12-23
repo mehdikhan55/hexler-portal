@@ -95,7 +95,10 @@ const permissionSchema = new mongoose.Schema({
             
             // CMS & Project Permissions
             'MANAGE_CMS',  // Single permission for CMS management
-            'VIEW_PROJECTS', 'MANAGE_PROJECTS'
+            'VIEW_PROJECTS', 'MANAGE_PROJECTS',
+
+            // Custom Permissions
+            'APPROVE-PROJECT_BUDGET',
         ]
     },
     description: String,
