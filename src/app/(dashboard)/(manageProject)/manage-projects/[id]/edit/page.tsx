@@ -1,8 +1,8 @@
+
 'use client';
 import React, { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
-import { projectsDummyData } from '@/constants/projectManagement';
 import { useForm } from 'react-hook-form';
 import CustomFormField, { FormFieldType } from '@/components/Form Reusables/CustomFormField';
 import { Button } from '@/components/ui/button';
@@ -11,6 +11,7 @@ import Loader from "@/components/Common/Loader";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { projectManagementServices } from '@/services/projectManagementServices';
 import toast from 'react-hot-toast';
+import { Plus, Trash2 } from 'lucide-react';
 
 interface ModuleData {
   moduleName: string;
@@ -34,6 +35,7 @@ interface ProjectData {
 }
 
 const projectStatuses = ['PENDING', 'CANCELLED', 'ACTIVE', 'COMPLETED', 'INACTIVE'];
+
 export default function EditProjectPage() {
   const params = useParams();
   const router = useRouter();
@@ -58,6 +60,75 @@ export default function EditProjectPage() {
     }
   });
 
+  // Add new module function
+
+  const handleAddModule = async () => {
+    try {
+      const currentModules = form.getValues('modules');
+      const newModule = {
+        moduleName: '',
+        description: '',
+        deadline: new Date(),
+        status: 'todo' as const
+      };
+
+      const updatedModules = [...currentModules, newModule];
+
+      // Update form state and save to database
+      form.setValue('modules', updatedModules);
+      const currentData = form.getValues();
+      const updatedProject = {
+        ...currentData,
+        modules: updatedModules
+      };
+
+      const result = await projectManagementServices.updateProject(
+        params.id as string,
+        updatedProject
+      );
+
+      if (!result.success) {
+        throw new Error(result.message || 'Failed to add module');
+      }
+
+      toast.success('Module added successfully');
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to add module';
+      console.error('Error adding module:', error);
+      toast.error(errorMessage);
+    }
+  };
+
+  // Remove module function
+
+  const handleRemoveModule = async (indexToRemove: number) => {
+    try {
+      const currentModules = form.getValues('modules');
+      const updatedModules = currentModules.filter((_, index) => index !== indexToRemove);
+
+      // Update form state and save to database
+      form.setValue('modules', updatedModules);
+      const currentData = form.getValues();
+      const updatedProject = {
+        ...currentData,
+        modules: updatedModules
+      };
+
+      const result = await projectManagementServices.updateProject(
+        params.id as string,
+        updatedProject
+      );
+
+      if (!result.success) {
+        throw new Error(result.message || 'Failed to remove module');
+      }
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to remove module';
+      console.error('Error removing module:', error);
+      toast.error(errorMessage);
+    }
+  };
+
   useEffect(() => {
     const fetchProject = async () => {
       const projectId = params.id as string;
@@ -68,19 +139,15 @@ export default function EditProjectPage() {
 
           if (result.success && result.data) {
             const project = result.data;
-
-            // Transform dates into Date objects for the form
-            const transformedProject = {
+            const transformedProject: ProjectData = {
               ...project,
-              //@ts-ignore
-              modules: project.modules.map(module => ({
+              modules: project.modules.map((module: ModuleData) => ({
                 ...module,
                 deadline: new Date(module.deadline)
               }))
             };
 
             setProjectData(transformedProject);
-            // Set form default values
             form.reset(transformedProject);
           } else {
             toast.error('Project not found');
@@ -103,7 +170,6 @@ export default function EditProjectPage() {
     try {
       setLoading(true);
 
-      // Transform and validate the data
       const updatedProject = {
         projectName: data.projectName,
         projectDescription: data.projectDescription,
@@ -111,14 +177,14 @@ export default function EditProjectPage() {
           amount: data.budget.amount,
           currency: data.budget.currency
         },
-        projectStatus: data.projectStatus as 'PENDING' | 'CANCELLED' | 'ACTIVE' | 'COMPLETED' | 'INACTIVE',
+        projectStatus: data.projectStatus,
         sendForApproval: data.sendForApproval,
         approvedByFinance: (data.sendForApproval && data.approvedByFinance) && false,
         modules: data.modules.map(module => ({
           moduleName: module.moduleName,
           description: module.description,
           deadline: new Date(module.deadline),
-          status: module.status as 'todo' | 'inprogress' | 'completed'
+          status: module.status
         }))
       };
 
@@ -141,6 +207,7 @@ export default function EditProjectPage() {
       setLoading(false);
     }
   };
+
   return (
     <div className="p-6">
       {isPageLoading ? (
@@ -172,7 +239,6 @@ export default function EditProjectPage() {
                     placeholder="Enter project description"
                   />
 
-                  {/* Project Budget Section */}
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <CustomFormField
@@ -234,14 +300,34 @@ export default function EditProjectPage() {
                         />
                       </div>
                     </div>
-
                   </div>
 
-
                   <div className="space-y-4">
-                    <h2 className="font-semibold">Modules</h2>
-                    {projectData.modules.map((module, index) => (
-                      <div key={index} className="p-4 border rounded-lg space-y-3">
+                    <div className="flex justify-between items-center">
+                      <h2 className="font-semibold">Modules</h2>
+                      <Button
+                        type="button"
+                        onClick={handleAddModule}
+                        variant="outline"
+                        className="flex items-center gap-2"
+                      >
+                        <Plus className="h-4 w-4" />
+                        Add Module
+                      </Button>
+                    </div>
+
+                    {form.watch('modules')?.map((module, index) => (
+                      <div key={index} className="p-4 border rounded-lg space-y-3 relative">
+                        <Button
+                          type="button"
+                          onClick={() => handleRemoveModule(index)}
+                          variant="destructive"
+                          size="sm"
+                          className="absolute top-2 right-2"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+
                         <CustomFormField
                           fieldType={FormFieldType.INPUT}
                           control={form.control}
@@ -258,14 +344,31 @@ export default function EditProjectPage() {
                           placeholder="Enter module description"
                         />
 
-
-
                         <CustomFormField
                           fieldType={FormFieldType.DATE}
                           control={form.control}
                           name={`modules.${index}.deadline`}
                           label="Deadline"
                         />
+
+                        <div>
+                          <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                            Status
+                          </label>
+                          <Select
+                            value={form.watch(`modules.${index}.status`)}
+                            onValueChange={(value) => form.setValue(`modules.${index}.status`, value as any)}
+                          >
+                            <SelectTrigger className="mt-2">
+                              <SelectValue placeholder="Select Status" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="todo">To Do</SelectItem>
+                              <SelectItem value="inprogress">In Progress</SelectItem>
+                              <SelectItem value="completed">Completed</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
                       </div>
                     ))}
                   </div>
