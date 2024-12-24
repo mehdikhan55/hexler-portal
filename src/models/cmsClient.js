@@ -9,7 +9,11 @@ const clientSchema = new mongoose.Schema({
     image: {
         type: String,
         required: true
-    }
+    },
+    display: {
+        type: Boolean,
+        default: true
+    },
 }, { timestamps: true });
 
 export default mongoose.models.CMSClient || mongoose.model('CMSClient', clientSchema);
