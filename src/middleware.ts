@@ -124,12 +124,17 @@ const routePermissions = {
     '/employee-profiles/[id]/edit': ['MANAGE_EMPLOYEES'],
     
     // CMS routes
+    // Project routes
     '/projects': ['VIEW_PROJECTS'],
     '/projects/new': ['MANAGE_CMS'],
     '/project-categories': ['MANAGE_CMS'],
+    //career routes
     '/careers': ['MANAGE_CMS'],
     '/careers/applications': ['MANAGE_CMS'],
     '/careers/applications/[id]': ['MANAGE_CMS'],
+    //clients routes
+    '/cms/clients':['MANAGE_CMS'],
+    '/cms/clients/new':['MANAGE_CMS'],
 
     // Project management routes
     '/manage-projects': ['VIEW_PROJECTS'],

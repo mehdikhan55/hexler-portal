@@ -177,6 +177,14 @@ const apiPermissions = {
     'GET:/api/projects/categories/[id]': ['MANAGE_CMS'],
     'PUT:/api/projects/categories/[id]': ['MANAGE_CMS'],
     'DELETE:/api/projects/categories/[id]': ['MANAGE_CMS'],
+
+    // Clients APIs
+    'GET:/api/cms/clients': ['MANAGE_CMS'],
+    'POST:/api/cms/clients': ['MANAGE_CMS'],
+    'GET:/api/cms/clients/active-clients': ['MANAGE_CMS'],
+    'GET:/api/cms/clients/[id]': ['MANAGE_CMS'],
+    'DELETE:/api/cms/clients/[id]': ['MANAGE_CMS'],
+    'PATCH:/api/cms/clients/[id]/display': ['MANAGE_CMS'],
     // ===> CMS APIs End<===
 
     // ===> Project Management APIs Start
