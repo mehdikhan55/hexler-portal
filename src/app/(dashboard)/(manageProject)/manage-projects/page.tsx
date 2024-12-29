@@ -16,6 +16,9 @@ import Loader from "@/components/Common/Loader";
 import { projectManagementServices, Project } from '@/services/projectManagementServices';
 import toast from 'react-hot-toast';
 import { format } from 'date-fns';
+import { Progress } from '@/components/ui/progress';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
+import LoadingOverlay from '@/components/Common/LoadingOverlay';
 
 const calculateProjectDuration = (project: Project): number => {
     if (!project.modules || project.modules.length === 0) return 0;
@@ -44,6 +47,13 @@ export default function Page() {
     const [projects, setProjects] = useState<Project[]>([]);
     const [deletingProjectId, setDeletingProjectId] = useState<string | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
+    const [statusFilter, setStatusFilter] = useState<string>("all");
+
+
+    const clearFilters = () => {
+        setStatusFilter("all");
+    };
+
 
     const router = useRouter();
 
@@ -51,10 +61,23 @@ export default function Page() {
         fetchProjects();
     }, []);
 
+    // Fetch applications when filters change
+    useEffect(() => {
+        console.log('fetch projects called')
+        fetchProjects();
+    }, [statusFilter]);
+
     const fetchProjects = async () => {
         try {
             setLoading(true);
-            const result = await projectManagementServices.getProjects();
+            const filters: any = {};
+
+            if (statusFilter !== "all") {
+                filters.projectStatus = statusFilter.toUpperCase();
+            }
+
+            console.log('filters:', filters)
+            const result = await projectManagementServices.getProjects(filters);
 
             if (result.success) {
                 setProjects(result.data);
@@ -71,11 +94,15 @@ export default function Page() {
     };
 
     const handleEdit = (projectId: string) => {
-        router.push(`/manage-projects/${projectId}/edit`);
+        // router.push(`/manage-projects/${projectId}/edit`);
+        const url = `/manage-projects/${projectId}/edit`;
+        window.open(url, '_blank');
     };
 
     const handleViewDetails = (projectId: string) => {
-        router.push(`/manage-projects/${projectId}`);
+        // router.push(`/manage-projects/${projectId}`);
+        const url = `/manage-projects/${projectId}`;
+        window.open(url, '_blank');
     };
 
     const handleDelete = (projectId: string) => async () => {
@@ -121,11 +148,15 @@ export default function Page() {
         }));
     };
 
+    const calculateProgress = (project: any) => {
+        if (!project?.modules?.length) return 0;
+        const completedModules = project.modules.filter((m: any) => m.status === 'completed').length;
+        return (completedModules / project.modules.length) * 100;
+    };
+
     if (loading) {
         return (
-            <div className="flex justify-center items-center min-h-screen">
-                <Loader />
-            </div>
+            <LoadingOverlay/>
         );
     }
 
@@ -148,9 +179,43 @@ export default function Page() {
             <div className="p-6">
                 <div className="flex justify-between items-center mb-6">
                     <h1 className="text-2xl font-bold">All Projects</h1>
-                    <Button onClick={() => router.push('/manage-projects/new')}>
-                        Add New Project
-                    </Button>
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                        {/* Status Filter */}
+                        <Select
+                            value={statusFilter}
+                            onValueChange={setStatusFilter}
+                            disabled={loading}
+                        >
+                            <SelectTrigger className="w-[180px]">
+                                <SelectValue placeholder="Filter by status" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectGroup>
+                                    <SelectLabel>Status</SelectLabel>
+                                    <SelectItem value="all">All Statuses</SelectItem>
+                                    <SelectItem value="pending">Pending</SelectItem>
+                                    <SelectItem value="active">Active</SelectItem>
+                                    <SelectItem value="inactive">Inactive</SelectItem>
+                                    <SelectItem value="cancelled">Cancelled</SelectItem>
+                                    <SelectItem value="completed">Completed</SelectItem>
+                                </SelectGroup>
+                            </SelectContent>
+                        </Select>
+
+                        {/* Clear Filters Button */}
+                        <Button
+                            variant="outline"
+                            onClick={clearFilters}
+                            disabled={loading || (statusFilter === "all")}
+                        >
+                            Clear Filters
+                        </Button>
+
+                        <Button onClick={() => router.push('/manage-projects/new')}>
+                            Add New Project
+                        </Button>
+
+                    </div>
                 </div>
 
                 {projects.length === 0 ? (
@@ -164,7 +229,7 @@ export default function Page() {
                                 <CardHeader className="bg-gray-50 dark:bg-gray-800 p-4">
                                     <div className="flex justify-between flex-col-reverse sm:flex-row items-start">
                                         <div>
-                                            <h2 className="text-xl font-semibold">{project.projectName}</h2>
+                                            <h2 onClick={() => project._id && handleViewDetails(project._id)} className="text-xl text-blue-400 cursor-pointer font-semibold">{project.projectName}</h2>
                                             <p className="text-sm text-muted-foreground mt-1">{project.projectDescription}</p>
                                         </div>
                                         <div className="flex items-center justify-between sm:justify-right gap-2 w-full sm:w-auto">
@@ -195,17 +260,17 @@ export default function Page() {
                                                 className={(() => {
                                                     switch (project.projectStatus) {
                                                         case 'PENDING':
-                                                            return 'bg-yellow-500';
+                                                            return 'bg-yellow-500 font-semibold';
                                                         case 'ACTIVE':
-                                                            return 'bg-green-500';
+                                                            return 'bg-green-500 font-semibold';
                                                         case 'INACTIVE':
-                                                            return 'bg-gray-500';
+                                                            return 'bg-gray-500 font-semibold';
                                                         case 'CANCELLED':
-                                                            return 'bg-red-500';
+                                                            return 'bg-red-500 font-semibold';
                                                         case 'COMPLETED':
-                                                            return 'bg-blue-500';
+                                                            return 'bg-blue-500 font-semibold';
                                                         default:
-                                                            return 'bg-gray-300'; // fallback in case of an unknown status
+                                                            return 'bg-gray-300 font-semibold'; // fallback in case of an unknown status
                                                     }
                                                 })()}
                                             >
@@ -213,8 +278,19 @@ export default function Page() {
                                             </Badge>
                                         </div>
                                     </div>
+
+                                    {/* Project Progress */}
+                                    <div className="space-y-2">
+                                        <div className="flex justify-between">
+                                            <span>Overall Progress</span>
+                                            <span>{calculateProgress(project).toFixed(0)}%</span>
+                                        </div>
+                                        <Progress value={calculateProgress(project)} className="h-2" />
+                                    </div>
                                 </CardHeader>
+
                                 <CardContent className="p-4 space-y-4">
+
                                     {/* Project Budget and Status */}
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-2">
@@ -226,22 +302,22 @@ export default function Page() {
                                             </span>
                                         </div>
                                         <div className="flex items-start justify-center">
-                                        <p className='text-xs'><p className="text-sm">Price Approved By Finance:&nbsp;</p></p>
-                                        <Badge
-                                            className={(() => {
-                                                if (project.approvedByFinance) {
-                                                    return 'bg-green-500'; // APPROVED
-                                                } else if (!project.approvedByFinance && project.sendForApproval) {
-                                                    return 'bg-yellow-500'; // PENDING
-                                                } else {
-                                                    return 'bg-gray-500'; // NOT SENT
-                                                }
-                                            })()}
-                                        >
-                                            {(project.approvedByFinance) && 'APPROVED'}
-                                            {(!project.approvedByFinance && project.sendForApproval) && 'PENDING'}
-                                            {(!project.approvedByFinance && !project.sendForApproval) && 'NOT SENT'}
-                                        </Badge>
+                                            <p className='text-xs'><p className="text-sm">Price Approved By Finance:&nbsp;</p></p>
+                                            <Badge
+                                                className={(() => {
+                                                    if (project.approvedByFinance) {
+                                                        return 'bg-green-500'; // APPROVED
+                                                    } else if (!project.approvedByFinance && project.sendForApproval) {
+                                                        return 'bg-yellow-500'; // PENDING
+                                                    } else {
+                                                        return 'bg-gray-500'; // NOT SENT
+                                                    }
+                                                })()}
+                                            >
+                                                {(project.approvedByFinance) && 'APPROVED'}
+                                                {(!project.approvedByFinance && project.sendForApproval) && 'PENDING'}
+                                                {(!project.approvedByFinance && !project.sendForApproval) && 'NOT SENT'}
+                                            </Badge>
                                         </div>
                                     </div>
 

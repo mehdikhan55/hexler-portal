@@ -47,8 +47,13 @@ const projectSchema = new Schema(
     },
     projectStatus: { // STATUS OF THE PROJECT
       type: String,  
-      enum: ["PENDING", "ACTIVE", "INACTIVE", "CANCELLED","COMPLETED"],
+      enum: ["PENDING", "ACTIVE", "INACTIVE", "CANCELLED","COMPLETED", "ALL_STAGES_COMPLETED"],
       default: "ACTIVE",
+    },
+    paymentStatus: { // PAYMENT STATUS OF THE PROJECT
+      type: String,
+      enum: ["PENDING", "RECIEVED", "NOT_RECIEVED"],
+      default: "PENDING",
     },
     sendForApproval: { // APPROVAL SENT TO FINANCE FOR BUDGET FINALIZATION OR NOT
       type: Boolean,

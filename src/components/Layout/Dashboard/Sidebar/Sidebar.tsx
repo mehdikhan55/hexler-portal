@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react'
 import classNames from 'classnames'
 import { Button } from 'react-bootstrap'
 import { useSidebar } from '@/components/Layout/Dashboard/SidebarProvider'
+import Link from 'next/link'
 
 export default function Sidebar({ children }: { children: React.ReactNode }) {
   const [isNarrow, setIsNarrow] = useState(false)
@@ -34,7 +35,9 @@ export default function Sidebar({ children }: { children: React.ReactNode }) {
       id="sidebar"
     >
       <div className="sidebar-brand d-none d-md-flex align-items-center justify-content-center">
-       <img src={"/assets/brand/logo.svg"} alt="hexler tech logo"  className='w-1/2'/>
+        <Link className='flex justify-center items-center' href="/">
+          <img src={"/assets/brand/logo.svg"} alt="hexler tech logo" className='w-1/2' />
+        </Link>
       </div>
 
       <div className="sidebar-nav flex-fill border-top">

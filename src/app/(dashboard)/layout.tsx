@@ -28,7 +28,7 @@ export default function Layout({
           </Container>
         </div>
 
-        <Footer />
+        {/* <Footer /> */}
       </div>
 
       <SidebarOverlay />

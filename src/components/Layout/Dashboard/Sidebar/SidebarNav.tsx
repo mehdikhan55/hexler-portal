@@ -1,6 +1,6 @@
 'use client'
 import {
-  faAddressCard, faBarChart, faBell, faEnvelope, faFileLines, faIdCard, faStar,
+  faAddressCard, faBarChart, faBell, faEnvelope, faFileLines, faIdCard, faMessage, faStar,
 } from '@fortawesome/free-regular-svg-icons'
 import {
   faBuildingUser,
@@ -18,6 +18,7 @@ import {
   faSackDollar,
   faScaleUnbalancedFlip,
   faStarAndCrescent,
+  faUserTie,
 } from '@fortawesome/free-solid-svg-icons'
 import React, { PropsWithChildren, useEffect } from 'react'
 import { Badge } from 'react-bootstrap'
@@ -54,9 +55,9 @@ export default function SidebarNav() {
   return (
     <ul className="list-unstyled">
 
-      <SidebarNavItem icon={faGauge} href="/">
+      {/* <SidebarNavItem icon={faGauge} href="/">
         {siteData.sidebar.items.dashboard}
-      </SidebarNavItem>
+      </SidebarNavItem> */}
 
 
       {
@@ -106,6 +107,12 @@ export default function SidebarNav() {
             <SidebarNavItem icon={faFileLines} href="/careers">Manage Careers</SidebarNavItem>
             <SidebarNavItem icon={faPlusCircle} href="/careers/applications">View Applications</SidebarNavItem>
           </SidebarNavGroup>
+          <SidebarNavGroup toggleIcon={faUserTie} toggleText={"Clients"}>
+            <SidebarNavItem icon={faFileLines} href="/cms/clients">See Clients</SidebarNavItem>
+            <SidebarNavItem icon={faPlusCircle} href="/cms/clients/new">Add Clients</SidebarNavItem>
+          </SidebarNavGroup>
+          <SidebarNavItem icon={faMessage} href="/blogs">Blogs</SidebarNavItem>
+
         </>
       }
 

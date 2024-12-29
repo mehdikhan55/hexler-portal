@@ -9,12 +9,14 @@ export async function GET(req: NextRequest) {
     await dbConnect();
 
     const { searchParams } = new URL(req.url);
-    const isActive = searchParams.get("isActive");
     const projectStatus = searchParams.get("projectStatus");
 
     // Build query object based on filters
     const query: any = {};
-    if (isActive !== null) query.isActive = isActive === 'true';
+
+    // Exclude projects with projectStatus "xyz"
+    query.projectStatus = { $ne: "ALL_STAGES_COMPLETED" };
+
     if (projectStatus) query.projectStatus = projectStatus;
 
     const projects = await Project.find(query).sort({ createdAt: -1 });

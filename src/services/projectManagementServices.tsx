@@ -11,7 +11,8 @@ export interface Project {
   _id?: string;
   projectName: string;
   projectDescription: string;
-  projectStatus: 'PENDING' | 'CANCELLED' | 'ACTIVE' | 'COMPLETED' | 'INACTIVE';
+  projectStatus: 'PENDING' | 'CANCELLED' | 'ACTIVE' | 'COMPLETED' | 'ALL_STAGES_COMPLETED' | 'INACTIVE';
+  paymentStatus: 'PENDING' | 'RECIEVED' | 'NOT_RECIEVED';
   sendForApproval: boolean;
   budget: {
     amount: number | null;
@@ -161,7 +162,7 @@ export const projectManagementServices = {
   },
 
   // Approve project budget
-  async approveProjectBudget(projectId: string, updatedBudget: { amount: number; currency: string } | null){
+  async approveProjectBudget(projectId: string, updatedBudget: { amount: number; currency: string } | null) {
     try {
       const response = await axios.patch(`/api/manage-projects/${projectId}/approve-budget`,
         { updatedBudget },
@@ -183,5 +184,106 @@ export const projectManagementServices = {
       const errorMessage = error?.response?.data?.message || error.message || 'An error occurred during the request';
       return { success: false, message: errorMessage };
     }
-  }
+  },
+
+
+  // Get projects pending CTO completion confirmation
+  async getProjectsPendingCompletion() {
+    try {
+      const response = await axios.get('/api/manage-projects/completion-confirmation', {
+        headers: {
+          'Cache-Control': 'no-store',
+          'Pragma': 'no-cache',
+          'Expires': '0'
+        }
+      });
+
+      if (response.data?.projects) {
+        return { success: true, data: response.data.projects };
+      }
+      throw new Error(response.data?.message || 'Unexpected response from server');
+    } catch (error: any) {
+      const errorMessage = error?.response?.data?.message || error.message || 'An error occurred during the request';
+      return { success: false, message: errorMessage };
+    }
+  },
+
+  async updateProjectStatus(
+    projectId: string, 
+    projectStatus: 'PENDING' | 'ACTIVE' | 'INACTIVE' | 'CANCELLED' | 'COMPLETED' | 'ALL_STAGES_COMPLETED'
+  ) {
+    try {
+      const response = await axios.patch(
+        '/api/manage-projects/completion-confirmation',
+        { projectId, projectStatus },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Cache-Control': 'no-store',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+          }
+        }
+      );
+  
+      if (response.data?.project) {
+        return { success: true, data: response.data.project };
+      }
+      throw new Error(response.data?.message || 'Unexpected response from server');
+    } catch (error: any) {
+      const errorMessage = error?.response?.data?.message || error.message || 'An error occurred during the request';
+      return { success: false, message: errorMessage };
+    }
+  },
+
+  // Get projects pending payment status update (CFO)
+  async getProjectsForPaymentStatus() {
+    try {
+      const response = await axios.get('/api/manage-projects/payment-status', {
+        headers: {
+          'Cache-Control': 'no-store',
+          'Pragma': 'no-cache',
+          'Expires': '0'
+        }
+      });
+
+      if (response.data?.projects) {
+        return { success: true, data: response.data.projects };
+      }
+      throw new Error(response.data?.message || 'Unexpected response from server');
+    } catch (error: any) {
+      const errorMessage = error?.response?.data?.message || error.message || 'An error occurred during the request';
+      return { success: false, message: errorMessage };
+    }
+  },
+
+  // Update project payment status (CFO)
+  async updateProjectPaymentStatus(
+    projectId: string,
+    paymentStatus: 'PENDING' | 'RECIEVED' | 'NOT_RECIEVED'
+  ) {
+    try {
+      const response = await axios.patch(
+        '/api/manage-projects/payment-status',
+        { projectId, paymentStatus },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Cache-Control': 'no-store',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+          }
+        }
+      );
+
+      if (response.data?.project) {
+        return { success: true, data: response.data.project };
+      }
+      throw new Error(response.data?.message || 'Unexpected response from server');
+    } catch (error: any) {
+      const errorMessage = error?.response?.data?.message || error.message || 'An error occurred during the request';
+      return { success: false, message: errorMessage };
+    }
+  },
+
 };

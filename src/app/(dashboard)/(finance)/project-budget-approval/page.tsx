@@ -16,6 +16,8 @@ interface Budget {
   currency: 'USD' | 'PKR';
 }
 
+// /finance/project-budget-approval/page.tsx
+
 export default function ProjectBudgetApproval() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -146,7 +148,7 @@ export default function ProjectBudgetApproval() {
                     </span>
                   </div>
 
-                  <div className="flex gap-2 mt-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-4">
                     <Button 
                       className="flex-1" 
                       onClick={() => handleApproveBudget(project)}
