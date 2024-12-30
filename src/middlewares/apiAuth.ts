@@ -9,6 +9,12 @@ interface DecodedToken {
     exp: number;
 }
 
+interface PermissionConfig {
+    type: 'OR';
+    permissions: string[];
+  }
+  
+
 const publicPaths = [
     '/api/auth/login',
     '/api/auth/logout',
@@ -85,7 +91,7 @@ function checkRoutePermissions(permissionKey: string, userPermissions: string[])
         const pattern = convertRouteToRegex(key);
         const [method, routePath] = key.split(':');
         const [, reqPath] = permissionKey.split(':');
-        
+
         if (method === permissionKey.split(':')[0] && pattern.test(reqPath)) {
             return checkPermissionArray(
                 userPermissions,
@@ -104,8 +110,18 @@ function convertRouteToRegex(routeKey: string): RegExp {
     return new RegExp(`^${pattern}$`);
 }
 
-function checkPermissionArray(userPermissions: string[], requiredPermissions: string[]): boolean {
-    return requiredPermissions.every(permission => userPermissions.includes(permission));
+function checkPermissionArray(userPermissions: string[], requiredPermissions: string[] | PermissionConfig): boolean {
+    // If it's a regular array, use the existing AND logic
+    if (Array.isArray(requiredPermissions)) {
+        return requiredPermissions.every(permission => userPermissions.includes(permission));
+    }
+
+    // Handle OR logic for the special case
+    if (requiredPermissions.type === 'OR') {
+        return requiredPermissions.permissions.some(permission => userPermissions.includes(permission));
+    }
+
+    return false;
 }
 
 // Helper function to attach user info to request
@@ -196,8 +212,20 @@ const apiPermissions = {
     'PUT:/api/manage-projects/[id]': ['MANAGE_PROJECTS'],
     'DELETE:/api/manage-projects/[id]': ['MANAGE_PROJECTS'],
     'PATCH:/api/manage-projects/[id]/approve-budget': ['APPROVE-PROJECT_BUDGET'],
-    // ===> Project Management APIs End
 
+    'GET:/api/manage-projects/completion-confirmation': ['CONFIRM-PROJECT_COMPLETION'],
+    'PATCH:/api/manage-projects/completion-confirmation': ['CONFIRM-PROJECT_COMPLETION'],
+
+    'GET:/api/manage-projects/payment-status': ['MANAGE-PROJECT_PAYMENTS'],
+    'PATCH:/api/manage-projects/payment-status': ['MANAGE-PROJECT_PAYMENTS'],
+
+    'GET:/api/manage-projects/closed-projects': {
+        type: 'OR' as const,
+        permissions: ['MANAGE-PROJECT_PAYMENTS', 'CONFIRM-PROJECT_COMPLETION']
+    },
+    'PATCH:/api/manage-projects/closed-projects': ['MANAGE-PROJECT_PAYMENTS'],
+
+    // ===> Project Management APIs End
 
 
     // Authentication APIs

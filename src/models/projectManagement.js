@@ -47,7 +47,7 @@ const projectSchema = new Schema(
     },
     projectStatus: { // STATUS OF THE PROJECT
       type: String,  
-      enum: ["PENDING", "ACTIVE", "INACTIVE", "CANCELLED","COMPLETED", "ALL_STAGES_COMPLETED"],
+      enum: ["PENDING", "ACTIVE", "INACTIVE", "CANCELLED","COMPLETED", "ALL_STAGES_COMPLETED","CLOSED_SUCCESSFULLY"],
       default: "ACTIVE",
     },
     paymentStatus: { // PAYMENT STATUS OF THE PROJECT

@@ -11,13 +11,17 @@ import toast from 'react-hot-toast';
 import LoadingOverlay from '@/components/Common/LoadingOverlay';
 import AccountCard from '@/components/AccountManagement/AccountCard';
 import { useRouter } from 'next/navigation';
+import { Eye, EyeOff } from 'lucide-react';
 
 const AccountManagementPage = () => {
     const [users, setUsers] = useState([]);
     const [roles, setRoles] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [showAddAccount, setShowAddAccount] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+
     const router = useRouter();
+
     const [newAccount, setNewAccount] = useState({
         email: '',
         password: '',
@@ -109,7 +113,7 @@ const AccountManagementPage = () => {
 
             {/* Add Account Dialog */}
             <Dialog open={showAddAccount} onOpenChange={setShowAddAccount}>
-                <DialogContent>
+                <DialogContent  className='z-[5000]'>
                     <DialogHeader>
                         <DialogTitle>Add New Account</DialogTitle>
                     </DialogHeader>
@@ -144,13 +148,27 @@ const AccountManagementPage = () => {
                         </div>
                         <div>
                             <Label htmlFor="password">Password</Label>
-                            <Input
-                                id="password"
-                                type="password"
-                                value={newAccount.password}
-                                onChange={(e) => setNewAccount({ ...newAccount, password: e.target.value })}
-                                placeholder="Enter password"
-                            />
+                            <div className="relative">
+                                <Input
+                                    id="password"
+                                    type={showPassword ? "text" : "password"}
+                                    value={newAccount.password}
+                                    onChange={(e) => setNewAccount({ ...newAccount, password: e.target.value })}
+                                    placeholder="Enter password"
+                                    className="pr-10"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                                >
+                                    {showPassword ? (
+                                        <EyeOff className="h-5 w-5" />
+                                    ) : (
+                                        <Eye className="h-5 w-5" />
+                                    )}
+                                </button>
+                            </div>
                         </div>
                         <div>
                             <Label htmlFor="role">Role</Label>

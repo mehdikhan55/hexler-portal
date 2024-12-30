@@ -48,3 +48,32 @@ frontend routes:
 /project-payments
 
 
+APIs: D
+
+/api/cms/clients : GET - D
+/api/cms/clients : POST - D
+/api/cms/clients/active-clients : POST - D
+/api/cms/clients/[id] : GET - D
+/api/cms/clients/[id] : DELETE - D
+/api/cms/clients/[id]/display : PATCH - D
+
+/api/manage-projects/completion-confirmation : GET
+/api/manage-projects/completion-confirmation : PATCH
+
+/api/manage-projects/payment-status : GET
+/api/manage-projects/payment-status : PATCH
+
+/api/manage-projects/closed-projects : GET
+/api/manage-projects/closed-projects : PATCH
+
+
+
+Frontend Routes:D
+/cms/clients 
+/cms/clients/new 
+
+/project-completion-confirmation
+
+/project-payments
+
+/closed-projects

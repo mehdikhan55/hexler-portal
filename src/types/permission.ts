@@ -21,7 +21,14 @@ export const PERMISSIONS = {
     "MANAGE_PROJECTS": 'MANAGE_PROJECTS',
 
     //Project Management Permissions
-    "APPROVE-PROJECT_BUDGET": 'APPROVE-PROJECT_BUDGET'
+    "APPROVE-PROJECT_BUDGET": 'APPROVE-PROJECT_BUDGET',
+
+    //Project Payments Management Permissions
+    "MANAGE-PROJECT_PAYMENTS": 'MANAGE-PROJECT_PAYMENTS',
+
+    //Project Completion Confirmation Permissions
+    "CONFIRM-PROJECT_COMPLETION": 'CONFIRM-PROJECT_COMPLETION',
+
 } as const;
 
 export type Permission = keyof typeof PERMISSIONS;

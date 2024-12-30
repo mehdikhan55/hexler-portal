@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { 
-    DropdownMenu, 
-    DropdownMenuContent, 
-    DropdownMenuItem, 
-    DropdownMenuTrigger 
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
+import { Eye, EyeOff } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -22,6 +23,7 @@ const AccountCard = ({ user, onRefresh }: { user: any, onRefresh: () => void }) 
     const [showResetPassword, setShowResetPassword] = useState(false);
     const [newPassword, setNewPassword] = useState('');
     const [isProcessing, setIsProcessing] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
     const handleDeleteAccount = async () => {
         setIsProcessing(true);
@@ -99,8 +101,8 @@ const AccountCard = ({ user, onRefresh }: { user: any, onRefresh: () => void }) 
                                 <Ban className="mr-2 h-4 w-4" />
                                 {user.isActive ? 'Deactivate' : 'Activate'} Account
                             </DropdownMenuItem>
-                            <DropdownMenuItem 
-                                className="text-red-600" 
+                            <DropdownMenuItem
+                                className="text-red-600"
                                 onClick={() => setShowDeleteConfirm(true)}
                             >
                                 <Trash className="mr-2 h-4 w-4" />Delete Account
@@ -116,7 +118,7 @@ const AccountCard = ({ user, onRefresh }: { user: any, onRefresh: () => void }) 
                     <div className="space-y-2 text-gray-300">
                         <p><strong>Email:</strong> {user.email}</p>
                         <p><strong>Role:</strong> {user.role.name}</p>
-                        <p><strong>Status:</strong> 
+                        <p><strong>Status:</strong>
                             <span className={user.isActive ? "text-green-500" : "text-red-500"}>
                                 {user.isActive ? ' Active' : ' Inactive'}
                             </span>
@@ -137,9 +139,9 @@ const AccountCard = ({ user, onRefresh }: { user: any, onRefresh: () => void }) 
                             Cancel
                         </Button>
                         <Button disabled={isProcessing} variant="destructive" onClick={handleDeleteAccount}>
-                          {
-                            isProcessing ? 'Processing...' : 'Delete'
-                          }
+                            {
+                                isProcessing ? 'Processing...' : 'Delete'
+                            }
                         </Button>
                     </div>
                 </DialogContent>
@@ -154,22 +156,36 @@ const AccountCard = ({ user, onRefresh }: { user: any, onRefresh: () => void }) 
                     <div className="space-y-4">
                         <div>
                             <Label htmlFor="new-password">New Password</Label>
-                            <Input
-                                id="new-password"
-                                type="password"
-                                value={newPassword}
-                                onChange={(e) => setNewPassword(e.target.value)}
-                                placeholder="Enter new password"
-                            />
+                            <div className="relative">
+                                <Input
+                                    id="new-password"
+                                    type={showPassword ? "text" : "password"}
+                                    value={newPassword}
+                                    onChange={(e) => setNewPassword(e.target.value)}
+                                    placeholder="Enter new password"
+                                    className="pr-10"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                                >
+                                    {showPassword ? (
+                                        <EyeOff className="h-5 w-5" />
+                                    ) : (
+                                        <Eye className="h-5 w-5" />
+                                    )}
+                                </button>
+                            </div>
                         </div>
                         <div className="flex justify-end space-x-2">
                             <Button variant="outline" onClick={() => setShowResetPassword(false)}>
                                 Cancel
                             </Button>
                             <Button disabled={isProcessing} onClick={handleResetPassword}>
-                               {
-                                 isProcessing ? 'Processing...' : 'Reset Password'
-                               }
+                                {
+                                    isProcessing ? 'Processing...' : 'Reset Password'
+                                }
                             </Button>
                         </div>
                     </div>

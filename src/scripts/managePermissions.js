@@ -94,14 +94,14 @@ async function managePermissions() {
 
     // Example usage: Add new permissions
     await addPermission(
-      'APPROVE-PROJECT_BUDGET', 
-      'Permission to approve project budgets'
+      'CONFIRM-PROJECT_COMPLETION', 
+      'Permission to confirm project completion'
+    );
+    await addPermission(
+      'MANAGE-PROJECT_PAYMENTS', 
+      'Permission to manage project payments'
     );
     
-    // await addPermission(
-    //   'MANAGE_REPORTS', 
-    //   'Permission to manage and generate system reports'
-    // );
 
     // Example usage: Delete a permission
     // await deletePermission('VIEW_REPORTS');

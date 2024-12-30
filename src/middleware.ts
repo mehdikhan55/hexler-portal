@@ -4,10 +4,34 @@ import type { NextRequest } from 'next/server';
 import { apiAuthMiddleware } from '@/middlewares/apiAuth';
 import { jwtVerify } from 'jose';
 
+interface PermissionConfig {
+    type: 'OR';
+    permissions: string[];
+}
 
 export async function middleware(request: NextRequest) {
+
+    const authToken = request.cookies.get('auth-token')?.value;
+
+    // Handle login page access
+    if (request.nextUrl.pathname === '/auth/login') {
+        if (authToken) {
+            try {
+                const secret = new TextEncoder().encode(process.env.JWT_SECRET!);
+                await jwtVerify(authToken, secret);
+                // User is logged in, redirect to home
+                return NextResponse.redirect(new URL('/', request.url));
+            } catch {
+                // Invalid token, allow access to login
+                return NextResponse.next();
+            }
+        }
+        // No token, allow access to login
+        return NextResponse.next();
+    }
+
     // Skip middleware for public routes
-    const publicPaths = ['/auth/login', '/auth/register'];
+    const publicPaths = ['/auth/login'];
     if (publicPaths.includes(request.nextUrl.pathname)) {
         return NextResponse.next();
     }
@@ -26,21 +50,21 @@ export async function middleware(request: NextRequest) {
         // Verify JWT token
         const secret = new TextEncoder().encode(process.env.JWT_SECRET!);
         const { payload } = await jwtVerify(authToken, secret);
-        
+
         const userPermissions = payload.permissions as string[];
         const path = request.nextUrl.pathname;
-        
+
         // Allow access to dashboard and error pages for authenticated users
         const openPaths = ['/', '/unauthorized', '/404', '/500'];
         if (openPaths.includes(path)) {
             return NextResponse.next();
         }
-        
+
         // Check permissions for the requested path
         if (!checkPathPermissions(path, userPermissions)) {
             return NextResponse.redirect(new URL('/unauthorized', request.url));
         }
-        
+
         return NextResponse.next();
     } catch (error) {
         console.error('Middleware error:', error);
@@ -55,8 +79,8 @@ function checkPathPermissions(path: string, userPermissions: string[]): boolean 
     if (userPermissions.includes('ADMIN')) {
         return true;
     }
-    console.log('path:',path)
-    console.log('user permissions:',userPermissions)
+    console.log('path:', path)
+    console.log('user permissions:', userPermissions)
 
     // First check exact match
     if (routePermissions[path as keyof typeof routePermissions]) {
@@ -68,7 +92,7 @@ function checkPathPermissions(path: string, userPermissions: string[]): boolean 
     for (const key of dynamicKeys) {
         const pattern = key.replace(/\[.*?\]/g, '[\\w-]+');
         const regex = new RegExp(`^${pattern}$`);
-        
+
         if (regex.test(path)) {
             return checkPermissions(userPermissions, routePermissions[key as keyof typeof routePermissions]);
         }
@@ -78,9 +102,18 @@ function checkPathPermissions(path: string, userPermissions: string[]): boolean 
     return false;
 }
 
-function checkPermissions(userPermissions: string[], requiredPermissions: string[]): boolean {
-    // User must have all required permissions
-    return requiredPermissions.every(permission => userPermissions.includes(permission));
+function checkPermissions(userPermissions: string[], requiredPermissions: string[] | PermissionConfig): boolean {
+    // If it's a regular array, use the existing AND logic
+    if (Array.isArray(requiredPermissions)) {
+        return requiredPermissions.every(permission => userPermissions.includes(permission));
+    }
+
+    // Handle OR logic for special cases
+    if (requiredPermissions.type === 'OR') {
+        return requiredPermissions.permissions.some(permission => userPermissions.includes(permission));
+    }
+
+    return false;
 }
 
 function handleAuthFailure(request: NextRequest) {
@@ -94,7 +127,7 @@ export const config = {
         // API routes
         '/api/:path*',
         // Page routes (excluding public paths)
-        '/((?!auth|_next/static|_next/image|favicon.ico|assets|images|uploads).*)',
+        '/((?!_next/static|_next/image|favicon.ico|assets|images|uploads).*)',
     ],
 };
 
@@ -115,14 +148,14 @@ const routePermissions = {
     '/expenses': ['VIEW_EXPENSES'],
     '/expenses/[id]': ['VIEW_EXPENSES'],
     '/expenses/edit/[id]': ['MANAGE_EXPENSES'],
-    
+
     // HR/Employee routes
     '/employee-profiles': ['VIEW_EMPLOYEES'],
     '/add-employee': ['MANAGE_EMPLOYEES'],
     '/employee-benefits': ['MANAGE_BENEFITS'],
     '/employee-profiles/[id]': ['VIEW_EMPLOYEES'],
     '/employee-profiles/[id]/edit': ['MANAGE_EMPLOYEES'],
-    
+
     // CMS routes
     // Project routes
     '/projects': ['VIEW_PROJECTS'],
@@ -133,8 +166,8 @@ const routePermissions = {
     '/careers/applications': ['MANAGE_CMS'],
     '/careers/applications/[id]': ['MANAGE_CMS'],
     //clients routes
-    '/cms/clients':['MANAGE_CMS'],
-    '/cms/clients/new':['MANAGE_CMS'],
+    '/cms/clients': ['MANAGE_CMS'],
+    '/cms/clients/new': ['MANAGE_CMS'],
 
     // Project management routes
     '/manage-projects': ['VIEW_PROJECTS'],
@@ -142,6 +175,12 @@ const routePermissions = {
     '/manage-projects/[id]': ['VIEW_PROJECTS'],
     '/manage-projects/[id]/edit': ['MANAGE_PROJECTS'],
     '/project-budget-approval': ['APPROVE-PROJECT_BUDGET'],
+    '/project-completion-confirmation': ['CONFIRM-PROJECT_COMPLETION'],
+    '/project-payments': ['MANAGE-PROJECT_PAYMENTS'],
+    '/closed-projects': {
+        type: 'OR' as const,
+        permissions: ['CONFIRM-PROJECT_COMPLETION', 'MANAGE-PROJECT_PAYMENTS']
+    },
 
     // Account management routes
     '/users': ['ADMIN'],

@@ -5,9 +5,12 @@ import {
 import {
   faBuildingUser,
   faCalculator,
+  faCheckCircle,
+  faCheckDouble,
   faDollar,
   faGauge,
   faMoneyBill,
+  faMoneyCheckDollar,
   faPeopleLine,
   faPeopleRoof,
   faPersonDress,
@@ -38,13 +41,17 @@ const SidebarNavTitle = (props: PropsWithChildren) => {
 
 export default function SidebarNav() {
   const { user } = useAuth();
-  const { isAdmin, 
-    isFinanceAdmin, 
-    canManageCMS, 
-    canManageProjects, 
-    canViewProjects, 
+  const { isAdmin,
+    isFinanceAdmin,
+    canManageCMS,
+    canManageProjects,
+    canViewProjects,
     canApproveProjectBudget,
-    isHRAdmin } = usePermissions(user?.permissions || [], user?.role || '');
+    isHRAdmin,
+    canConfirmProjectCompletion,
+    canManageProjectPayments,
+    canViewClosedProjects
+  } = usePermissions(user?.permissions || [], user?.role || '');
 
   useEffect(() => {
     console.log('current user is : ', user)
@@ -76,6 +83,8 @@ export default function SidebarNav() {
           </SidebarNavGroup>
 
           {canApproveProjectBudget() && <SidebarNavItem icon={faSackDollar} href="/project-budget-approval">Project Budget</SidebarNavItem>}
+          {canManageProjectPayments() && <SidebarNavItem icon={faMoneyCheckDollar} href="/project-payments">Project Payments</SidebarNavItem>}
+          {canViewClosedProjects() && <SidebarNavItem icon={faCheckDouble} href="/closed-projects">Closed Projects</SidebarNavItem>}
         </>
       }
 
@@ -94,6 +103,16 @@ export default function SidebarNav() {
         </>
       }
 
+      {(canViewProjects() && canManageProjects()) && <>
+        <SidebarNavTitle>Project Management</SidebarNavTitle>
+        <SidebarNavGroup toggleIcon={faProjectDiagram} toggleText={"Manage Projects"}>
+          <SidebarNavItem icon={faFileLines} href="/manage-projects">See All Projects</SidebarNavItem>
+          {canManageProjects() && <SidebarNavItem icon={faPlusCircle} href="/manage-projects/new">Add New Project</SidebarNavItem>}
+          {canConfirmProjectCompletion() && <SidebarNavItem icon={faCheckCircle} href="/project-completion-confirmation">Confirm Completion</SidebarNavItem>}
+        </SidebarNavGroup>
+        <SidebarNavItem icon={faCheckDouble} href="/closed-projects">Closed Projects</SidebarNavItem>
+      </>
+      }
 
       {
         canManageCMS() && <>
@@ -116,14 +135,6 @@ export default function SidebarNav() {
         </>
       }
 
-      {(canViewProjects() && canManageProjects()) && <>
-        <SidebarNavTitle>Project Management</SidebarNavTitle>
-        <SidebarNavGroup toggleIcon={faProjectDiagram} toggleText={"Manage Projects"}>
-          <SidebarNavItem icon={faFileLines} href="/manage-projects">See All Projects</SidebarNavItem>
-          {canManageProjects() && <SidebarNavItem icon={faPlusCircle} href="/manage-projects/new">Add New Project</SidebarNavItem>}
-        </SidebarNavGroup>
-      </>
-      }
 
       {isAdmin() && (
         <>

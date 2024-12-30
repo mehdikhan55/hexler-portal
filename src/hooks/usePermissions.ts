@@ -33,5 +33,14 @@ export function usePermissions(userPermissions: Permission[], userRole: string) 
 
         // Project Budget Management permissions
         canApproveProjectBudget: () => hasPermission(userPermissions, PERMISSIONS["APPROVE-PROJECT_BUDGET"]),
+
+        // Project Payments Management permissions
+        canManageProjectPayments: () => hasPermission(userPermissions, PERMISSIONS["MANAGE-PROJECT_PAYMENTS"]),
+
+        // Closed Projects Management permissions
+        canViewClosedProjects: () => hasPermission(userPermissions, PERMISSIONS["MANAGE-PROJECT_PAYMENTS"]) || hasPermission(userPermissions, PERMISSIONS["CONFIRM-PROJECT_COMPLETION"]),
+
+        // Project Completion Confirmation permissions
+        canConfirmProjectCompletion: () => hasPermission(userPermissions, PERMISSIONS["CONFIRM-PROJECT_COMPLETION"]),
     };
 }

@@ -20,6 +20,8 @@ import LoadingOverlay from '@/components/Common/LoadingOverlay';
 
 export type ProjectStatus = 'PENDING' | 'ACTIVE' | 'INACTIVE' | 'CANCELLED' | 'COMPLETED' | 'ALL_STAGES_COMPLETED';
 
+// /project-completion-confirmation/page.tsx
+
 export default function ProjectCompletionConfirmation() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState<boolean>(true);

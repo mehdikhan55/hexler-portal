@@ -100,9 +100,9 @@ export default function Page() {
     };
 
     const handleViewDetails = (projectId: string) => {
-        // router.push(`/manage-projects/${projectId}`);
-        const url = `/manage-projects/${projectId}`;
-        window.open(url, '_blank');
+        router.push(`/manage-projects/${projectId}`);
+        // const url = `/manage-projects/${projectId}`;
+        // window.open(url, '_blank');
     };
 
     const handleDelete = (projectId: string) => async () => {

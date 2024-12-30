@@ -30,7 +30,7 @@ export default function ProjectPayments() {
             const result = await projectManagementServices.getProjectsForPaymentStatus();
             if (result.success) {
                 setProjects(result.data);
-                console.log('hello',result.data);
+                console.log('hello', result.data);
             } else {
                 toast.error(result.message || 'Failed to fetch projects');
             }
@@ -72,6 +72,25 @@ export default function ProjectPayments() {
         }
     };
 
+    const handleCloseProject = async (project:Project)=>{
+        try {
+            setProcessing(true);
+            const result = await projectManagementServices.closeProjectSuccessfully(project._id!);
+
+            if (result.success) {
+                toast.success('Payment closed successfully');
+                await fetchCompletedProjects();
+            } else {
+                throw new Error(result.message || 'Failed to update payment status');
+            }
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : 'Error closing project';
+            toast.error(errorMessage);
+        } finally {
+            setProcessing(false);
+        }
+    }
+
     const getStatusBadgeColor = (status: string) => {
         switch (status) {
             case 'RECIEVED':
@@ -85,7 +104,7 @@ export default function ProjectPayments() {
 
     if (loading) {
         return (
-            <LoadingOverlay/>
+            <LoadingOverlay />
         );
     }
 
@@ -114,6 +133,7 @@ export default function ProjectPayments() {
                                             {project.projectDescription}
                                         </CardDescription>
                                     </div>
+                                    {/* @ts-ignore */}
                                     <Badge className={getStatusBadgeColor(project.paymentStatus)}>
                                         {project.paymentStatus || 'PENDING'}
                                     </Badge>
@@ -136,13 +156,23 @@ export default function ProjectPayments() {
                                         </span>
                                     </div>
 
-                                    <Button
-                                        className="w-full"
-                                        onClick={() => handleOpenUpdateDialog(project)}
-                                        disabled={processing}
-                                    >
-                                        Update Payment Status
-                                    </Button>
+                                    <div className="flex flex-col gap-1">
+                                        <Button
+                                            className="w-full"
+                                            onClick={() => handleOpenUpdateDialog(project)}
+                                            disabled={processing}
+                                        >
+                                            Update Payment Status
+                                        </Button>
+                                       {project.paymentStatus==="RECIEVED" && <Button
+                                            className="w-full"
+                                            variant={'outline'}
+                                            onClick={() => handleCloseProject(project)}
+                                            disabled={processing}
+                                        >
+                                            Close Project Successfully
+                                        </Button>}
+                                    </div>
                                 </div>
                             </CardContent>
                         </Card>

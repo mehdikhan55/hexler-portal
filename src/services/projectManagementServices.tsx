@@ -12,7 +12,7 @@ export interface Project {
   projectName: string;
   projectDescription: string;
   projectStatus: 'PENDING' | 'CANCELLED' | 'ACTIVE' | 'COMPLETED' | 'ALL_STAGES_COMPLETED' | 'INACTIVE';
-  paymentStatus: 'PENDING' | 'RECIEVED' | 'NOT_RECIEVED';
+  paymentStatus?: 'PENDING' | 'RECIEVED' | 'NOT_RECIEVED';
   sendForApproval: boolean;
   budget: {
     amount: number | null;
@@ -209,7 +209,7 @@ export const projectManagementServices = {
   },
 
   async updateProjectStatus(
-    projectId: string, 
+    projectId: string,
     projectStatus: 'PENDING' | 'ACTIVE' | 'INACTIVE' | 'CANCELLED' | 'COMPLETED' | 'ALL_STAGES_COMPLETED'
   ) {
     try {
@@ -225,7 +225,7 @@ export const projectManagementServices = {
           }
         }
       );
-  
+
       if (response.data?.project) {
         return { success: true, data: response.data.project };
       }
@@ -285,5 +285,57 @@ export const projectManagementServices = {
       return { success: false, message: errorMessage };
     }
   },
+
+  async closeProjectSuccessfully(projectId: string) {
+    try {
+      const response = await axios.patch(
+        '/api/manage-projects/closed-projects',
+        {projectId},
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Cache-Control': 'no-store',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+          }
+        }
+      );
+
+      if (response.data?.project) {
+        return { success: true, data: response.data.project };
+      }
+      throw new Error(response.data?.message || 'Unexpected response from server');
+    } catch (error: any) {
+      const errorMessage = error?.response?.data?.message || error.message || 'An error occurred during the request';
+      return { success: false, message: errorMessage };
+    }
+  },
+  async getClosedProjects() {
+    try {
+      let url = '/api/manage-projects/closed-projects';
+      // if (filters) {
+      //   const params = new URLSearchParams();
+      //   if (filters.isActive !== undefined) params.append('isActive', String(filters.isActive));
+      //   if (filters.projectStatus) params.append('projectStatus', filters.projectStatus);
+      //   url += `?${params.toString()}`;
+      // }
+
+      const response = await axios.get(url, {
+        headers: {
+          'Cache-Control': 'no-store',
+          'Pragma': 'no-cache',
+          'Expires': '0'
+        }
+      });
+
+      if (response.data?.projects) {
+        return { success: true, data: response.data.projects };
+      }
+      throw new Error(response.data?.message || 'Unexpected response from server');
+    } catch (error: any) {
+      const errorMessage = error?.response?.data?.message || error.message || 'An error occurred during the request';
+      return { success: false, message: errorMessage };
+    }
+  }
 
 };
