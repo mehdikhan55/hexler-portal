@@ -1,6 +1,6 @@
 'use client'
 import {
-  faAddressCard, faBarChart, faBell, faEnvelope, faFileLines, faIdCard, faMessage, faStar,
+  faAddressCard, faBarChart, faBell, faEnvelope, faFile, faFileLines, faIdCard, faMessage, faStar,
 } from '@fortawesome/free-regular-svg-icons'
 import {
   faBuildingUser,
@@ -80,6 +80,10 @@ export default function SidebarNav() {
           <SidebarNavGroup toggleIcon={faScaleUnbalancedFlip} toggleText={"Expense Tracker"}>
             <SidebarNavItem icon={faGauge} href="/expense-tracker">Office Expense Tracker</SidebarNavItem>
             <SidebarNavItem icon={faPuzzlePiece} href="/expense-categories">Expense Categories</SidebarNavItem>
+          </SidebarNavGroup>
+          <SidebarNavGroup toggleIcon={faFile} toggleText={"Invoices"}>
+            <SidebarNavItem icon={faFileLines} href="/invoices">See Invoices</SidebarNavItem>
+            <SidebarNavItem icon={faPlusCircle} href="/generate-invoice">Generate Invoice</SidebarNavItem>
           </SidebarNavGroup>
 
           {canApproveProjectBudget() && <SidebarNavItem icon={faSackDollar} href="/project-budget-approval">Project Budget</SidebarNavItem>}
