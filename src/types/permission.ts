@@ -26,6 +26,9 @@ export const PERMISSIONS = {
     //Project Payments Management Permissions
     "MANAGE-PROJECT_PAYMENTS": 'MANAGE-PROJECT_PAYMENTS',
 
+    //Manage invoices Permissions
+    "MANAGE_INVOICES": 'MANAGE_INVOICES',
+
     //Project Completion Confirmation Permissions
     "CONFIRM-PROJECT_COMPLETION": 'CONFIRM-PROJECT_COMPLETION',
 

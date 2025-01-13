@@ -6,7 +6,7 @@ import { careerServices } from '@/services/careerServices';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowLeft, Calendar, Download, Mail, MapPin, Phone, User2 } from 'lucide-react';
+import { ArrowLeft, Briefcase, Calendar, Download, FileText, LinkIcon, Mail, MapPin, Phone, User2 } from 'lucide-react';
 import Loader from '@/components/Common/Loader';
 import toast from 'react-hot-toast';
 import {
@@ -196,7 +196,6 @@ const page = ({ params }: { params: { applicationId: string } }) => {
                         </CardContent>
                     </Card>
 
-                    {/* Contact Information */}
                     <Card className='dark:bg-gray-800'>
                         <CardHeader>
                             <CardTitle>Contact Information</CardTitle>
@@ -206,13 +205,29 @@ const page = ({ params }: { params: { applicationId: string } }) => {
                                 <Mail className="w-5 h-5 text-gray-400" />
                                 <span>{application.email}</span>
                             </div>
-                            <div className="flex items-center gap-3">
-                                <Phone className="w-5 h-5 text-gray-400" />
-                                <span>{application.phoneNumber}</span>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="flex items-center gap-3">
+                                    <Phone className="w-5 h-5 text-gray-400" />
+                                    <span>Phone: {application.phoneNumber}</span>
+                                </div>
+                                <div className="flex items-center gap-3">
+                                    <Phone className="w-5 h-5 text-gray-400" />
+                                    <span>WhatsApp: {application.whatsappNumber}</span>
+                                </div>
                             </div>
                             <div className="flex items-center gap-3">
                                 <MapPin className="w-5 h-5 text-gray-400" />
-                                <span>{application.address}, {application.city}</span>
+                                <span>{application.address}</span>
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="flex items-center gap-3">
+                                    <MapPin className="w-5 h-5 text-gray-400" />
+                                    <span>Origin City: {application.originCity}</span>
+                                </div>
+                                <div className="flex items-center gap-3">
+                                    <MapPin className="w-5 h-5 text-gray-400" />
+                                    <span>Current City: {application.residingCity}</span>
+                                </div>
                             </div>
                             <div className="flex items-center gap-3">
                                 <Calendar className="w-5 h-5 text-gray-400" />
@@ -221,20 +236,53 @@ const page = ({ params }: { params: { applicationId: string } }) => {
                         </CardContent>
                     </Card>
 
-                    {/* Professional Links */}
-                    {(application.linkedinProfile || application.githubProfile || application.projectLinks) && (
-                        <Card className='dark:bg-gray-800'>
-                            <CardHeader>
-                                <CardTitle>Professional Links</CardTitle>
-                            </CardHeader>
-                            <CardContent className="grid gap-4">
+                    {/* Professional Experience */}
+                    <Card className='dark:bg-gray-800'>
+                        <CardHeader>
+                            <CardTitle>Professional Experience</CardTitle>
+                        </CardHeader>
+                        <CardContent className="grid gap-4">
+                            {application.pastExperience && (
+                                <div className="space-y-2">
+                                    <h3 className="font-semibold flex items-center gap-2">
+                                        <Briefcase className="w-4 h-4" />
+                                        Past Experience
+                                    </h3>
+                                    <p className="text-gray-600 dark:text-gray-300">
+                                        {application.pastExperience}
+                                    </p>
+                                </div>
+                            )}
+                            
+                            {application.coverLetter && (
+                                <div className="space-y-2">
+                                    <h3 className="font-semibold flex items-center gap-2">
+                                        <FileText className="w-4 h-4" />
+                                        Cover Letter
+                                    </h3>
+                                    <p className="text-gray-600 dark:text-gray-300">
+                                        {application.coverLetter}
+                                    </p>
+                                </div>
+                            )}
+                        </CardContent>
+                    </Card>
+
+                    {/* Professional Links - Updated */}
+                    <Card className='dark:bg-gray-800'>
+                        <CardHeader>
+                            <CardTitle>Professional Links</CardTitle>
+                        </CardHeader>
+                        <CardContent className="grid gap-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {application.linkedinProfile && (
                                     <a
                                         href={application.linkedinProfile}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="text-blue-500 hover:underline"
+                                        className="flex items-center gap-2 text-blue-500 hover:underline"
                                     >
+                                        <LinkIcon className="w-4 h-4" />
                                         LinkedIn Profile
                                     </a>
                                 )}
@@ -243,51 +291,65 @@ const page = ({ params }: { params: { applicationId: string } }) => {
                                         href={application.githubProfile}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="text-blue-500 hover:underline"
+                                        className="flex items-center gap-2 text-blue-500 hover:underline"
                                     >
+                                        <LinkIcon className="w-4 h-4" />
                                         GitHub Profile
                                     </a>
                                 )}
+                            </div>
 
-                                <CardTitle>Project Links</CardTitle>
-
-                                {application.projectLinks && (
-                                    <div
-                                        className="text-blue-500 hover:underline flex flex-col gap-1"
+                            {application.portfolioLink && (
+                                <div>
+                                    <h3 className="font-semibold mb-2">Portfolio (Or Behance etc)</h3>
+                                    <a
+                                        href={application.portfolioLink}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex items-center gap-2 text-blue-500 hover:underline"
                                     >
+                                        <LinkIcon className="w-4 h-4" />
+                                        View Portfolio
+                                    </a>
+                                </div>
+                            )}
+
+                            {application.projectLinks && (
+                                <div>
+                                    <h3 className="font-semibold mb-2">Project Links</h3>
+                                    <div className="flex flex-col gap-2">
                                         {application.projectLinks.split(' ').map((link, index) => (
-                                            <div key={index}>
-                                                <p
-                                                    className="block hover:underline"
-                                                >
-                                                    {link}
-                                                </p>
-                                                <br />
-                                            </div>
+                                            <a
+                                                key={index}
+                                                href={link}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="flex items-center gap-2 text-blue-500 hover:underline"
+                                            >
+                                                <LinkIcon className="w-4 h-4" />
+                                                Project {index + 1}
+                                            </a>
                                         ))}
                                     </div>
-                                )}
-                            </CardContent>
-                        </Card>
-                    )}
+                                </div>
+                            )}
+                        </CardContent>
+                    </Card>
 
                     {/* Resume */}
-                    {application.resume && (
-                        <Card className='dark:bg-gray-800'>
-                            <CardHeader>
-                                <CardTitle>Resume</CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                                <p className='text-blue-500 hover:underline cursor-pointer'>{application?.resume}</p>
-                                <Link href={application.resume} target='_blank' >
-                                    <Button className="flex items-center gap-2">
-                                        <Download className="w-4 h-4" />
-                                        Download Resume
-                                    </Button>
-                                </Link>
-                            </CardContent>
-                        </Card>
-                    )}
+                    {application.resume && <Card className='dark:bg-gray-800'>
+                        <CardHeader>
+                            <CardTitle>Resume</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <Link href={application.resume} target='_blank'>
+                                <Button className="flex items-center gap-2">
+                                    <Download className="w-4 h-4" />
+                                    Download Resume
+                                </Button>
+                            </Link>
+                        </CardContent>
+                    </Card>}
 
                     {/* Application Timeline */}
                     <Card className='dark:bg-gray-800'>

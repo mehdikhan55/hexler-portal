@@ -28,7 +28,7 @@ const Page = () => {
       projectCategory: '',
       projectImage: null,
       projectLink: '',
-      projectOrder: '1'
+      projectOrder: 1
     }
   });
 

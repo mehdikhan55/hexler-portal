@@ -12,46 +12,46 @@ import DatePicker from '@/components/Expense/date-picker-demo';
 
 const AddProjectForm = ({ form, onSubmit, loading, buttonText = "Submit", categoriesData }: any) => {
     // State declarations
-    const [currentModule, setCurrentModule] = useState<string>(''); // For module name input
-    const [modules, setModules] = useState<{ id: string; name: string }[]>([]); // List of modules
-    const [editingModuleId, setEditingModuleId] = useState<string | null>(null); // ID of the module being edited
+    // const [currentModule, setCurrentModule] = useState<string>(''); // For module name input
+    // const [modules, setModules] = useState<{ id: string; name: string }[]>([]); // List of modules
+    // const [editingModuleId, setEditingModuleId] = useState<string | null>(null); // ID of the module being edited
 
     // Function to handle adding a new module or updating an existing one
-    const handleAddModule = () => {
-        if (!currentModule.trim()) return; // Prevent empty module names
+    // const handleAddModule = () => {
+    //     if (!currentModule.trim()) return; // Prevent empty module names
 
-        if (editingModuleId) {
-            // Update existing module
-            setModules((prev) =>
-                prev.map((module) =>
-                    module.id === editingModuleId ? { ...module, name: currentModule } : module
-                )
-            );
-            setEditingModuleId(null);
-        } else {
-            // Add new module
-            setModules((prev) => [
-                ...prev,
-                { id: Date.now().toString(), name: currentModule },
-            ]);
-        }
+    //     if (editingModuleId) {
+    //         // Update existing module
+    //         setModules((prev) =>
+    //             prev.map((module) =>
+    //                 module.id === editingModuleId ? { ...module, name: currentModule } : module
+    //             )
+    //         );
+    //         setEditingModuleId(null);
+    //     } else {
+    //         // Add new module
+    //         setModules((prev) => [
+    //             ...prev,
+    //             { id: Date.now().toString(), name: currentModule },
+    //         ]);
+    //     }
 
-        setCurrentModule(''); // Clear input field
-    };
+    //     setCurrentModule(''); // Clear input field
+    // };
 
-    // Function to handle editing a module
-    const handleEditModule = (id: string) => {
-        const moduleToEdit = modules.find((module) => module.id === id);
-        if (moduleToEdit) {
-            setCurrentModule(moduleToEdit.name);
-            setEditingModuleId(id);
-        }
-    };
+    // // Function to handle editing a module
+    // const handleEditModule = (id: string) => {
+    //     const moduleToEdit = modules.find((module) => module.id === id);
+    //     if (moduleToEdit) {
+    //         setCurrentModule(moduleToEdit.name);
+    //         setEditingModuleId(id);
+    //     }
+    // };
 
     // Function to handle deleting a module
-    const handleDeleteModule = (id: string) => {
-        setModules((prev) => prev.filter((module) => module.id !== id));
-    };
+    // const handleDeleteModule = (id: string) => {
+    //     setModules((prev) => prev.filter((module) => module.id !== id));
+    // };
 
     return (
         <div>
@@ -111,7 +111,7 @@ const AddProjectForm = ({ form, onSubmit, loading, buttonText = "Submit", catego
                     </div>
 
                     {/* Module Management Section */}
-                    <Card>
+                    {/* <Card>
                         <CardContent className="pt-6">
                             <div className="space-y-4">
                                 <h3 className="text-lg font-medium">Project Modules</h3>
@@ -164,11 +164,14 @@ const AddProjectForm = ({ form, onSubmit, loading, buttonText = "Submit", catego
                                 </div>
                             </div>
                         </CardContent>
-                    </Card>
+                    </Card> */}
 
+
+                    {/* Starting and Ending Date  */}
+                    
                     <div className="flex flex-row gap-6 w-fit">
                         {/* Start Date */}
-                        <CustomFormField
+                        {/* <CustomFormField
                             fieldType={FormFieldType.SKELETON}
                             control={form.control}
                             name="startDate"
@@ -183,10 +186,10 @@ const AddProjectForm = ({ form, onSubmit, loading, buttonText = "Submit", catego
                                     />
                                 </FormControl>
                             )}
-                        />
+                        /> */}
 
                         {/* End Date */}
-                        <CustomFormField
+                        {/* <CustomFormField
                             fieldType={FormFieldType.SKELETON}
                             control={form.control}
                             name="endDate"
@@ -201,8 +204,9 @@ const AddProjectForm = ({ form, onSubmit, loading, buttonText = "Submit", catego
                                     />
                                 </FormControl>
                             )}
-                        />
+                        /> */}
                     </div>
+                    
 
                     <CustomFormField
                         fieldType={FormFieldType.SKELETON}

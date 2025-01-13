@@ -1,5 +1,5 @@
 'use client'
-import { EllipsisVertical, User2 } from 'lucide-react';
+import { EllipsisVertical, PhoneCall, User2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { CareerApplication } from '@/types/Career';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@/components/ui/dropdown-menu';
@@ -8,6 +8,9 @@ import { careerServices } from '@/services/careerServices';
 import toast from 'react-hot-toast';
 import LoadingOverlay from '@/components/Common/LoadingOverlay';
 import { useState } from 'react';
+import whatsappIcon from "../../../public/assets/icons/whattsapp-icon.png";
+import Image from 'next/image';
+
 
 interface ApplicationCardProps {
   application: CareerApplication;
@@ -31,14 +34,14 @@ const ApplicationCard = ({ application, onStatusChange }: ApplicationCardProps) 
 
   const handleStatusChange = async (newStatus: string) => {
     if (!application._id || isProcessing) return;
-    
+
     try {
       setIsProcessing(true);
       const result = await careerServices.updateApplicationStatus(
-        application._id, 
+        application._id,
         newStatus as CareerApplication['status']
       );
-      
+
       if (result.success) {
         toast.success(`Status updated to ${newStatus}`);
         onStatusChange();
@@ -61,15 +64,15 @@ const ApplicationCard = ({ application, onStatusChange }: ApplicationCardProps) 
   return (
     <div className="relative">
       {isProcessing && <LoadingOverlay />}
-      <div 
+      <div
         className="bg-gray- dark:border-2 border-black dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden transform transition duration-300 ease-in-out hover:shadow-xl cursor-pointer"
         onClick={viewDetails}
       >
         <div className="p-4 relative">
           <div className="absolute top-2 right-2">
             <DropdownMenu>
-              <DropdownMenuTrigger 
-                onClick={(e) => e.stopPropagation()} 
+              <DropdownMenuTrigger
+                onClick={(e) => e.stopPropagation()}
                 className="focus:outline-none"
                 disabled={isProcessing}
               >
@@ -120,8 +123,15 @@ const ApplicationCard = ({ application, onStatusChange }: ApplicationCardProps) 
 
           <div className="text-sm dark:text-gray-400">
             <p className="mb-1">📧 {application.email}</p>
-            <p className="mb-1">📱 {application.phoneNumber}</p>
-            <p>📍 {application.city}</p>
+            <div className='flex items-center gap-1'>
+              <PhoneCall size={18} />
+              <p className="mb-1">{application.phoneNumber}</p>
+            </div>
+            <div className='flex items-center gap-1'>
+              <Image src={whatsappIcon} height={18} width={18} alt='whatsapp' className='mb-1' />
+              <p className="mb-1">{application.phoneNumber}</p>
+            </div>
+            <p>📍 {application.residingCity}</p>
           </div>
         </div>
       </div>

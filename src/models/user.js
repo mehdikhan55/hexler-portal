@@ -98,7 +98,8 @@ const permissionSchema = new mongoose.Schema({
             'VIEW_PROJECTS', 'MANAGE_PROJECTS',
 
             // Custom Permissions
-            'APPROVE-PROJECT_BUDGET', 'CONFIRM-PROJECT_COMPLETION', 'MANAGE-PROJECT_PAYMENTS'
+            'APPROVE-PROJECT_BUDGET', 'CONFIRM-PROJECT_COMPLETION', 'MANAGE-PROJECT_PAYMENTS',
+            'MANAGE_INVOICES'
         ]
     },
     description: String,

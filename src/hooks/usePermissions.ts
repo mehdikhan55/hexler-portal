@@ -14,7 +14,7 @@ export function usePermissions(userPermissions: Permission[], userRole: string) 
         isHRAdmin: () => hasRequiredRole(userRole, "HR"),
         isEmployee: () => hasRequiredRole(userRole, "Emp"),
         isCTO: () => hasRequiredRole(userRole, "CTO"),
-
+        
         // Finance related permissions
         canViewPayroll: () => hasPermission(userPermissions, PERMISSIONS["VIEW_PAYROLL"]),
         canManagePayroll: () => hasPermission(userPermissions, PERMISSIONS["MANAGE_PAYROLL"]),
@@ -42,5 +42,8 @@ export function usePermissions(userPermissions: Permission[], userRole: string) 
 
         // Project Completion Confirmation permissions
         canConfirmProjectCompletion: () => hasPermission(userPermissions, PERMISSIONS["CONFIRM-PROJECT_COMPLETION"]),
+
+        // Invoice Management permissions
+        canManageInvoices: () => hasPermission(userPermissions, PERMISSIONS["MANAGE_INVOICES"]),
     };
 }

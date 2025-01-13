@@ -27,7 +27,8 @@ export const ProjectAddSchema = z.object({
     projectCategory: z.string().min(3, 'Project category must be at least 3 characters long'),
     projectImage: z.any(),
     projectLink: z.string(),
-    projectOrder: z.string().min(1, 'Project order must be at least 1 character long'),
+    // projectOrder: z.string().min(1, 'Project order must be at least 1 character long'),
+    projectOrder: z.number().min(1, 'Project order must be at least 1 character long'),
 });
 export const ProjectEditSchema = z.object({
     projectName: z.string().min(3, 'Project name must be at least 3 characters long'),

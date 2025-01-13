@@ -6,28 +6,34 @@ export type Career = {
     createdAt: string;
     updatedAt: string;
 };
+
 export type AddCareer = {
     name: string;
     description?: string;
     isActive: boolean;
 };
 
-export type CareerApplication ={
+export type CareerApplication = {
     _id?: string;
     firstName: string;
     lastName: string;
     gender: "male" | "female" | "other";
     DOB: string;
     phoneNumber: string;
+    whatsappNumber: string;
     email: string;
     address: string;
-    city: string;
+    originCity: string;
+    residingCity: string;
     projectLinks?: string;
-    linkedinProfile?: string;
-    githubProfile?: string;
+    portfolioLink?: string;
+    pastExperience?: string;
+    coverLetter?: string;
+    linkedinProfile: string;
+    githubProfile: string;
     career: string | Career;
-    resume?: string;
+    resume: string;
     status: "pending" | "reviewing" | "shortlisted" | "rejected" | "hired";
     createdAt?: string;
     updatedAt?: string;
-} 
+};

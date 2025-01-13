@@ -50,7 +50,11 @@ export default function SidebarNav() {
     isHRAdmin,
     canConfirmProjectCompletion,
     canManageProjectPayments,
-    canViewClosedProjects
+    canViewClosedProjects,
+    canManageInvoices,
+    canManageExpenses,
+    canManagePayroll,
+    canManageEmployees
   } = usePermissions(user?.permissions || [], user?.role || '');
 
   useEffect(() => {
@@ -68,25 +72,33 @@ export default function SidebarNav() {
 
 
       {
-        isFinanceAdmin() && <>
+        (canManagePayroll() ||
+          canManageExpenses() ||
+          canManageInvoices() ||
+          canApproveProjectBudget() ||
+          canManageProjectPayments() ||
+          canViewClosedProjects()
+        ) && <>
           <SidebarNavTitle>Finance Management</SidebarNavTitle>
 
-          <SidebarNavGroup toggleIcon={faDollar} toggleText={"Payroll"}>
+          {canManagePayroll() && <SidebarNavGroup toggleIcon={faDollar} toggleText={"Payroll"}>
             <SidebarNavItem icon={faMoneyBill} href="/payroll">Payroll</SidebarNavItem>
             <SidebarNavItem icon={faCalculator} href="/salary-calculator">Salary Calculator</SidebarNavItem>
             <SidebarNavItem icon={faPeopleLine} href="/">Attendance</SidebarNavItem>
           </SidebarNavGroup>
+          }
 
-          <SidebarNavGroup toggleIcon={faScaleUnbalancedFlip} toggleText={"Expense Tracker"}>
+          {canManageExpenses() && <SidebarNavGroup toggleIcon={faScaleUnbalancedFlip} toggleText={"Expense Tracker"}>
             <SidebarNavItem icon={faGauge} href="/expense-tracker">Office Expense Tracker</SidebarNavItem>
             <SidebarNavItem icon={faPuzzlePiece} href="/expense-categories">Expense Categories</SidebarNavItem>
-          </SidebarNavGroup>
-          <SidebarNavGroup toggleIcon={faFile} toggleText={"Invoices"}>
+          </SidebarNavGroup>}
+          {canManageInvoices() && <SidebarNavGroup toggleIcon={faFile} toggleText={"Invoices"}>
             <SidebarNavItem icon={faFileLines} href="/invoices">See Invoices</SidebarNavItem>
             <SidebarNavItem icon={faPlusCircle} href="/generate-invoice">Generate Invoice</SidebarNavItem>
-          </SidebarNavGroup>
+          </SidebarNavGroup>}
 
-          {canApproveProjectBudget() && <SidebarNavItem icon={faSackDollar} href="/project-budget-approval">Project Budget</SidebarNavItem>}
+          {canApproveProjectBudget()
+            && <SidebarNavItem icon={faSackDollar} href="/project-budget-approval">Project Budget</SidebarNavItem>}
           {canManageProjectPayments() && <SidebarNavItem icon={faMoneyCheckDollar} href="/project-payments">Project Payments</SidebarNavItem>}
           {canViewClosedProjects() && <SidebarNavItem icon={faCheckDouble} href="/closed-projects">Closed Projects</SidebarNavItem>}
         </>
@@ -96,7 +108,7 @@ export default function SidebarNav() {
 
 
       {
-        (isFinanceAdmin() || isHRAdmin()) && <>
+        (canManageEmployees()) && <>
           <SidebarNavTitle>Employees Management</SidebarNavTitle>
           <SidebarNavGroup toggleIcon={faPersonShelter} toggleText={"Employee"}>
             <SidebarNavItem icon={faPeopleRoof} href="/employee-profiles">Employee Profiles</SidebarNavItem>
@@ -110,7 +122,11 @@ export default function SidebarNav() {
       {(canViewProjects() && canManageProjects()) && <>
         <SidebarNavTitle>Project Management</SidebarNavTitle>
         <SidebarNavGroup toggleIcon={faProjectDiagram} toggleText={"Manage Projects"}>
-          <SidebarNavItem icon={faFileLines} href="/manage-projects">See All Projects</SidebarNavItem>
+          {(
+            canViewProjects() ||
+            canManageProjects()
+          )
+            && <SidebarNavItem icon={faFileLines} href="/manage-projects">See All Projects</SidebarNavItem>}
           {canManageProjects() && <SidebarNavItem icon={faPlusCircle} href="/manage-projects/new">Add New Project</SidebarNavItem>}
           {canConfirmProjectCompletion() && <SidebarNavItem icon={faCheckCircle} href="/project-completion-confirmation">Confirm Completion</SidebarNavItem>}
         </SidebarNavGroup>

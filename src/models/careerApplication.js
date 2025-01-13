@@ -7,20 +7,24 @@ const careerApplicationSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    lastName:{
+    lastName: {
         type: String,
-        required:true
+        required: true
     },
-    gender:{
+    gender: {
         type: String,
         required: true,
-        enum : ["male","female","other"]
+        enum: ["male", "female", "other"]
     },
-    DOB:{
+    DOB: {
         type: Date,
         required: true
-    },  
-    phoneNumber:{
+    },
+    phoneNumber: {
+        type: String,
+        required: true
+    },
+    whatsappNumber: {
         type: String,
         required: true
     },
@@ -28,22 +32,37 @@ const careerApplicationSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    address:{
+    address: {
         type: String,
         required: true
     },
-    city:{
+    originCity: {
         type: String,
         required: true
     },
-    projectLinks:{
+    residingCity: {
         type: String,
+        required: true
     },
-    linkedinProfile:{
-        type: String,
+    projectLinks: {
+        type: String
     },
-    githubProfile:{
+    portfolioLink: {
+        type: String
+    },
+    pastExperience: {
+        type: String
+    },
+    coverLetter: {
+        type: String
+    },
+    linkedinProfile: {
         type: String,
+        required: true
+    },
+    githubProfile: {
+        type: String,
+        required: true
     },
     career: {
         type: mongoose.Schema.Types.ObjectId,
@@ -52,12 +71,13 @@ const careerApplicationSchema = new mongoose.Schema({
     },
     resume: {
         type: String,
+        required: true
     },
     status: {
         type: String,
         enum: ['pending', 'reviewing', 'shortlisted', 'rejected', 'hired'],
         default: 'pending'
     }
-},{timestamps: true});
+}, { timestamps: true });
 
 export default mongoose.models.CareerApplication || mongoose.model('CareerApplication', careerApplicationSchema);
