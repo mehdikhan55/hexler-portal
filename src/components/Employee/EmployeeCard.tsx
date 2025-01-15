@@ -1,6 +1,6 @@
 'use client'
 import React, { useEffect, useState } from 'react';
-import { Pen, Trash2, Mail, Phone, Building2 } from 'lucide-react';
+import { Pen, Trash2, Mail, Phone, Building2, Eye } from 'lucide-react';
 import { cn } from "@/lib/utils";
 import { Employee } from '@/types/Employee';
 import defaultProfilePhoto from '../../../public/assets/default-profile.jpg';
@@ -61,6 +61,13 @@ const EmployeeCard = ({ employee, fetchEmployees }: EmployeeCardProps) => {
       <div className="w-full max-w-2xl rounded-xl border dark:bg-gray-800 text-card-foreground shadow-sm hover:shadow-lg transition-shadow duration-200 ">
         <div className="relative p-6 flex gap-4 cursor-pointer">
           <div className="absolute top-4 right-4 flex gap-2">
+            <Link href={`/employee-profiles/${employee._id}`}>
+              <button
+                className="p-2 rounded-full hover:bg-accent transition-colors"
+              >
+                <Eye color='white' className="w-4 h-4" />
+              </button>
+            </Link>
             <Link href={`/employee-profiles/${employee._id}/edit`}>
               <button
                 className="p-2 rounded-full hover:bg-accent transition-colors"
@@ -72,19 +79,20 @@ const EmployeeCard = ({ employee, fetchEmployees }: EmployeeCardProps) => {
               onClick={() => handleDeleteClick()}
               className="p-2 rounded-full hover:bg-destructive/10 transition-colors"
             >
-              <Trash2 className="w-4 h-4 text-destructive" />
+              <Trash2 className="w-4 h-4 text-red-500" />
             </button>
           </div>
 
           <div className="flex-shrink-0">
             <div className="w-24 h-24 rounded-full overflow-hidden bg-muted">
               {employee.profilePhoto ? (
-                <img
-                  src={(employee.profilePhoto === "/images/default-profile.jpg") ? "/assets/default-profile.jpg" : employee.profilePhoto}
-                  alt={`${employee.firstName} ${employee.lastName}`}
-                  className="w-full h-full object-cover"
-                  onClick={() => handleClickCard(employee._id)}
-                />
+                <Link href={`/employee-profiles/${employee._id}`} className='no-underline'>
+                  <img
+                    src={(employee.profilePhoto === "/images/default-profile.jpg") ? "/assets/default-profile.jpg" : employee.profilePhoto}
+                    alt={`${employee.firstName} ${employee.lastName}`}
+                    className="w-full h-full object-cover"
+                  />
+                </Link>
               ) : (
                 <div className="w-full h-full flex items-center justify-center bg-primary/10 text-primary text-2xl font-semibold">
                   {employee.firstName[0]}{employee.lastName[0]}
@@ -93,46 +101,48 @@ const EmployeeCard = ({ employee, fetchEmployees }: EmployeeCardProps) => {
             </div>
           </div>
 
-          <div className="flex-grow" onClick={() => handleClickCard(employee._id)}>
-            <div className="mb-2">
-              <h3 className="text-xl font-semibold">{employee.firstName} {employee.lastName}</h3>
-              <p className="text-muted-foreground font-medium">{employee.position}</p>
-            </div>
-
-            <div className="space-y-2">
-              <div className="flex items-center gap-2 text-muted-foreground">
-                <Mail className="w-4 h-4" />
-                <span className="text-sm">{employee.email}</span>
+          <Link href={`/employee-profiles/${employee._id}`} className='no-underline'>
+            <div className="flex-grow">
+              <div className="mb-2">
+                <h3 className="text-xl font-semibold">{employee.firstName} {employee.lastName}</h3>
+                <p className="text-muted-foreground font-medium">{employee.position}</p>
               </div>
 
-              <div className="flex items-center gap-2 text-muted-foreground">
-                <Phone className="w-4 h-4" />
-                <span className="text-sm">{employee.phoneNumber}</span>
-              </div>
-
-              {employee.department && (
+              <div className="space-y-2">
                 <div className="flex items-center gap-2 text-muted-foreground">
-                  <Building2 className="w-4 h-4" />
-                  <span className="text-sm">{employee.department}</span>
+                  <Mail className="w-4 h-4" />
+                  <span className="text-sm">{employee.email}</span>
                 </div>
+
+                <div className="flex items-center gap-2 text-muted-foreground">
+                  <Phone className="w-4 h-4" />
+                  <span className="text-sm">{employee.phoneNumber}</span>
+                </div>
+
+                {employee.department && (
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <Building2 className="w-4 h-4" />
+                    <span className="text-sm">{employee.department}</span>
+                  </div>
+                )}
+              </div>
+
+              {employee.status && (
+                <span className={cn(
+                  "mt-3 inline-block px-3 py-1 rounded-full text-sm font-medium",
+                  {
+                    "bg-success/20 text-success": employee.status === 'active',
+                    "bg-warning/20 text-warning": employee.status === 'inactive',
+                    "bg-destructive/20 text-destructive": employee.status === 'terminated'
+                  }
+                )}>
+                  {employee.status.charAt(0).toUpperCase() + employee.status.slice(1)}
+                </span>
               )}
             </div>
-
-            {employee.status && (
-              <span className={cn(
-                "mt-3 inline-block px-3 py-1 rounded-full text-sm font-medium",
-                {
-                  "bg-success/20 text-success": employee.status === 'active',
-                  "bg-warning/20 text-warning": employee.status === 'inactive',
-                  "bg-destructive/20 text-destructive": employee.status === 'terminated'
-                }
-              )}>
-                {employee.status.charAt(0).toUpperCase() + employee.status.slice(1)}
-              </span>
-            )}
-          </div>
+          </Link>
         </div>
-      </div>
+      </div >
 
       {isDeleteModalOpen && (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
@@ -158,7 +168,8 @@ const EmployeeCard = ({ employee, fetchEmployees }: EmployeeCardProps) => {
             </div>
           </div>
         </div>
-      )}
+      )
+      }
     </>
   );
 };

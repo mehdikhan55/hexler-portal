@@ -1,10 +1,8 @@
-
 import Image from "next/image";
 import ReactDatePicker from "react-datepicker";
 import { Control } from "react-hook-form";
 import 'react-phone-number-input/style.css'
 import PhoneInput from "react-phone-number-input";
-
 
 import {
     FormControl,
@@ -19,7 +17,6 @@ import { Select, SelectContent, SelectTrigger, SelectValue } from "@/components/
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 
-
 export enum FormFieldType {
     INPUT = "input",
     TEXTAREA = "textarea",
@@ -30,7 +27,7 @@ export enum FormFieldType {
     SKELETON = "skeleton",
     PASSWORD = 'password',
     NUMBER = 'number',
-    DATE = 'DATE'  // Add this line
+    DATE = 'DATE'
 }
 
 interface CustomProps {
@@ -52,7 +49,6 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
     switch (props.fieldType) {
         case FormFieldType.INPUT:
             return (
-                // <div className="flex rounded-md border border-dark-500 bg-dark-400">
                 <div className="">
                     {props.iconSrc && (
                         <Image
@@ -67,7 +63,7 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
                         <Input
                             placeholder={props.placeholder}
                             {...field}
-                            // className="shad-input border-0"
+                            disabled={props.disabled}
                             className=""
                         />
                     </FormControl>
@@ -81,16 +77,15 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
                         placeholder={props.placeholder}
                         {...field}
                         type="number"
+                        disabled={props.disabled}
                         value={field.value || ''}
                         onChange={(e) => field.onChange(Number(e.target.value))}
-                    // className="shad-input border-0"
                     />
                 </FormControl>
             );
 
         case FormFieldType.PASSWORD:
             return (
-                // <div className="flex rounded-md border border-dark-500 bg-dark-400">
                 <div className="">
                     {props.iconSrc && (
                         <Image
@@ -106,7 +101,7 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
                             placeholder={props.placeholder}
                             {...field}
                             type="password"
-                        // className="shad-input border-0"
+                            disabled={props.disabled}
                         />
                     </FormControl>
                 </div>
@@ -133,6 +128,7 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
                         value={field.value as E164Number | undefined}
                         onChange={field.onChange}
                         className="input-phone"
+                        disabled={props.disabled}
                     />
                 </FormControl>
             );
@@ -144,6 +140,7 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
                             id={props.name}
                             checked={field.value}
                             onCheckedChange={field.onChange}
+                            disabled={props.disabled}
                         />
                         <label htmlFor={props.name} className="checkbox-label">
                             {props.label}
@@ -169,6 +166,7 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
                             timeInputLabel="Time:"
                             dateFormat={props.dateFormat ?? "MM/dd/yyyy"}
                             wrapperClassName="date-picker"
+                            disabled={props.disabled}
                         />
                     </FormControl>
                 </div>
@@ -176,7 +174,11 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
         case FormFieldType.SELECT:
             return (
                 <FormControl>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select 
+                        onValueChange={field.onChange} 
+                        defaultValue={field.value} 
+                        disabled={props.disabled}
+                    >
                         <FormControl>
                             <SelectTrigger className="shad-select-trigger">
                                 <SelectValue placeholder={props.placeholder} />
@@ -196,6 +198,7 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
                     <Input
                         type="date"
                         {...field}
+                        disabled={props.disabled}
                         value={field.value ? new Date(field.value).toISOString().split('T')[0] : ''}
                         onChange={e => field.onChange(new Date(e.target.value))}
                         className="w-fit"
@@ -204,16 +207,14 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
             );
         default:
             return null;
-        // }
-    };
+    }
 }
 
 const CustomFormField = (props: CustomProps) => {
-    const { control, name, label, disabled } = props;
+    const { control, name, label } = props;
 
     return (
         <FormField
-            disabled={disabled && true}
             control={control}
             name={name}
             render={({ field }) => (
@@ -222,7 +223,6 @@ const CustomFormField = (props: CustomProps) => {
                         <FormLabel className="shad-input-label">{label}</FormLabel>
                     )}
                     <RenderInput field={field} props={props} />
-
                     <FormMessage className="shad-error" />
                 </FormItem>
             )}

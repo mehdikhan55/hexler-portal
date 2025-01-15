@@ -63,8 +63,8 @@ const AddExpense: React.FC<AddExpenseProps> = ({ onAddExpense, categories }) => 
                 Add New
             </Button>
 
-            <Dialog open={show} onOpenChange={handleClose} >
-                <DialogContent className="sm:max-w-[425px] max-h-[80vh] overflow-y-auto z-50">
+            <Dialog open={show} onOpenChange={handleClose}>
+                <DialogContent className="sm:max-w-[425px] max-h-[80vh] overflow-y-auto z-[5000]">
                     <DialogHeader>
                         <DialogTitle>Add New Expense</DialogTitle>
                         <DialogDescription>Please fill out the form below to add a new expense.</DialogDescription>

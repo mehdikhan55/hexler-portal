@@ -103,7 +103,7 @@ const Page = () => {
       />
 
       <Dialog open={showPayrollData} onOpenChange={handlePayrollClose} >
-        <DialogContent className="max-w-full max-h-[80vh] sm:max-w-5xl overflow-y-auto z-50">
+        <DialogContent className="max-w-full max-h-[80vh] sm:max-w-5xl overflow-y-auto z-[5000]">
           <DialogHeader>
             <DialogTitle>Payroll Details</DialogTitle>
           </DialogHeader>

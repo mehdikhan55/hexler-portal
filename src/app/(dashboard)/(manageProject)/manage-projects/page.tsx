@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Clock, DollarSign, ListChecks, ChevronDown, ChevronUp, Eye, Edit2, Calendar, Trash } from "lucide-react";
+import { Clock, DollarSign, ListChecks, ChevronDown, ChevronUp, Eye, Edit2, Calendar, Trash, Trash2 } from "lucide-react";
 import {
     Dialog,
     DialogContent,
@@ -19,6 +19,7 @@ import { format } from 'date-fns';
 import { Progress } from '@/components/ui/progress';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import LoadingOverlay from '@/components/Common/LoadingOverlay';
+import Link from 'next/link';
 
 const calculateProjectDuration = (project: Project): number => {
     if (!project.modules || project.modules.length === 0) return 0;
@@ -93,18 +94,6 @@ export default function Page() {
         }
     };
 
-    const handleEdit = (projectId: string) => {
-        // router.push(`/manage-projects/${projectId}/edit`);
-        const url = `/manage-projects/${projectId}/edit`;
-        window.open(url, '_blank');
-    };
-
-    const handleViewDetails = (projectId: string) => {
-        router.push(`/manage-projects/${projectId}`);
-        // const url = `/manage-projects/${projectId}`;
-        // window.open(url, '_blank');
-    };
-
     const handleDelete = (projectId: string) => async () => {
         try {
             setDeletingProjectId(projectId);
@@ -156,7 +145,7 @@ export default function Page() {
 
     if (loading) {
         return (
-            <LoadingOverlay/>
+            <LoadingOverlay />
         );
     }
 
@@ -229,31 +218,35 @@ export default function Page() {
                                 <CardHeader className="bg-gray-50 dark:bg-gray-800 p-4">
                                     <div className="flex justify-between flex-col-reverse sm:flex-row items-start">
                                         <div>
-                                            <h2 onClick={() => project._id && handleViewDetails(project._id)} className="text-xl text-blue-400 cursor-pointer font-semibold">{project.projectName}</h2>
-                                            <p className="text-sm text-muted-foreground mt-1">{project.projectDescription}</p>
+                                            <Link href={`/manage-projects/${project._id}`} className='no-underline'>
+                                            <h2 className="text-xl text-blue-400 cursor-pointer font-semibold">{project.projectName}</h2>
+                                            </Link>
+                                                <p className="text-sm text-muted-foreground mt-1">{project.projectDescription}</p>
                                         </div>
                                         <div className="flex items-center justify-between sm:justify-right gap-2 w-full sm:w-auto">
                                             <div className='flex gap-2'>
-                                                <button
-                                                    onClick={() => project._id && handleEdit(project._id)}
-                                                    className="p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full transition-colors"
-                                                    title="Edit Project"
-                                                >
-                                                    <Edit2 className="w-4 h-4" />
-                                                </button>
-                                                <button
-                                                    onClick={() => project._id && handleViewDetails(project._id)}
-                                                    className="p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full transition-colors"
-                                                    title="View Details"
-                                                >
-                                                    <Eye className="w-4 h-4" />
-                                                </button>
+                                                <Link href={`/manage-projects/${project._id}`}>
+                                                    <button
+                                                        className="p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full transition-colors"
+                                                        title="View Details"
+                                                    >
+                                                        <Eye color='white' className="w-4 h-4" />
+                                                    </button>
+                                                </Link>
+                                                <Link href={`/manage-projects/${project._id}/edit`}>
+                                                    <button
+                                                        className="p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full transition-colors"
+                                                        title="Edit Project"
+                                                    >
+                                                        <Edit2 className="w-4 h-4 text-blue-300" />
+                                                    </button>
+                                                </Link>
                                                 <button
                                                     onClick={handleDelete(project._id!)}
                                                     className="p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full transition-colors"
                                                     title="View Details"
                                                 >
-                                                    <Trash className="w-4 h-4" />
+                                                    <Trash2 className="w-4 h-4 text-red-500" />
                                                 </button>
                                             </div>
                                             <Badge

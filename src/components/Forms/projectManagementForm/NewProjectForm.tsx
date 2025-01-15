@@ -9,6 +9,7 @@ import { Edit, Plus, X } from 'lucide-react';
 import React, { useState } from 'react';
 import DatePicker from '@/components/Expense/date-picker-demo';
 import MyDatePicker from '@/components/Common/MyDatePicker';
+import { Textarea } from '@/components/ui/textarea';
 
 const NewProjectForm = ({ form, onSubmit, loading, buttonText = "Submit" }: any) => {
     // State for managing modules
@@ -135,7 +136,7 @@ const NewProjectForm = ({ form, onSubmit, loading, buttonText = "Submit" }: any)
                                             moduleName: e.target.value
                                         })}
                                     />
-                                    <Input
+                                    <Textarea
                                         placeholder="Module Description"
                                         value={currentModule.description}
                                         onChange={(e) => setCurrentModule({

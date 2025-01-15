@@ -43,7 +43,7 @@ const AddExpenseCategory: React.FC<AddExpenseCategoryProps> = ({ onAddCategory }
       </Button>
 
       <Dialog open={show} onOpenChange={handleClose}>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="sm:max-w-[425px] z-[5000]">
           <DialogHeader>
             <DialogTitle>Add New Expense Category</DialogTitle>
             <DialogDescription>Please fill out the form below to add a new category.</DialogDescription>

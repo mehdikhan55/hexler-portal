@@ -7,7 +7,7 @@ import { SelectItem } from '@/components/ui/select';
 import DatePicker from "@/components/Expense/date-picker-demo";
 import { Employee } from '@/types/Employee';
 import { UseFormReturn } from 'react-hook-form';
-import {  PayrollAddSchema2 } from '@/lib/validations';
+import { PayrollAddSchema2 } from '@/lib/validations';
 import { z } from 'zod';
 
 interface AddPayrollFormProps {
@@ -18,27 +18,12 @@ interface AddPayrollFormProps {
 }
 
 const EditPayrollForm = ({ employees, form, onSubmit, loading }: AddPayrollFormProps) => {
-    // Watch all required values
-    const selectedEmployeeId = form.watch('employeeId');
+    // Watch values for total salary calculation
     const baseSalary = form.watch('baseSalary') || 0;
     const bonus = form.watch('bonus') || 0;
     const deductions = form.watch('deductions') || 0;
 
-    // First useEffect: Handle employee selection and base salary
-    useEffect(() => {
-        if (selectedEmployeeId) {
-            const selectedEmployee = employees.find(emp => emp._id === selectedEmployeeId);
-            if (selectedEmployee) {
-                form.setValue('baseSalary', Number(selectedEmployee.salary), {
-                    shouldValidate: true,
-                    shouldDirty: true,
-                    shouldTouch: true
-                });
-            }
-        }
-    }, [selectedEmployeeId, employees, form]);
-
-    // Second useEffect: Handle total salary calculations
+    // Handle total salary calculations
     useEffect(() => {
         const totalSalary = baseSalary + bonus - deductions;
         
@@ -48,7 +33,6 @@ const EditPayrollForm = ({ employees, form, onSubmit, loading }: AddPayrollFormP
             shouldTouch: true
         });
     }, [baseSalary, bonus, deductions, form]);
-
 
     return (
         <div className="w-full max-w-4xl">
@@ -61,6 +45,7 @@ const EditPayrollForm = ({ employees, form, onSubmit, loading }: AddPayrollFormP
                             name="employeeId"
                             label="Employee"
                             placeholder="Select employee"
+                            disabled={true} // Disable employee selection
                         >
                             {employees?.map((employee) => (
                                 <SelectItem key={employee._id} value={employee._id}>
@@ -107,10 +92,8 @@ const EditPayrollForm = ({ employees, form, onSubmit, loading }: AddPayrollFormP
                                     <FormControl>
                                         <DatePicker
                                             selectedDate={field.value ? new Date(field.value) : null}
-                                            // @ts-ignore
                                             onDateChange={(date) => {
                                                 if (date) {
-                                                    // Format date for MongoDB (ISO string)
                                                     field.onChange(date.toISOString());
                                                 }
                                             }}
