@@ -23,7 +23,7 @@ const page = () => {
     items: [
       { description: '', quantity: 1, price: 0 }
     ],
-    credit: 0
+    credit: 0,
   });
 
   const handleInputChange = (field: string, value: any) => {
@@ -67,13 +67,13 @@ const page = () => {
 
   const calculateSubTotal = () => {
     return invoiceData.items.reduce(
-      (sum, item) => sum + item.quantity * item.price,
+      (sum, item) => sum + item.quantity * (item.price || 0),
       0
     );
   };
 
   const calculateTotal = () => {
-    return calculateSubTotal() + invoiceData.credit;
+    return calculateSubTotal() + (invoiceData.credit || 0);
   };
 
 
@@ -81,18 +81,34 @@ const page = () => {
     e.preventDefault();
     try {
       setLoading(true);
-
+  
       // Validate required fields
       if (!invoiceData.clientDetails.name || !invoiceData.clientDetails.address) {
         throw new Error('Please fill in all required fields');
       }
 
-      const result = await invoiceServices.generateInvoice(invoiceData);
-
+      if(!invoiceData.invoiceDate || !invoiceData.dueDate){
+        throw new Error('Please fill in date fields');
+      }
+  
+      // Calculate subtotal and total
+      const subTotal = calculateSubTotal();
+      const total = calculateTotal();
+  
+      // Create a new invoice data object with the additional values
+      const invoiceToSubmit = {
+        ...invoiceData,
+        subTotal,   // Add subtotal
+        total,      // Add total
+        credit: invoiceData.credit,  // Ensure credit is included
+      };
+  
+      const result = await invoiceServices.generateInvoice(invoiceToSubmit);
+  
       if (!result.success) {
         throw new Error(result.message);
       }
-
+  
       // Optionally reset form
     } catch (error) {
       console.error('Error:', error);
@@ -100,6 +116,7 @@ const page = () => {
       setLoading(false);
     }
   };
+  
 
   return (
     <>
@@ -198,6 +215,7 @@ const page = () => {
                       placeholder="Price"
                       type="number"
                       value={item.price}
+                      min={0}
                       onChange={(e) =>
                         handleItemChange(index, 'price', parseFloat(e.target.value))
                       }
@@ -227,6 +245,7 @@ const page = () => {
                   id="credit"
                   type="number"
                   value={invoiceData.credit}
+                  min={0}
                   onChange={(e) => handleInputChange('credit', parseFloat(e.target.value))}
                 />
               </div>
@@ -235,7 +254,7 @@ const page = () => {
             {/* Totals Section */}
               <div>
                 <h5 className="font-semibold">Subtotal: Rs. {calculateSubTotal()}</h5>
-                <h5 className="font-semibold">Credit: Rs. {invoiceData.credit}</h5>
+                <h5 className="font-semibold">Credit: Rs. {invoiceData.credit || 0}</h5>
                 <h3 className="font-semibold">Total: Rs. {calculateTotal()}</h3>
               </div>
 

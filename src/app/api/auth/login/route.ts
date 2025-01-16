@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
                 permissions: user.role.permissions.map((p: any) => p.name),
             },
             process.env.JWT_SECRET!,
-            { expiresIn: '24h' } // Token expires in 24 hours
+            { expiresIn: '1h' } // Token expires in 1 hour
         );
 
         // Update last login

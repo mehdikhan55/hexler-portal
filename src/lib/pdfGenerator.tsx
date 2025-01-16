@@ -1,8 +1,10 @@
 import PDFDocument from 'pdfkit';
 import path from 'path';
 
-// Resolve the path to the logo relative to the current directory
-const logoPath = path.resolve('./public/assets/brand/logo.png');
+interface InvoiceItem {
+  description: string;
+  price: number;
+}
 
 interface InvoiceData {
   invoiceNumber: string;
@@ -15,15 +17,15 @@ interface InvoiceData {
     company?: string;
     address: string;
   };
-  description: string;
-  amount: number;
+  items: InvoiceItem[];
+  subTotal: number;
   credit: number;
+  total: number;
 }
 
 export async function generateInvoicePDF(invoiceData: InvoiceData): Promise<Buffer> {
   return new Promise((resolve, reject) => {
     try {
-      // Create a new PDF document
       const doc = new PDFDocument({
         size: 'A4',
         margin: 50,
@@ -34,52 +36,131 @@ export async function generateInvoicePDF(invoiceData: InvoiceData): Promise<Buff
       doc.on('end', () => resolve(Buffer.concat(buffers)));
       doc.on('error', reject);
 
-      // Add Hexler Tech logo
-      doc.image(logoPath, 50, 40, { width: 150 });
+      // Add document settings
+      doc.font('Helvetica');
+      doc.fontSize(10);
 
-      // Add header details
-      doc.fontSize(10).font('Helvetica-Bold')
-        .text(`Invoice #${invoiceData.invoiceNumber}`, 50, 120)
-        .text(`NTN #${invoiceData.ntnNumber}`, 400, 120)
-        .text(`Invoice Date: ${new Date(invoiceData.invoiceDate).toLocaleDateString()}`, 50, 140)
-        .text(`Reg No. ${invoiceData.regNumber}`, 400, 140)
-        .text(`Due Date: ${new Date(invoiceData.dueDate).toLocaleDateString()}`, 50, 160);
+      // Add top margin space (25% of A4 height)
+      const topMargin = 841.89 * 0.25;
+      let currentY = topMargin;
 
-      // Add client details
-      doc.font('Helvetica').fontSize(10)
-        .text('Invoiced To:', 50, 200)
-        .text(invoiceData.clientDetails.name, 50, 220)
-        .text(invoiceData.clientDetails.company || '', 50, 240)
-        .text(invoiceData.clientDetails.address, 50, 260);
+      // Left column header details - BOLD
+      doc.font('Helvetica-Bold');
+      doc.text(`Invoice #${invoiceData.invoiceNumber}`, 50, currentY);
+      doc.text(`NTN # ${invoiceData.ntnNumber}`, 400, currentY);
+      doc.text(`Reg No. ${invoiceData.regNumber}`, 400, currentY + 20);
 
-      // Add table header
-      doc.font('Helvetica-Bold')
-        .text('Description', 50, 300, { underline: true })
-        .text('Total', 400, 300, { underline: true });
+      // Switch back to regular for dates
+      doc.font('Helvetica');
+      doc.text(`Invoice Date: ${new Date(invoiceData.invoiceDate).toLocaleDateString()}`, 50, currentY + 20);
+      doc.text(`Due Date: ${new Date(invoiceData.dueDate).toLocaleDateString()}`, 50, currentY + 40);
 
-      // Add table content
-      doc.font('Helvetica')
-        .text(invoiceData.description, 50, 320)
-        .text(`Rs. ${invoiceData.amount.toLocaleString()}/-`, 400, 320);
+      // Add invoice recipient details - BOLD header and name
+      currentY += 80;
+      doc.font('Helvetica-Bold');
+      doc.text('Invoiced To', 50, currentY);
+      doc.text(invoiceData.clientDetails.name, 50, currentY + 20);
+      
+      // Switch back to regular for remaining details
+      doc.font('Helvetica');
+      if (invoiceData.clientDetails.company) {
+        doc.text(invoiceData.clientDetails.company, 50, currentY + 35);
+        currentY += 15;
+      }
+      doc.text(invoiceData.clientDetails.address, 50, currentY + 35);
 
-      // Add totals
-      const totalsY = 400;
-      doc.text('Sub Total', 300, totalsY)
-        .text(`Rs. ${invoiceData.amount.toLocaleString()}/-`, 400, totalsY)
-        .text('Credit', 300, totalsY + 20)
-        .text(`Rs. ${invoiceData.credit.toLocaleString()}/-`, 400, totalsY + 20)
-        .text('Total', 300, totalsY + 40)
-        .font('Helvetica-Bold')
-        .text(`Rs. ${(invoiceData.amount - invoiceData.credit).toLocaleString()}/-`, 400, totalsY + 40);
+      // Create table
+      currentY += 100;
+      const tableWidth = 500;
+      const descriptionColWidth = 350;
+      const totalColWidth = 150;
+      const totalColumnX = 400;
+      const descriptionColumnX = 50;
+      
+      // Table header with grey background - BOLD
+      doc.rect(50, currentY, tableWidth, 30).fill('#f0f0f0');
+      doc.rect(50, currentY, tableWidth, 30).stroke();
+      doc.fillColor('black');
+      doc.font('Helvetica-Bold');
 
-      // Add footer
-      const footerY = 700;
-      doc.fontSize(8).font('Helvetica')
-        .text('ISLAMABAD', 50, footerY)
-        .text('Street 30, Defence Villas, Sector F, DHA PHASE 1', 50, footerY + 15)
-        .text('+92 344 9200674', 400, footerY)
-        .text('info@hexlertech.com', 400, footerY + 15)
-        .text('www.hexlertech.com', 400, footerY + 30);
+      // Center align "Description" header
+      const descHeaderWidth = doc.widthOfString('Description');
+      doc.text('Description', 
+        descriptionColumnX + (descriptionColWidth - descHeaderWidth)/2, 
+        currentY + 10);
+
+      // Center align "Total" header
+      const totalHeaderWidth = doc.widthOfString('Total');
+      doc.text('Total', 
+        totalColumnX + (totalColWidth - totalHeaderWidth)/2, 
+        currentY + 10);
+
+        doc.font('Helvetica');
+      // Table content
+      currentY += 30;
+      invoiceData.items.forEach(item => {
+        doc.rect(50, currentY, tableWidth, 30).stroke();
+        
+        // Center align description
+        const descWidth = doc.widthOfString(item.description);
+        doc.text(item.description, 
+          descriptionColumnX + (descriptionColWidth - descWidth)/2, 
+          currentY + 10);
+
+        // Center align price
+        const priceText = `${item.price.toLocaleString()}/-`;
+        const priceWidth = doc.widthOfString(priceText);
+        doc.text(priceText, 
+          totalColumnX + (totalColWidth - priceWidth)/2, 
+          currentY + 10);
+        
+        currentY += 30;
+      });
+
+      // Add empty row if there's only one item
+      if (invoiceData.items.length === 1) {
+        doc.rect(50, currentY, tableWidth, 30).stroke();
+        currentY += 30;
+      }
+
+      doc.font('Helvetica-Bold');
+      // Sub Total row
+      doc.rect(50, currentY, tableWidth, 30).fill('#f0f0f0');
+      doc.rect(50, currentY, tableWidth, 30).stroke();
+      doc.fillColor('black');
+      doc.text('Sub Total', 300, currentY + 10);
+      const subTotalText = `Rs. ${invoiceData.subTotal.toLocaleString()}/-`;
+      const subTotalWidth = doc.widthOfString(subTotalText);
+      doc.text(subTotalText, 
+        totalColumnX + (totalColWidth - subTotalWidth)/2, 
+        currentY + 10);
+      currentY += 30;
+
+      // Credit row
+      doc.rect(50, currentY, tableWidth, 30).fill('#f0f0f0');
+      doc.rect(50, currentY, tableWidth, 30).stroke();
+      doc.fillColor('black');
+      doc.text('Credit', 300, currentY + 10);
+      const creditText = `Rs. ${invoiceData.credit.toLocaleString()}.00`;
+      const creditWidth = doc.widthOfString(creditText);
+      doc.text(creditText, 
+        totalColumnX + (totalColWidth - creditWidth)/2, 
+        currentY + 10);
+      currentY += 30;
+
+      // Total row
+      doc.rect(50, currentY, tableWidth, 30).fill('#f0f0f0');
+      doc.rect(50, currentY, tableWidth, 30).stroke();
+      doc.fillColor('black');
+      doc.text('Total', 300, currentY + 10);
+      const totalText = `Rs ${invoiceData.total.toLocaleString()}/-`;
+      const totalWidth = doc.widthOfString(totalText);
+      doc.text(totalText, 
+        totalColumnX + (totalColWidth - totalWidth)/2, 
+        currentY + 10);
+
+      // Add bottom margin space
+      doc.moveDown(841.89 * 0.25);
 
       doc.end();
     } catch (error) {

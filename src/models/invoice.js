@@ -1,4 +1,4 @@
-// models/invoice.js
+// models/invoice.ts
 import mongoose from 'mongoose';
 
 const invoiceSchema = new mongoose.Schema({
@@ -41,36 +41,32 @@ const invoiceSchema = new mongoose.Schema({
     },
     price: {
       type: Number,
-      required: true
+      required: true,
+      min: 0
     },
   }],
   subTotal: {
     type: Number,
-    default: 0
+    required: true,
+    min: 0
   },
   credit: {
     type: Number,
-    default: 0
+    default: 0,
+    min: 0
   },
   total: {
     type: Number,
-    default: 0
+    required: true,
+    min: 0
   },
   status: {
     type: String,
     enum: ['PENDING', 'PAID', 'OVERDUE'],
     default: 'PENDING'
-  },
-  pdfUrl: String
-}, { timestamps: true });
-
-// Auto-generate invoice number
-invoiceSchema.pre('save', async function(next) {
-  if (this.isNew) {
-    const count = await mongoose.model('Invoice').countDocuments();
-    this.invoiceNumber = `DE${String(count + 1).padStart(3, '0')}`;
   }
-  next();
+}, { 
+  timestamps: true,
 });
 
 export default mongoose.models.Invoice || mongoose.model('Invoice', invoiceSchema);

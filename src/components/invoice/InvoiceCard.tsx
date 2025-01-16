@@ -3,10 +3,11 @@ import React, { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
-import { DollarSign, Calendar, FileText, User, EllipsisVertical, Trash } from 'lucide-react';
+import { DollarSign, Calendar, FileText, User, EllipsisVertical, Trash, Download } from 'lucide-react';
 import { Invoice } from '@/types/Invoice';
 import toast from 'react-hot-toast';
 import { invoiceServices } from '@/services/invoiceServices';
+import LoadingOverlay from '../Common/LoadingOverlay';
 
 const InvoiceCard = ({ invoice, fetchInvoices }: { invoice: Invoice; fetchInvoices: () => void }) => {
   const [loading, setLoading] = useState(false);
@@ -41,22 +42,41 @@ const InvoiceCard = ({ invoice, fetchInvoices }: { invoice: Invoice; fetchInvoic
     setIsDeleteModalOpen(false); // Close modal without deleting
   };
 
+  const handleDownload = async (invoiceId: string) => {
+    setLoading(true);
+    const result = await invoiceServices.downloadInvoice(invoiceId);
+    if (result.success) {
+      // toast.success('Invoice Downloaded!');
+      setLoading(false);
+    } else {
+      toast.error(result.message);
+      setLoading(false);
+    }
+  }
+
   return (
     <div className="">
+      {loading && <LoadingOverlay />}
       <Card className="shadow-md relative">
-        <DropdownMenu>
-          <DropdownMenuTrigger className="absolute top-2 right-2 text-white">
-            <span className="sr-only">Actions</span>
-            <EllipsisVertical className="w-5 h-5 text-gray-300 hover:text-blue-500 transition-colors" />
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="absolute right-0 top-0 bg-gray-800 dark:bg-gray-800 rounded-lg shadow-md">
-            <DropdownMenuItem onClick={handleDeleteClick} className="hover:bg-red-600 text-white cursor-pointer">
-              <Trash className="mr-2 w-4 h-4 text-red-500" />
-              Delete
-            </DropdownMenuItem>
-            <DropdownMenuSeparator className="border-t border-gray-700" />
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <div className="absolute top-2 right-2 flex items-center justify-center gap-2">
+          <div onClick={() => handleDownload(invoice._id)} className="text-white cursor-pointer w-fit">
+            <Download className="w-4 h-4 text-green-500 hover:text-green-600" />
+          </div>
+          <DropdownMenu>
+            <DropdownMenuTrigger className=" text-white">
+              <span className="sr-only">Actions</span>
+              <EllipsisVertical className="w-5 h-5 text-gray-300 hover:text-blue-500 transition-colors" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="absolute right-0 top-0 bg-gray-800 dark:bg-gray-800 rounded-lg shadow-md">
+              <DropdownMenuItem onClick={handleDeleteClick} className="hover:bg-red-600 text-white cursor-pointer">
+                <Trash className="mr-2 w-4 h-4 text-red-500" />
+                Delete
+              </DropdownMenuItem>
+              <DropdownMenuSeparator className="border-t border-gray-700" />
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+
         <CardHeader>
           <CardTitle className="flex items-center space-x-2">
             <FileText className="w-5 h-5 text-gray-200" />
@@ -85,13 +105,12 @@ const InvoiceCard = ({ invoice, fetchInvoices }: { invoice: Invoice; fetchInvoic
               <span className="text-sm text-gray-300">Total: {invoice.total ? invoice.total.toFixed(2) : "N/A"}</span>
             </div>
             <Badge
-              className={`text-xs ${
-                invoice.status === 'PAID'
-                  ? 'bg-green-100 text-green-700'
-                  : invoice.status === 'OVERDUE'
+              className={`text-xs ${invoice.status === 'PAID'
+                ? 'bg-green-100 text-green-700'
+                : invoice.status === 'OVERDUE'
                   ? 'bg-red-100 text-red-700'
                   : 'bg-yellow-100 text-yellow-700'
-              }`}
+                }`}
             >
               {invoice.status}
             </Badge>

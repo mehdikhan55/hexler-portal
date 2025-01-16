@@ -113,20 +113,20 @@ export const invoiceServices = {
         }
       });
 
-      // Create a URL for the PDF blob
-      const pdfBlob = new Blob([response.data], { type: 'application/pdf' });
-      const pdfUrl = window.URL.createObjectURL(pdfBlob);
+      // // Create a URL for the PDF blob
+      // const pdfBlob = new Blob([response.data], { type: 'application/pdf' });
+      // const pdfUrl = window.URL.createObjectURL(pdfBlob);
 
-      // Trigger download
-      const link = document.createElement('a');
-      link.href = pdfUrl;
-      link.download = `invoice-${invoiceId}.pdf`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      // // Create an anchor tag to trigger the download
+      // const link = document.createElement('a');
+      // link.href = pdfUrl;
+      // link.download = response.headers['content-disposition'].split('filename=')[1].replace(/"/g, ''); // Use filename from headers
+      // document.body.appendChild(link); // Append the link to the body
+      // link.click(); // Trigger the download
+      // document.body.removeChild(link); // Clean up
 
-      // Cleanup
-      window.URL.revokeObjectURL(pdfUrl);
+      // // Revoke the object URL after the download is triggered
+      // window.URL.revokeObjectURL(pdfUrl);
 
       return { success: true };
     } catch (error: any) {
