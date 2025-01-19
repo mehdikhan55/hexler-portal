@@ -63,23 +63,23 @@ const EmployeeCard = ({ employee, fetchEmployees }: EmployeeCardProps) => {
           <div className="absolute top-4 right-4 flex gap-2">
             <Link href={`/employee-profiles/${employee._id}`}>
               <button
-                className="p-2 rounded-full hover:bg-accent transition-colors"
+                className="p-2 rounded-full hover:bg-gray-900 transition-colors"
               >
                 <Eye color='white' className="w-4 h-4" />
               </button>
             </Link>
             <Link href={`/employee-profiles/${employee._id}/edit`}>
               <button
-                className="p-2 rounded-full hover:bg-accent transition-colors"
+                className="p-2 rounded-full hover:bg-gray-900 transition-colors"
               >
                 <Pen className="w-4 h-4" />
               </button>
             </Link>
             <button
               onClick={() => handleDeleteClick()}
-              className="p-2 rounded-full hover:bg-destructive/10 transition-colors"
+              className="p-2 rounded-full hover:bg-gray-900 transition-colors"
             >
-              <Trash2 className="w-4 h-4 text-red-500" />
+              <Trash2 className="w-4 h-4 text-red-500 " />
             </button>
           </div>
 
@@ -149,7 +149,7 @@ const EmployeeCard = ({ employee, fetchEmployees }: EmployeeCardProps) => {
           <div className="light:bg-white dark:bg-gray-900 p-6 rounded-lg shadow-lg max-w-sm w-full">
             <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-4">Confirm Deletion</h3>
             <p className="text-sm text-gray-700 dark:text-gray-300 mb-6">
-              Are you sure you want to delete the project: <strong>{employeeToDelete}</strong>?
+              Are you sure you want to delete the Employee: <strong>{employeeToDelete}</strong>?
             </p>
             <div className="flex justify-between">
               <button

@@ -113,9 +113,9 @@ export default function SidebarNav() {
           <SidebarNavGroup toggleIcon={faPersonShelter} toggleText={"Employee"}>
             <SidebarNavItem icon={faPeopleRoof} href="/employee-profiles">Employee Profiles</SidebarNavItem>
             <SidebarNavItem icon={faPlusCircle} href="/add-employee">Add Employee</SidebarNavItem>
-            <SidebarNavItem icon={faPeopleLine} href="/employees">Manage Employees</SidebarNavItem>
+            {/* <SidebarNavItem icon={faPeopleLine} href="/employees">Manage Employees</SidebarNavItem> */}
           </SidebarNavGroup>
-          <SidebarNavItem icon={faStarAndCrescent} href="/employee-benefits">Employee Benefits</SidebarNavItem>
+          {/* <SidebarNavItem icon={faStarAndCrescent} href="/employee-benefits">Employee Benefits</SidebarNavItem> */}
         </>
       }
 
@@ -150,7 +150,7 @@ export default function SidebarNav() {
             <SidebarNavItem icon={faFileLines} href="/cms/clients">See Clients</SidebarNavItem>
             <SidebarNavItem icon={faPlusCircle} href="/cms/clients/new">Add Clients</SidebarNavItem>
           </SidebarNavGroup>
-          <SidebarNavItem icon={faMessage} href="/blogs">Blogs</SidebarNavItem>
+          {/* <SidebarNavItem icon={faMessage} href="/blogs">Blogs</SidebarNavItem> */}
 
         </>
       }
@@ -163,7 +163,7 @@ export default function SidebarNav() {
           {/* <SidebarNavItem icon={faPlusCircle} href="/manage-accounts/new">Add New Account</SidebarNavItem> */}
         </>
       )}
-      {
+      {/* {
         isFinanceAdmin() && <>
           <SidebarNavTitle>Administration</SidebarNavTitle>
           <SidebarNavItem icon={faBuildingUser} href="#">Departments</SidebarNavItem>
@@ -171,7 +171,7 @@ export default function SidebarNav() {
           <SidebarNavItem icon={faEnvelope} href="#">Email Logs</SidebarNavItem>
           <SidebarNavItem icon={faIdCard} href="#">Etag and Card</SidebarNavItem>
         </>
-      }
+      } */}
 
       {/* <SidebarNavItem icon={faCode} href="/pokemons">
         {siteData.sidebar.items.sample}

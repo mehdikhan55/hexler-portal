@@ -1,4 +1,4 @@
-'use client';
+'use client'
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,8 +8,18 @@ import DatePicker from "@/components/Expense/date-picker-demo";
 import LoadingOverlay from '@/components/Common/LoadingOverlay';
 import { invoiceServices } from '@/services/invoiceServices';
 
-const page = () => {
+const InvoiceForm = () => {
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({
+    invoiceDate: '',
+    dueDate: '',
+    'clientDetails.name': '',
+    'clientDetails.company': '',
+    'clientDetails.address': '',
+    items: [] as string[],
+    credit: ''
+  });
+
   const [invoiceData, setInvoiceData] = useState({
     ntnNumber: '9252785',
     regNumber: '0215372',
@@ -26,6 +36,64 @@ const page = () => {
     credit: 0,
   });
 
+  const validateForm = () => {
+    const newErrors = {
+      invoiceDate: '',
+      dueDate: '',
+      'clientDetails.name': '',
+      'clientDetails.address': '',
+      'clientDetails.company': '',
+      items: [] as string[],
+      credit: ''
+    };
+    let isValid = true;
+
+    // Validate dates
+    if (!invoiceData.invoiceDate) {
+      newErrors.invoiceDate = 'Invoice date is required';
+      isValid = false;
+    }
+    if (!invoiceData.dueDate) {
+      newErrors.dueDate = 'Due date is required';
+      isValid = false;
+    }
+
+    // Validate client details
+    if (!invoiceData.clientDetails.name.trim()) {
+      newErrors['clientDetails.name'] = 'Client name is required';
+      isValid = false;
+    }
+    if (!invoiceData.clientDetails.company.trim()) { // Add this validation
+      newErrors['clientDetails.company'] = 'Company name is required';
+      isValid = false;
+    }
+    if (!invoiceData.clientDetails.address.trim()) {
+      newErrors['clientDetails.address'] = 'Client address is required';
+      isValid = false;
+    }
+
+    // Validate items
+    const itemErrors = invoiceData.items.map(item => {
+      if (!item.description.trim()) return 'Description is required';
+      if (item.price <= 0) return 'Price must be greater than 0';
+      return '';
+    });
+
+    if (itemErrors.some(error => error)) {
+      newErrors.items = itemErrors;
+      isValid = false;
+    }
+
+    // Validate credit
+    if (invoiceData.credit < 0) {
+      newErrors.credit = 'Credit cannot be negative';
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
+  };
+
   const handleInputChange = (field: string, value: any) => {
     setInvoiceData(prev => {
       if (field.includes('.')) {
@@ -34,7 +102,7 @@ const page = () => {
           ...prev,
           [parent]: {
             //@ts-ignore
-            ...prev[parent],
+            ...prev[parent as keyof typeof prev],
             [child]: value
           }
         };
@@ -44,6 +112,13 @@ const page = () => {
         [field]: value
       };
     });
+    // Clear error when user starts typing
+    if (field in errors) {
+      setErrors(prev => ({
+        ...prev,
+        [field]: ''
+      }));
+    }
   };
 
   const handleItemChange = (index: number, field: string, value: any) => {
@@ -51,6 +126,11 @@ const page = () => {
       i === index ? { ...item, [field]: value } : item
     );
     setInvoiceData({ ...invoiceData, items: updatedItems });
+    // Clear error for this item
+    setErrors(prev => ({
+      ...prev,
+      items: prev.items.map((error, i) => i === index ? '' : error)
+    }));
   };
 
   const addItem = () => {
@@ -58,11 +138,19 @@ const page = () => {
       ...prev,
       items: [...prev.items, { description: '', quantity: 1, price: 0 }]
     }));
+    setErrors(prev => ({
+      ...prev,
+      items: [...prev.items, '']
+    }));
   };
 
   const removeItem = (index: number) => {
     const updatedItems = invoiceData.items.filter((_, i) => i !== index);
     setInvoiceData({ ...invoiceData, items: updatedItems });
+    setErrors(prev => ({
+      ...prev,
+      items: prev.items.filter((_, i) => i !== index)
+    }));
   };
 
   const calculateSubTotal = () => {
@@ -76,47 +164,37 @@ const page = () => {
     return calculateSubTotal() + (invoiceData.credit || 0);
   };
 
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!validateForm()) {
+      return;
+    }
+
     try {
       setLoading(true);
-  
-      // Validate required fields
-      if (!invoiceData.clientDetails.name || !invoiceData.clientDetails.address) {
-        throw new Error('Please fill in all required fields');
-      }
-
-      if(!invoiceData.invoiceDate || !invoiceData.dueDate){
-        throw new Error('Please fill in date fields');
-      }
-  
-      // Calculate subtotal and total
       const subTotal = calculateSubTotal();
       const total = calculateTotal();
-  
-      // Create a new invoice data object with the additional values
+
       const invoiceToSubmit = {
         ...invoiceData,
-        subTotal,   // Add subtotal
-        total,      // Add total
-        credit: invoiceData.credit,  // Ensure credit is included
+        subTotal,
+        total,
+        credit: invoiceData.credit,
       };
-  
+
       const result = await invoiceServices.generateInvoice(invoiceToSubmit);
-  
+
       if (!result.success) {
         throw new Error(result.message);
       }
-  
-      // Optionally reset form
+
     } catch (error) {
       console.error('Error:', error);
     } finally {
       setLoading(false);
     }
   };
-  
 
   return (
     <>
@@ -135,6 +213,7 @@ const page = () => {
                   id="ntnNumber"
                   value={invoiceData.ntnNumber}
                   onChange={(e) => handleInputChange('ntnNumber', e.target.value)}
+                  readOnly
                 />
               </div>
               <div>
@@ -143,6 +222,7 @@ const page = () => {
                   id="regNumber"
                   value={invoiceData.regNumber}
                   onChange={(e) => handleInputChange('regNumber', e.target.value)}
+                  readOnly
                 />
               </div>
             </div>
@@ -150,18 +230,24 @@ const page = () => {
             {/* Dates Section */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <Label>Invoice Date</Label>
+                <Label>Invoice Date *</Label>
                 <DatePicker
                   selectedDate={invoiceData.invoiceDate}
                   onDateChange={(date) => handleInputChange('invoiceDate', date)}
                 />
+                {errors.invoiceDate && (
+                  <p className="text-red-500 text-sm mt-1">{errors.invoiceDate}</p>
+                )}
               </div>
               <div>
-                <Label>Due Date</Label>
+                <Label>Due Date *</Label>
                 <DatePicker
                   selectedDate={invoiceData.dueDate}
                   onDateChange={(date) => handleInputChange('dueDate', date)}
                 />
+                {errors.dueDate && (
+                  <p className="text-red-500 text-sm mt-1">{errors.dueDate}</p>
+                )}
               </div>
             </div>
 
@@ -176,14 +262,20 @@ const page = () => {
                     value={invoiceData.clientDetails.name}
                     onChange={(e) => handleInputChange('clientDetails.name', e.target.value)}
                   />
+                  {errors['clientDetails.name'] && (
+                    <p className="text-red-500 text-sm mt-1">{errors['clientDetails.name']}</p>
+                  )}
                 </div>
                 <div>
-                  <Label htmlFor="clientCompany">Company</Label>
+                  <Label htmlFor="clientCompany">Company *</Label>
                   <Input
                     id="clientCompany"
                     value={invoiceData.clientDetails.company}
                     onChange={(e) => handleInputChange('clientDetails.company', e.target.value)}
                   />
+                  {errors['clientDetails.company'] && (
+                    <p className="text-red-500 text-sm mt-1">{errors['clientDetails.company']}</p>
+                  )}
                 </div>
                 <div>
                   <Label htmlFor="clientAddress">Address *</Label>
@@ -192,6 +284,9 @@ const page = () => {
                     value={invoiceData.clientDetails.address}
                     onChange={(e) => handleInputChange('clientDetails.address', e.target.value)}
                   />
+                  {errors['clientDetails.address'] && (
+                    <p className="text-red-500 text-sm mt-1">{errors['clientDetails.address']}</p>
+                  )}
                 </div>
               </div>
             </div>
@@ -200,39 +295,44 @@ const page = () => {
             <div className="space-y-4">
               <h3 className="font-semibold text-base">Items</h3>
               {invoiceData.items.map((item, index) => (
-                <div key={index} className="grid grid-cols-1 md:grid-cols-6 gap-4">
-                  <div className="md:col-span-4">
-                    <Input
-                      placeholder="Description"
-                      value={item.description}
-                      onChange={(e) =>
-                        handleItemChange(index, 'description', e.target.value)
-                      }
-                    />
+                <div key={index} className="space-y-2">
+                  <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
+                    <div className="md:col-span-4">
+                      <Input
+                        placeholder="Description"
+                        value={item.description}
+                        onChange={(e) =>
+                          handleItemChange(index, 'description', e.target.value)
+                        }
+                      />
+                    </div>
+                    <div className="md:col-span-1">
+                      <Input
+                        placeholder="Price"
+                        type="number"
+                        value={item.price}
+                        min={0}
+                        onChange={(e) =>
+                          handleItemChange(index, 'price', parseFloat(e.target.value))
+                        }
+                      />
+                    </div>
+                    <div className="md:col-span-1 flex items-center justify-center">
+                      <Button
+                        type="button"
+                        variant="destructive"
+                        onClick={() => removeItem(index)}
+                      >
+                        Remove
+                      </Button>
+                    </div>
                   </div>
-                  <div className="md:col-span-1">
-                    <Input
-                      placeholder="Price"
-                      type="number"
-                      value={item.price}
-                      min={0}
-                      onChange={(e) =>
-                        handleItemChange(index, 'price', parseFloat(e.target.value))
-                      }
-                    />
-                  </div>
-                  <div className="md:col-span-1 flex items-center justify-center">
-                    <Button
-                      type="button"
-                      variant="destructive"
-                      onClick={() => removeItem(index)}
-                    >
-                      Remove
-                    </Button>
-                  </div>
+                  {errors.items[index] && (
+                    <p className="text-red-500 text-sm">{errors.items[index]}</p>
+                  )}
                 </div>
               ))}
-              <Button type="button" onClick={addItem} className="w-full">
+              <Button type="button" onClick={addItem} className="w-full text-white">
                 Add Item
               </Button>
             </div>
@@ -248,18 +348,21 @@ const page = () => {
                   min={0}
                   onChange={(e) => handleInputChange('credit', parseFloat(e.target.value))}
                 />
+                {errors.credit && (
+                  <p className="text-red-500 text-sm mt-1">{errors.credit}</p>
+                )}
               </div>
             </div>
 
             {/* Totals Section */}
-              <div>
-                <h5 className="font-semibold">Subtotal: Rs. {calculateSubTotal()}</h5>
-                <h5 className="font-semibold">Credit: Rs. {invoiceData.credit || 0}</h5>
-                <h3 className="font-semibold">Total: Rs. {calculateTotal()}</h3>
-              </div>
+            <div>
+              <h5 className="font-semibold">Subtotal: Rs. {calculateSubTotal()}</h5>
+              <h5 className="font-semibold">Credit: Rs. {invoiceData.credit || 0}</h5>
+              <h3 className="font-semibold">Total: Rs. {calculateTotal()}</h3>
+            </div>
 
             <div className="flex justify-end space-x-4">
-              <Button type="submit" className="w-32" disabled={loading}>
+              <Button type="submit" className="w-32 text-white" disabled={loading}>
                 {loading ? 'Generating...' : 'Generate Invoice'}
               </Button>
             </div>
@@ -270,4 +373,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default InvoiceForm;
